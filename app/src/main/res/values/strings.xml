@@ -25,6 +25,6 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Fourier components: %1$d</string>
     <string name="proof_explanation">The moving circles sum to draw one closed contour. More components improve its detail, but cannot recover details missing from the original outline.</string>
-    <string name="proof_version">Experimental version 0.2.0 · Stage 1</string>
+    <string name="proof_version">Experimental version 0.2.1 · Stage 1</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
 </resources>
