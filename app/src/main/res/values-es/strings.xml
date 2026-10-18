@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fourier Art</string>
+    <string name="tagline">De una fotografía a una animación matemática.</string>
+    <string name="welcome_title">Descubre el arte de Fourier</string>
+    <string name="welcome_description">Pronto podrás transformar tus fotos en trazos dibujados por círculos en movimiento.</string>
+    <string name="choose_photo">Elegir foto</string>
+    <string name="take_photo">Tomar foto</string>
+    <string name="stage_notice">La importación de imágenes y la cámara estarán disponibles en una etapa posterior del desarrollo.</string>
+    <string name="language_label">Idioma</string>
+    <string name="version_label">Versión de desarrollo 0.1.0 · Etapa 0</string>
+</resources>
