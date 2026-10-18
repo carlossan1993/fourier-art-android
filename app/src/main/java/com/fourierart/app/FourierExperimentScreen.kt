@@ -80,7 +80,7 @@ fun FourierExperimentScreen() {
     var components by remember { mutableIntStateOf(50) }
     var sensitivity by remember { mutableIntStateOf(50) }
     var loading by remember { mutableStateOf(false) }
-    // 0 = built-in sample; 1 = silhouette found; 2 = no useful contour; 3 = image failure
+    // 0 = sample; 1 = silhouette; 2 = no contour; 3 = image read failure; 4 = contour error
     var result by remember { mutableIntStateOf(0) }
 
     val picker = rememberLauncherForActivityResult(
@@ -88,9 +88,11 @@ fun FourierExperimentScreen() {
     ) { uri ->
         if (uri != null) scope.launch {
             loading = true
+            var errorPhase = 3
             try {
                 val bitmap = withContext(Dispatchers.IO) { decodePhoto(context, uri) }
                 image = bitmap
+                errorPhase = 4
                 val detected = withContext(Dispatchers.Default) {
                     ImageSilhouette.fromBitmap(bitmap, sensitivity)
                 }
@@ -101,7 +103,7 @@ fun FourierExperimentScreen() {
                     result = 2
                 }
             } catch (_: Exception) {
-                result = 3
+                result = errorPhase
             } finally {
                 loading = false
             }
@@ -190,7 +192,7 @@ fun FourierExperimentScreen() {
                                         result = 2
                                     }
                                 } catch (_: Exception) {
-                                    result = 3
+                                    result = 4
                                 } finally {
                                     loading = false
                                 }
@@ -205,6 +207,7 @@ fun FourierExperimentScreen() {
                     1 -> Text(stringResource(R.string.outcome_found), color = accent)
                     2 -> Text(stringResource(R.string.outcome_missing), color = Color(0xFFFFD18A))
                     3 -> Text(stringResource(R.string.outcome_error), color = Color(0xFFFFB3B3))
+                    4 -> Text(stringResource(R.string.outcome_contour_error), color = Color(0xFFFFB3B3))
                     else -> Text(stringResource(R.string.outcome_sample), color = accent)
                 }
             }
@@ -319,8 +322,11 @@ private fun FourierDisplay(curve: FourierCurve, components: Int, modifier: Modif
 
 private fun decodePhoto(context: Context, uri: Uri): Bitmap {
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-    context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
-        ?: throw IllegalArgumentException("Image cannot be read")
+    // BitmapFactory returns null deliberately with inJustDecodeBounds=true.
+    // Check the stream itself and then use outWidth/outHeight instead.
+    val boundsStream = context.contentResolver.openInputStream(uri)
+        ?: throw IllegalArgumentException("Image stream unavailable")
+    boundsStream.use { BitmapFactory.decodeStream(it, null, bounds) }
     if (bounds.outWidth < 1 || bounds.outHeight < 1) throw IllegalArgumentException("Invalid image")
     var downsample = 1
     while (max(bounds.outWidth, bounds.outHeight) / downsample > 900) downsample *= 2
