@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fourier Art</string>
+    <string name="tagline">From a photograph to a mathematical animation.</string>
+    <string name="welcome_title">Discover the art of Fourier</string>
+    <string name="welcome_description">Soon you will be able to transform your photos into strokes drawn by moving circles.</string>
+    <string name="choose_photo">Choose a photo</string>
+    <string name="take_photo">Take a photo</string>
+    <string name="stage_notice">Photo import and camera capture will be enabled in a later development stage.</string>
+    <string name="language_label">Language</string>
+    <string name="version_label">Development version 0.1.0 · Stage 0</string>
+</resources>

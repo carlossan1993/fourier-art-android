@@ -1,0 +1,24 @@
+# Android / Gradle
+.gradle/
+build/
+**/build/
+local.properties
+*.iml
+.idea/
+.cxx/
+.externalNativeBuild/
+captures/
+*.hprof
+.DS_Store
+
+# APK/AAB and private signing
+*.apk
+*.aab
+*.jks
+*.keystore
+keystore.properties
+*.pem
+
+# User images / private test assets
+private-tests/
+private-photos/
