@@ -9,4 +9,21 @@
     <string name="stage_notice">Photo import and camera capture will be enabled in a later development stage.</string>
     <string name="language_label">Language</string>
     <string name="version_label">Development version 0.1.0 · Stage 0</string>
+
+    <string name="proof_subtitle">Stage 1 · Mathematical proof of concept</string>
+    <string name="proof_choose">Test a sample or import an image</string>
+    <string name="circle">Circle</string>
+    <string name="star">Star</string>
+    <string name="photo_warning">Experimental outline: best with a single dark object on a plain, contrasting background. Portraits and pets are not yet reliably segmented.</string>
+    <string name="selected_image">Selected photo preview</string>
+    <string name="sensitivity">Background difference threshold: %1$d</string>
+    <string name="reprocess">Try outline again</string>
+    <string name="outcome_found">A contour was found. Check whether it matches your subject.</string>
+    <string name="outcome_missing">No reliable contour found. Adjust the threshold or choose a simpler image. The previous drawing remains visible.</string>
+    <string name="outcome_error">The image could not be processed. Try another image.</string>
+    <string name="outcome_sample">Mathematical demonstration with a known contour.</string>
+    <string name="proof_animation">Fourier reconstruction with epicircles</string>
+    <string name="components_label">Fourier components: %1$d</string>
+    <string name="proof_explanation">The moving circles sum to draw one closed contour. More components improve its detail, but cannot recover details missing from the original outline.</string>
+    <string name="proof_version">Experimental version 0.2.0 · Stage 1</string>
 </resources>
