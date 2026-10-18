@@ -9,4 +9,21 @@
     <string name="stage_notice">La importación de imágenes y la cámara estarán disponibles en una etapa posterior del desarrollo.</string>
     <string name="language_label">Idioma</string>
     <string name="version_label">Versión de desarrollo 0.1.0 · Etapa 0</string>
+
+    <string name="proof_subtitle">Etapa 1 · Prueba de concepto matemática</string>
+    <string name="proof_choose">Prueba una figura o importa una imagen</string>
+    <string name="circle">Círculo</string>
+    <string name="star">Estrella</string>
+    <string name="photo_warning">Contorno experimental: funciona mejor con un objeto oscuro sobre un fondo liso y contrastante. La segmentación de rostros y mascotas todavía no es fiable.</string>
+    <string name="selected_image">Vista previa de la foto seleccionada</string>
+    <string name="sensitivity">Umbral de diferencia con el fondo: %1$d</string>
+    <string name="reprocess">Reintentar contorno</string>
+    <string name="outcome_found">Se encontró un contorno. Revisa si corresponde al sujeto.</string>
+    <string name="outcome_missing">No se encontró un contorno fiable. Ajusta el umbral o elige una imagen más sencilla. Se mantiene el dibujo anterior.</string>
+    <string name="outcome_error">No se pudo procesar la imagen. Prueba con otra.</string>
+    <string name="outcome_sample">Demostración matemática con un contorno conocido.</string>
+    <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
+    <string name="components_label">Componentes de Fourier: %1$d</string>
+    <string name="proof_explanation">La suma de los círculos en movimiento dibuja un contorno cerrado. Más componentes mejoran el detalle, pero no recuperan elementos ausentes del contorno original.</string>
+    <string name="proof_version">Versión experimental 0.2.0 · Etapa 1</string>
 </resources>
