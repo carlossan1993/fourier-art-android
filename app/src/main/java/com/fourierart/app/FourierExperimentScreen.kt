@@ -3,6 +3,8 @@ package com.fourierart.app
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -331,7 +333,40 @@ private fun decodePhoto(context: Context, uri: Uri): Bitmap {
     var downsample = 1
     while (max(bounds.outWidth, bounds.outHeight) / downsample > 900) downsample *= 2
     val options = BitmapFactory.Options().apply { inSampleSize = downsample }
-    return context.contentResolver.openInputStream(uri)?.use {
+    val bitmap = context.contentResolver.openInputStream(uri)?.use {
         BitmapFactory.decodeStream(it, null, options)
     } ?: throw IllegalArgumentException("Image decoding failed")
+
+    // BitmapFactory does not honor JPEG EXIF orientation. The gallery often does,
+    // which previously made a portrait appear rotated after Fourier processing.
+    val orientation = try {
+        context.contentResolver.openInputStream(uri)?.use {
+            ExifInterface(it).getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
+        } ?: ExifInterface.ORIENTATION_NORMAL
+    } catch (_: Exception) {
+        ExifInterface.ORIENTATION_NORMAL
+    }
+    val matrix = Matrix()
+    when (orientation) {
+        ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
+        ExifInterface.ORIENTATION_ROTATE_180 -> matrix.setRotate(180f)
+        ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.setScale(1f, -1f)
+        ExifInterface.ORIENTATION_TRANSPOSE -> {
+            matrix.setRotate(90f)
+            matrix.postScale(-1f, 1f)
+        }
+        ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
+        ExifInterface.ORIENTATION_TRANSVERSE -> {
+            matrix.setRotate(-90f)
+            matrix.postScale(-1f, 1f)
+        }
+        ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90f)
+        else -> return bitmap
+    }
+    val rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    if (rotated !== bitmap) bitmap.recycle()
+    return rotated
 }
