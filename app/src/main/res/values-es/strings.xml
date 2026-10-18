@@ -25,6 +25,6 @@
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes de Fourier: %1$d</string>
     <string name="proof_explanation">La suma de los círculos en movimiento dibuja un contorno cerrado. Más componentes mejoran el detalle, pero no recuperan elementos ausentes del contorno original.</string>
-    <string name="proof_version">Versión experimental 0.2.0 · Etapa 1</string>
+    <string name="proof_version">Versión experimental 0.2.1 · Etapa 1</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
 </resources>
