@@ -124,6 +124,20 @@ object ImageSilhouette {
         }
         if (best.size < 12) return null
 
+        // A long rectangular perimeter from the photo border is not a subject.
+        // Reject an almost-full-frame contour instead of claiming recognition.
+        val nearBorder = best.count { vertex ->
+            val x = vertex % (width + 1)
+            val y = vertex / (width + 1)
+            x <= 1 || y <= 1 || x >= width - 1 || y >= height - 1
+        }
+        val touchesTop = best.any { it / (width + 1) <= 1 }
+        val touchesBottom = best.any { it / (width + 1) >= height - 1 }
+        val touchesLeft = best.any { it % (width + 1) <= 1 }
+        val touchesRight = best.any { it % (width + 1) >= width - 1 }
+        val touchedSides = listOf(touchesTop, touchesBottom, touchesLeft, touchesRight).count { it }
+        if (touchedSides >= 3 && nearBorder.toDouble() / best.size > 0.12) return null
+
         val xs = best.map { it % (width + 1).toDouble() }
         val ys = best.map { (it / (width + 1)).toDouble() }
         val centerX = (xs.min() + xs.max()) / 2
