@@ -36,14 +36,14 @@ jobs:
         with:
           gradle-version: "8.13"
 
-      - name: Build app
-        run: gradle :app:testDebugUnitTest :app:assembleDebug --no-daemon --stacktrace
-
       - name: Fetch public-domain portrait fixture
         run: |
           mkdir -p app/src/androidTest/assets
           curl --fail --location --retry 2 https://raw.githubusercontent.com/scikit-image/scikit-image/v0.25.2/skimage/data/astronaut.png -o app/src/androidTest/assets/portrait.png
           echo "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5  app/src/androidTest/assets/portrait.png" | sha256sum --check
+
+      - name: Build app and test APK
+        run: gradle :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest --no-daemon --stacktrace
 
       - name: Enable KVM for Android quality test
         run: |
@@ -60,8 +60,12 @@ jobs:
           emulator-boot-timeout: 180
           disable-animations: true
           script: |
-            gradle :app:connectedDebugAndroidTest --no-daemon --stacktrace
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             mkdir -p quality-output
+            adb shell am instrument -w com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner > quality-output/instrumentation.txt
+            cat quality-output/instrumentation.txt
+            python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/instrumentation.txt").read_text()), "Instrumented portrait test did not pass"'
             adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/
 
       - name: Upload quality evidence
@@ -71,7 +75,6 @@ jobs:
           name: portrait-quality-evidence
           path: |
             quality-output/
-            app/build/reports/androidTests/connected/
             app/build/reports/tests/testDebugUnitTest/
           retention-days: 3
 
