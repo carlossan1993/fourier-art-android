@@ -113,4 +113,3 @@ class FourierCurve private constructor(val points: List<Point2>) {
         }
     }
 }
-

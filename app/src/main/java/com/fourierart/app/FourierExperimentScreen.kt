@@ -44,6 +44,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -77,6 +78,7 @@ fun FourierExperimentScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var drawing by remember { mutableStateOf<ContourDrawing?>(ContourDrawing.sample(FourierCurve.star())) }
+    var showComplete by remember(drawing) { mutableStateOf(false) }
     var mode by remember { mutableStateOf(PhotoContours.Mode.AUTO) }
     var analysis by remember { mutableStateOf<PhotoContours.Analysis?>(null) }
     var analyzedMode by remember { mutableStateOf<PhotoContours.Mode?>(null) }
@@ -248,7 +250,10 @@ fun FourierExperimentScreen() {
                     style = MaterialTheme.typography.titleMedium
                 )
                 if (drawing != null) {
-                    FourierDisplay(drawing!!, components, Modifier.fillMaxWidth().height(300.dp))
+                    FourierDisplay(drawing!!, components, showComplete, Modifier.fillMaxWidth().height(300.dp))
+                    OutlinedButton(onClick = { showComplete = !showComplete }, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(if (showComplete) R.string.show_animation else R.string.show_complete))
+                    }
                 } else {
                     Text(stringResource(R.string.no_drawing), Modifier.padding(16.dp))
                 }
@@ -323,14 +328,15 @@ private fun ContourPreview(bitmap: Bitmap, drawing: ContourDrawing?, modifier: M
 }
 
 @Composable
-private fun FourierDisplay(drawing: ContourDrawing, components: Int, modifier: Modifier = Modifier) {
+private fun FourierDisplay(drawing: ContourDrawing, components: Int, showComplete: Boolean, modifier: Modifier = Modifier) {
     androidx.compose.runtime.key(drawing) {
         val transition = rememberInfiniteTransition(label = "fourier-animation")
-        val progress by transition.animateFloat(
-            initialValue = 0f, targetValue = 1f,
-            animationSpec = infiniteRepeatable(animation = tween(12000, easing = LinearEasing), repeatMode = RepeatMode.Restart),
+        val animatedProgress by transition.animateFloat(
+            initialValue = 0f, targetValue = 1.25f,
+            animationSpec = infiniteRepeatable(animation = tween(15000, easing = LinearEasing), repeatMode = RepeatMode.Restart),
             label = "trace-reveal"
         )
+        val progress = if (showComplete) 1f else animatedProgress.coerceAtMost(1f)
         val trails = remember(drawing, components) { drawing.strokes.map { it.trace(components) } }
         val weights = remember(drawing) {
             drawing.strokes.map { stroke ->
@@ -339,7 +345,7 @@ private fun FourierDisplay(drawing: ContourDrawing, components: Int, modifier: M
             }
         }
         val total = weights.sum()
-        Canvas(modifier = modifier) {
+        Canvas(modifier = modifier.clipToBounds()) {
             drawRect(background)
             val scale = min(size.width, size.height) * 0.43f
             val origin = Offset(size.width / 2f, size.height / 2f)
@@ -360,6 +366,7 @@ private fun FourierDisplay(drawing: ContourDrawing, components: Int, modifier: M
                 }
                 drawPath(path, Color.White, style = Stroke(1.8.dp.toPx(), cap = StrokeCap.Round))
             }
+            if (showComplete) return@Canvas
             val stroke = drawing.strokes[active]
             val t = 2 * PI * local * stroke.visibleFraction
             var pos = Point2(0.0, 0.0)
@@ -427,4 +434,3 @@ private fun decodePhoto(context: Context, uri: Uri): Bitmap {
     if (rotated !== bitmap) bitmap.recycle()
     return rotated
 }
-

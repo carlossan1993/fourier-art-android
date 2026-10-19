@@ -38,5 +38,6 @@
     <string name="profile_changed">Profile changed. Tap retry to process the photo.</string>
     <string name="no_drawing">The animation appears after strokes have been detected in this image.</string>
     <string name="face_sensitivity">Facial features use model points. Sensitivity applies to Subject and Drawing.</string>
+    <string name="show_complete">Show complete result</string>
+    <string name="show_animation">Show animation</string>
 </resources>
-

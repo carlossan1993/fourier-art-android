@@ -38,5 +38,6 @@
     <string name="profile_changed">Perfil cambiado. Pulsa Reintentar para procesar la foto.</string>
     <string name="no_drawing">La animación aparecerá cuando se detecten trazos en esta imagen.</string>
     <string name="face_sensitivity">Los rasgos faciales usan puntos del modelo. La sensibilidad se aplica en Sujeto y Dibujo.</string>
+    <string name="show_complete">Ver resultado completo</string>
+    <string name="show_animation">Ver animación</string>
 </resources>
-

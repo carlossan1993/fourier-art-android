@@ -12,7 +12,7 @@
 
 Todos los trazos comparten origen y escala, conservan la proporción y tienen DFT independiente. Un trazo abierto usa extensión reflejada de ida/vuelta: solo se anima la mitad de ida, sin cerrar una ceja o nariz con una línea artificial. La animación levanta el lápiz entre trazos y distribuye el tiempo según longitud.
 
-La vista previa superpone los trazos originales sobre la foto orientada. Al fallar una foto se borra la reconstrucción anterior para evitar confundirla con el nuevo resultado. Se conserva la corrección EXIF de 0.2.2. La inferencia se almacena solo en memoria para no repetirla al ajustar sensibilidad.
+La vista previa superpone los trazos originales sobre la foto orientada. «Ver resultado completo» permite evaluar la reconstrucción estática sin epiciclos; la animación también mantiene tres segundos el dibujo terminado antes de reiniciar. Al fallar una foto se borra la reconstrucción anterior para evitar confundirla con el nuevo resultado. Se conserva la corrección EXIF de 0.2.2. La inferencia se almacena solo en memoria para no repetirla al ajustar sensibilidad.
 
 ## Modelos y dependencias
 
