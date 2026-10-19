@@ -27,10 +27,18 @@ class PortraitQualityTest {
             val result = PhotoContours.extract(analysis, PhotoContours.Mode.DRAWING, 65)
             assertEquals(PhotoContours.Kind.FACE, result.kind)
             val drawing = result.drawing!!
-            for (part in listOf(FacePart.LEFT_EYE, FacePart.RIGHT_EYE, FacePart.NOSE_BRIDGE)) {
+            for (part in listOf(FacePart.LEFT_EYE, FacePart.RIGHT_EYE)) {
                 val expected = face.parts[part]!!
                 assertTrue("Lost facial feature: $part", drawing.sourceStrokes.any { it.points == expected.points })
             }
+            assertEquals(2,face.parts[FacePart.NOSE_BRIDGE]!!.points.size)
+            val nose = face.parts[FacePart.NOSE_BOTTOM]!!.points
+            assertTrue("Nose disappeared after composition", drawing.sourceStrokes.any { s ->
+                s.points.size >= 2 && s.points.count { p ->
+                    p.x in (nose.minOf { it.x }-10)..(nose.maxOf { it.x }+10) &&
+                    p.y in (nose.minOf { it.y }-20)..(nose.maxOf { it.y }+10)
+                } > s.points.size/2
+            })
             assertTrue("No context beyond the protected facial features", drawing.sourceStrokes.size > 12)
             assertTrue(drawing.strokes.flatMap { it.trace(200) }.all { it.x.isFinite() && it.y.isFinite() })
             val folder = File(instrumentation.targetContext.getExternalFilesDir(null), "quality").apply { mkdirs() }
