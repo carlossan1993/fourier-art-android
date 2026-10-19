@@ -11,7 +11,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,7 +50,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,7 +57,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
 import com.fourierart.app.core.FourierCurve
-import com.fourierart.app.core.ImageSilhouette
+import com.fourierart.app.core.ContourDrawing
+import com.fourierart.app.core.PhotoContours
 import com.fourierart.app.core.Point2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -77,13 +76,29 @@ private val harmonicOptions = listOf(10, 20, 50, 100, 200)
 fun FourierExperimentScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var curve by remember { mutableStateOf(FourierCurve.star()) }
+    var drawing by remember { mutableStateOf<ContourDrawing?>(ContourDrawing.sample(FourierCurve.star())) }
+    var mode by remember { mutableStateOf(PhotoContours.Mode.AUTO) }
+    var analysis by remember { mutableStateOf<PhotoContours.Analysis?>(null) }
+    var analyzedMode by remember { mutableStateOf<PhotoContours.Mode?>(null) }
+    var outcome by remember { mutableStateOf(PhotoContours.Kind.NO_SUBJECT) }
     var image by remember { mutableStateOf<Bitmap?>(null) }
     var components by remember { mutableIntStateOf(50) }
     var sensitivity by remember { mutableIntStateOf(50) }
     var loading by remember { mutableStateOf(false) }
-    // 0 = sample; 1 = silhouette; 2 = no contour; 3 = image read failure; 4 = contour error
+    // 0 = sample; 1 = detected strokes; 2 = no contour; 3 = read failure; 4 = contour error; 5 = profile changed
     var result by remember { mutableIntStateOf(0) }
+
+    suspend fun process(bitmap: Bitmap) {
+        val processed = withContext(Dispatchers.Default) {
+            val cached = analysis?.takeIf { analyzedMode == mode && !it.modelUnavailable } ?: PhotoContours.analyze(bitmap, mode)
+            Pair(cached, PhotoContours.extract(cached, mode, sensitivity))
+        }
+        analysis = processed.first
+        analyzedMode = mode
+        drawing = processed.second.drawing
+        outcome = processed.second.kind
+        result = if (drawing != null) 1 else 2
+    }
 
     val picker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
@@ -94,17 +109,13 @@ fun FourierExperimentScreen() {
             try {
                 val bitmap = withContext(Dispatchers.IO) { decodePhoto(context, uri) }
                 image = bitmap
+                analysis = null
+                analyzedMode = null
+                drawing = null
                 errorPhase = 4
-                val detected = withContext(Dispatchers.Default) {
-                    ImageSilhouette.fromBitmap(bitmap, sensitivity)
-                }
-                if (detected != null) {
-                    curve = detected
-                    result = 1
-                } else {
-                    result = 2
-                }
+                process(bitmap)
             } catch (_: Exception) {
+                drawing = null
                 result = errorPhase
             } finally {
                 loading = false
@@ -143,12 +154,12 @@ fun FourierExperimentScreen() {
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { curve = FourierCurve.circle(); image = null; result = 0 },
+                        onClick = { drawing = ContourDrawing.sample(FourierCurve.circle()); image = null; analysis = null; result = 0 },
                         enabled = !loading,
                         modifier = Modifier.weight(1f)
                     ) { Text(stringResource(R.string.circle)) }
                     OutlinedButton(
-                        onClick = { curve = FourierCurve.star(); image = null; result = 0 },
+                        onClick = { drawing = ContourDrawing.sample(FourierCurve.star()); image = null; analysis = null; result = 0 },
                         enabled = !loading,
                         modifier = Modifier.weight(1f)
                     ) { Text(stringResource(R.string.star)) }
@@ -165,35 +176,41 @@ fun FourierExperimentScreen() {
                     style = MaterialTheme.typography.bodySmall
                 )
                 if (image != null) {
-                    Image(
-                        bitmap = image!!.asImageBitmap(),
-                        contentDescription = stringResource(R.string.selected_image),
-                        modifier = Modifier.fillMaxWidth().height(120.dp),
-                        contentScale = ContentScale.Fit
-                    )
+                    ContourPreview(image!!, drawing, Modifier.fillMaxWidth().height(220.dp))
+                    Text(stringResource(R.string.processing_profile))
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        for (profile in PhotoContours.Mode.entries) {
+                            OutlinedButton(
+                                onClick = { mode = profile; drawing = null; result = 5 },
+                                enabled = !loading && mode != profile,
+                                modifier = Modifier.weight(1f)
+                            ) { Text(stringResource(when (profile) {
+                                PhotoContours.Mode.AUTO -> R.string.profile_auto
+                                PhotoContours.Mode.SUBJECT -> R.string.profile_subject
+                                PhotoContours.Mode.DRAWING -> R.string.profile_drawing
+                            })) }
+                        }
+                    }
                     Text(stringResource(R.string.sensitivity, sensitivity))
                     Slider(
                         value = sensitivity.toFloat(),
                         onValueChange = { sensitivity = it.roundToInt() },
-                        valueRange = 25f..115f,
-                        steps = 8
+                        enabled = !loading && !(result == 1 && outcome == PhotoContours.Kind.FACE),
+                        valueRange = 0f..100f,
+                        steps = 9
                     )
+                    if (result == 1 && outcome == PhotoContours.Kind.FACE) {
+                        Text(stringResource(R.string.face_sensitivity), style = MaterialTheme.typography.bodySmall)
+                    }
                     OutlinedButton(
                         onClick = {
                             val bitmap = image ?: return@OutlinedButton
                             scope.launch {
                                 loading = true
                                 try {
-                                    val detected = withContext(Dispatchers.Default) {
-                                        ImageSilhouette.fromBitmap(bitmap, sensitivity)
-                                    }
-                                    if (detected != null) {
-                                        curve = detected
-                                        result = 1
-                                    } else {
-                                        result = 2
-                                    }
+                                    process(bitmap)
                                 } catch (_: Exception) {
+                                    drawing = null
                                     result = 4
                                 } finally {
                                     loading = false
@@ -206,8 +223,14 @@ fun FourierExperimentScreen() {
                 }
                 if (loading) CircularProgressIndicator()
                 when (result) {
-                    1 -> Text(stringResource(R.string.outcome_found), color = accent)
-                    2 -> Text(stringResource(R.string.outcome_missing), color = Color(0xFFFFD18A))
+                    1 -> Text(stringResource(when (outcome) {
+                        PhotoContours.Kind.FACE -> R.string.outcome_face
+                        PhotoContours.Kind.SUBJECT -> R.string.outcome_subject
+                        else -> R.string.outcome_drawing
+                    }, drawing?.strokes?.size ?: 0), color = accent)
+                    2 -> Text(stringResource(if (outcome == PhotoContours.Kind.MODEL_UNAVAILABLE)
+                        R.string.model_unavailable else R.string.outcome_missing), color = Color(0xFFFFD18A))
+                    5 -> Text(stringResource(R.string.profile_changed), color = Color(0xFFFFD18A))
                     3 -> Text(stringResource(R.string.outcome_error), color = Color(0xFFFFB3B3))
                     4 -> Text(stringResource(R.string.outcome_contour_error), color = Color(0xFFFFB3B3))
                     else -> Text(stringResource(R.string.outcome_sample), color = accent)
@@ -224,7 +247,11 @@ fun FourierExperimentScreen() {
                     stringResource(R.string.proof_animation),
                     style = MaterialTheme.typography.titleMedium
                 )
-                FourierDisplay(curve, components, Modifier.fillMaxWidth().height(270.dp))
+                if (drawing != null) {
+                    FourierDisplay(drawing!!, components, Modifier.fillMaxWidth().height(300.dp))
+                } else {
+                    Text(stringResource(R.string.no_drawing), Modifier.padding(16.dp))
+                }
                 Text(stringResource(R.string.components_label, components))
                 Slider(
                     value = harmonicOptions.indexOf(components).coerceAtLeast(0).toFloat(),
@@ -269,56 +296,86 @@ private fun changeLanguage(language: String) {
 }
 
 @Composable
-private fun FourierDisplay(curve: FourierCurve, components: Int, modifier: Modifier = Modifier) {
-    val transition = rememberInfiniteTransition(label = "fourier-animation")
-    val progress by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(9000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "trace-reveal"
-    )
-    val trail = remember(curve, components) { curve.trace(components, 320) }
-    Canvas(modifier = modifier) {
-        drawRect(background)
-        val scale = min(size.width, size.height) * 0.39f
-        val origin = Offset(size.width / 2f, size.height / 2f)
-        fun xy(p: Point2): Offset = Offset(
-            origin.x + p.x.toFloat() * scale,
-            origin.y + p.y.toFloat() * scale
+private fun ContourPreview(bitmap: Bitmap, drawing: ContourDrawing?, modifier: Modifier) {
+    val preview = remember(bitmap) { bitmap.asImageBitmap() }
+    Canvas(modifier) {
+        val factor = min(size.width / bitmap.width, size.height / bitmap.height)
+        val left = (size.width - bitmap.width * factor) / 2f
+        val top = (size.height - bitmap.height * factor) / 2f
+        drawImage(preview,
+            dstOffset = androidx.compose.ui.unit.IntOffset(left.roundToInt(), top.roundToInt()),
+            dstSize = androidx.compose.ui.unit.IntSize((bitmap.width * factor).roundToInt(), (bitmap.height * factor).roundToInt()))
+        // Detector uses <=640px while the import may have up to 900px.
+        val detectorFactor = minOf(1.0, 640.0 / max(bitmap.width, bitmap.height))
+        val detectorWidth = max(1, (bitmap.width * detectorFactor).toInt())
+        val detectorHeight = max(1, (bitmap.height * detectorFactor).toInt())
+        for (stroke in drawing?.sourceStrokes.orEmpty()) {
+            val path = Path()
+            stroke.points.forEachIndexed { i, p ->
+                val x = left + p.x.toFloat() / detectorWidth * bitmap.width * factor
+                val y = top + p.y.toFloat() / detectorHeight * bitmap.height * factor
+                if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+            }
+            if (stroke.closed) path.close()
+            drawPath(path, accent, style = Stroke(1.5.dp.toPx()))
+        }
+    }
+}
+
+@Composable
+private fun FourierDisplay(drawing: ContourDrawing, components: Int, modifier: Modifier = Modifier) {
+    androidx.compose.runtime.key(drawing) {
+        val transition = rememberInfiniteTransition(label = "fourier-animation")
+        val progress by transition.animateFloat(
+            initialValue = 0f, targetValue = 1f,
+            animationSpec = infiniteRepeatable(animation = tween(12000, easing = LinearEasing), repeatMode = RepeatMode.Restart),
+            label = "trace-reveal"
         )
-
-        val length = (trail.size * progress).roundToInt().coerceIn(1, trail.size)
-        if (length > 1) {
-            val drawn = Path().apply {
-                moveTo(xy(trail[0]).x, xy(trail[0]).y)
-                for (i in 1 until length) {
-                    val pos = xy(trail[i])
-                    lineTo(pos.x, pos.y)
+        val trails = remember(drawing, components) { drawing.strokes.map { it.trace(components) } }
+        val weights = remember(drawing) {
+            drawing.strokes.map { stroke ->
+                stroke.curve.points.zipWithNext().sumOf { (a, b) -> kotlin.math.hypot(b.x - a.x, b.y - a.y) }
+                    .times(stroke.visibleFraction).coerceAtLeast(0.01)
+            }
+        }
+        val total = weights.sum()
+        Canvas(modifier = modifier) {
+            drawRect(background)
+            val scale = min(size.width, size.height) * 0.43f
+            val origin = Offset(size.width / 2f, size.height / 2f)
+            fun xy(p: Point2) = Offset(origin.x + p.x.toFloat() * scale, origin.y + p.y.toFloat() * scale)
+            var elapsed = 0.0
+            var active = drawing.strokes.lastIndex
+            var local = 1.0
+            for (i in trails.indices) {
+                val part = ((progress * total - elapsed) / weights[i]).coerceIn(0.0, 1.0)
+                if (part < 1 && progress * total >= elapsed) { active = i; local = part }
+                elapsed += weights[i]
+                if (part <= 0) continue
+                val trail = trails[i]
+                val count = (part * (trail.size - 1)).toInt().coerceIn(0, trail.lastIndex)
+                val path = Path().apply {
+                    moveTo(xy(trail[0]).x, xy(trail[0]).y)
+                    for (j in 1..count) { val p = xy(trail[j]); lineTo(p.x, p.y) }
                 }
+                drawPath(path, Color.White, style = Stroke(1.8.dp.toPx(), cap = StrokeCap.Round))
             }
-            drawPath(drawn, Color.White, style = Stroke(2.5.dp.toPx(), cap = StrokeCap.Round))
-        }
-
-        val t = 2 * PI * progress
-        var pos = Point2(0.0, 0.0)
-        for (h in curve.harmonics.take(components)) {
-            val end = h.at(t)
-            val destination = Point2(pos.x + end.x, pos.y + end.y)
-            if (h.radius * scale > 1.2) {
-                drawCircle(
-                    accent.copy(alpha = 0.37f),
-                    radius = (h.radius * scale).toFloat(),
-                    center = xy(pos),
-                    style = Stroke(width = 1.dp.toPx())
-                )
+            val stroke = drawing.strokes[active]
+            val t = 2 * PI * local * stroke.visibleFraction
+            var pos = Point2(0.0, 0.0)
+            for (h in stroke.curve.harmonics.take(components)) {
+                val end = h.at(t)
+                val dest = Point2(pos.x + end.x, pos.y + end.y)
+                // DC positions the chain; it is an offset, not a rotating circle.
+                if (h.frequency != 0) {
+                    if (h.radius * scale > 1.2) drawCircle(accent.copy(alpha = 0.3f),
+                        radius = (h.radius * scale).toFloat(), center = xy(pos), style = Stroke(0.7.dp.toPx()))
+                    drawLine(accent.copy(alpha = 0.6f), xy(pos), xy(dest), 0.8.dp.toPx())
+                }
+                pos = dest
             }
-            drawLine(accent.copy(alpha = 0.7f), xy(pos), xy(destination), 1.dp.toPx())
-            pos = destination
+            drawCircle(accent, 3.dp.toPx(), xy(pos))
         }
-        drawCircle(accent, 4.dp.toPx(), xy(pos))
     }
 }
 
@@ -370,3 +427,4 @@ private fun decodePhoto(context: Context, uri: Uri): Bitmap {
     if (rotated !== bitmap) bitmap.recycle()
     return rotated
 }
+

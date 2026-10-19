@@ -14,17 +14,29 @@
     <string name="proof_choose">Prueba una figura o importa una imagen</string>
     <string name="circle">Círculo</string>
     <string name="star">Estrella</string>
-    <string name="photo_warning">Contorno experimental: funciona mejor con un objeto oscuro sobre un fondo liso y contrastante. La segmentación de rostros y mascotas todavía no es fiable.</string>
+    <string name="photo_warning">Automático prioriza rasgos del rostro. Sujeto aísla mascotas y objetos. Dibujo procesa líneas sin modelo. Revisa siempre los trazos sobre la foto.</string>
     <string name="selected_image">Vista previa de la foto seleccionada</string>
-    <string name="sensitivity">Umbral de diferencia con el fondo: %1$d</string>
+    <string name="sensitivity">Sensibilidad de máscara y detalles: %1$d</string>
     <string name="reprocess">Reintentar contorno</string>
     <string name="outcome_found">Se encontró un contorno. Revisa si corresponde al sujeto.</string>
-    <string name="outcome_missing">No se encontró un contorno fiable. Ajusta el umbral o elige una imagen más sencilla. Se mantiene el dibujo anterior.</string>
+    <string name="outcome_missing">No se encontraron trazos fiables. Prueba otro perfil o una foto más cercana y con fondo sencillo.</string>
     <string name="outcome_error">No se pudo procesar la imagen. Prueba con otra.</string>
     <string name="outcome_sample">Demostración matemática con un contorno conocido.</string>
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes de Fourier: %1$d</string>
-    <string name="proof_explanation">La suma de los círculos en movimiento dibuja un contorno cerrado. Más componentes mejoran el detalle, pero no recuperan elementos ausentes del contorno original.</string>
-    <string name="proof_version">Versión experimental 0.2.2 · Etapa 1</string>
+    <string name="proof_explanation">Cada trazo tiene sus propios epiciclos. El lápiz se levanta entre rasgos separados. Más componentes mejoran la reconstrucción del trazo detectado.</string>
+    <string name="proof_version">Versión experimental 0.3.0 · Etapa 1</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
+    <string name="processing_profile">Perfil de procesamiento</string>
+    <string name="profile_auto">Auto</string>
+    <string name="profile_subject">Sujeto</string>
+    <string name="profile_drawing">Dibujo</string>
+    <string name="outcome_face">Rasgos faciales: %1$d trazos. Comprueba ojos, nariz y boca en la vista previa.</string>
+    <string name="outcome_subject">Sujeto y detalles: %1$d trazos. Revisa si la silueta corresponde al sujeto.</string>
+    <string name="outcome_drawing">Líneas detectadas: %1$d trazos. Este perfil no separa el fondo.</string>
+    <string name="model_unavailable">El modelo de sujeto aún no está disponible. Conecta a Internet y vuelve a intentar para que Google Play services lo descargue. Puedes usar Dibujo sin ese modelo.</string>
+    <string name="profile_changed">Perfil cambiado. Pulsa Reintentar para procesar la foto.</string>
+    <string name="no_drawing">La animación aparecerá cuando se detecten trazos en esta imagen.</string>
+    <string name="face_sensitivity">Los rasgos faciales usan puntos del modelo. La sensibilidad se aplica en Sujeto y Dibujo.</string>
 </resources>
+

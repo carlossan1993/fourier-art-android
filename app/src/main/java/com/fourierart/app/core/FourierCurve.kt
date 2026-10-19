@@ -65,6 +65,12 @@ class FourierCurve private constructor(val points: List<Point2>) {
             return FourierCurve(resample(path, SAMPLE_COUNT))
         }
 
+        fun fromOpenPath(path: List<Point2>): FourierCurve {
+            require(path.size >= 2) { "An open stroke needs at least 2 points" }
+            // Periodic extension returns along the SAME stroke, never closes with a chord.
+            return FourierCurve(resample(path + path.drop(1).dropLast(1).reversed(), SAMPLE_COUNT))
+        }
+
         fun circle(): FourierCurve = fromClosedPath(
             (0 until SAMPLE_COUNT).map {
                 val t = 2.0 * PI * it / SAMPLE_COUNT
@@ -107,3 +113,4 @@ class FourierCurve private constructor(val points: List<Point2>) {
         }
     }
 }
+
