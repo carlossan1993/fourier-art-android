@@ -6,7 +6,7 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.PI
 
-/** Platform-free raster processing, bounded to <=640px by the caller. */
+/** Platform-free raster processing, bounded to <=768px by the caller. */
 object RasterContours {
     fun largestComponent(mask: BooleanArray, width: Int, height: Int): BooleanArray {
         require(mask.size == width * height && width > 0 && height > 0)
@@ -29,8 +29,51 @@ object RasterContours {
         return BooleanArray(mask.size).also { output -> largest.forEach { output[it] = true } }
     }
 
+    /** Flood only background connected to the border; accept this route only for a dominant plain color. */
+    fun plainBackgroundMask(pixels: IntArray, width: Int, height: Int, sensitivity: Int): BooleanArray? {
+        require(pixels.size == width * height)
+        fun rgb(c: Int): Int {
+            val alpha = (c ushr 24) / 255.0
+            val r = (((c shr 16) and 255) * alpha + 255 * (1 - alpha)).toInt()
+            val g = (((c shr 8) and 255) * alpha + 255 * (1 - alpha)).toInt()
+            val b = ((c and 255) * alpha + 255 * (1 - alpha)).toInt()
+            return (r shl 16) or (g shl 8) or b
+        }
+        val colors = IntArray(pixels.size) { rgb(pixels[it]) }
+        val border = pixels.indices.filter { i -> val x = i % width; val y = i / width
+            x < 2 || x >= width - 2 || y < 2 || y >= height - 2 }
+        if (border.isEmpty()) return null
+        fun bin(c: Int) = (((c shr 21) and 7) shl 6) or (((c shr 13) and 7) shl 3) or ((c shr 5) and 7)
+        val bins = IntArray(512)
+        border.forEach { bins[bin(colors[it])]++ }
+        val dominant = bins.indices.maxBy { bins[it] }
+        if (bins[dominant] < border.size * 0.45) return null
+        val samples = border.filter { bin(colors[it]) == dominant }.map { colors[it] }
+        val r = samples.map { (it shr 16) and 255 }.sorted()[samples.size / 2]
+        val g = samples.map { (it shr 8) and 255 }.sorted()[samples.size / 2]
+        val b = samples.map { it and 255 }.sorted()[samples.size / 2]
+        val threshold = 52 - sensitivity.coerceIn(0, 100) * 0.30
+        val background = BooleanArray(pixels.size) { i ->
+            val c = colors[i]
+            maxOf(abs(((c shr 16) and 255) - r), abs(((c shr 8) and 255) - g), abs((c and 255) - b)) <= threshold
+        }
+        val flooded = BooleanArray(pixels.size); val queue = IntArray(pixels.size)
+        var read = 0; var end = 0
+        for (i in border) if (background[i] && !flooded[i]) { flooded[i] = true; queue[end++] = i }
+        while (read < end) {
+            val i = queue[read++]; val x = i % width; val y = i / width
+            for (j in intArrayOf(if (x > 0) i - 1 else -1, if (x + 1 < width) i + 1 else -1,
+                if (y > 0) i - width else -1, if (y + 1 < height) i + width else -1)) {
+                if (j >= 0 && background[j] && !flooded[j]) { flooded[j] = true; queue[end++] = j }
+            }
+        }
+        val subject = largestComponent(BooleanArray(pixels.size) { !flooded[it] }, width, height)
+        val area = subject.count { it }
+        return subject.takeIf { area > pixels.size * 0.01 && area < pixels.size * 0.92 }
+    }
+
     /** Oriented grid edges preserve concavities and holes. Right-turn routing resolves diagonal contacts. */
-    fun outlines(mask: BooleanArray, width: Int, height: Int): List<ContourStroke> {
+    fun outlines(mask: BooleanArray, width: Int, height: Int, rejectFrame: Boolean = true): List<ContourStroke> {
         require(mask.size == width * height)
         fun has(x: Int, y: Int) = x in 0 until width && y in 0 until height && mask[y * width + x]
         fun vertex(x: Int, y: Int) = y * (width + 1) + x
@@ -63,7 +106,7 @@ object RasterContours {
                     val border = points.count { it.x <= 1 || it.y <= 1 || it.x >= width - 1 || it.y >= height - 1 }
                     val sides = listOf(points.any { it.x <= 1 }, points.any { it.y <= 1 },
                         points.any { it.x >= width - 1 }, points.any { it.y >= height - 1 }).count { it }
-                    if (sides < 3 || border.toDouble() / points.size <= 0.12) paths.add(ContourStroke(points, true))
+                    if (!rejectFrame || sides < 3 || border.toDouble() / points.size <= 0.12) paths.add(ContourStroke(points, true))
                 }
             }
         }
@@ -158,6 +201,6 @@ object RasterContours {
         }
         for ((i, ns) in adjacency) if (ns.size != 2) for (j in ns) if (key(i, j) !in used) walk(i, j)
         for ((i, ns) in adjacency) for (j in ns) if (key(i, j) !in used) walk(i, j)
-        return strokes.sortedByDescending { it.length }.take(40)
+        return strokes.sortedByDescending { it.length }
     }
 }

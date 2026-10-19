@@ -22,3 +22,5 @@ keystore.properties
 # User images / private test assets
 private-tests/
 private-photos/
+# Public-domain CI fixture is downloaded at a pinned version and checksum, not committed.
+app/src/androidTest/assets/portrait.png

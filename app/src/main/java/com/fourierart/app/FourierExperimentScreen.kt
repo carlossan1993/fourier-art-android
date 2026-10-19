@@ -84,7 +84,7 @@ fun FourierExperimentScreen() {
     var analyzedMode by remember { mutableStateOf<PhotoContours.Mode?>(null) }
     var outcome by remember { mutableStateOf(PhotoContours.Kind.NO_SUBJECT) }
     var image by remember { mutableStateOf<Bitmap?>(null) }
-    var components by remember { mutableIntStateOf(50) }
+    var components by remember { mutableIntStateOf(200) }
     var sensitivity by remember { mutableIntStateOf(50) }
     var loading by remember { mutableStateOf(false) }
     // 0 = sample; 1 = detected strokes; 2 = no contour; 3 = read failure; 4 = contour error; 5 = profile changed
@@ -197,11 +197,11 @@ fun FourierExperimentScreen() {
                     Slider(
                         value = sensitivity.toFloat(),
                         onValueChange = { sensitivity = it.roundToInt() },
-                        enabled = !loading && !(result == 1 && outcome == PhotoContours.Kind.FACE),
+                        enabled = !loading,
                         valueRange = 0f..100f,
                         steps = 9
                     )
-                    if (result == 1 && outcome == PhotoContours.Kind.FACE) {
+                    if (result == 1 && (outcome == PhotoContours.Kind.FACE || outcome == PhotoContours.Kind.FACE_PARTIAL)) {
                         Text(stringResource(R.string.face_sensitivity), style = MaterialTheme.typography.bodySmall)
                     }
                     OutlinedButton(
@@ -227,9 +227,10 @@ fun FourierExperimentScreen() {
                 when (result) {
                     1 -> Text(stringResource(when (outcome) {
                         PhotoContours.Kind.FACE -> R.string.outcome_face
+                        PhotoContours.Kind.FACE_PARTIAL -> R.string.outcome_face_partial
                         PhotoContours.Kind.SUBJECT -> R.string.outcome_subject
                         else -> R.string.outcome_drawing
-                    }, drawing?.strokes?.size ?: 0), color = accent)
+                    }, drawing?.strokes?.size ?: 0), color = if (outcome == PhotoContours.Kind.FACE_PARTIAL) Color(0xFFFFD18A) else accent)
                     2 -> Text(stringResource(if (outcome == PhotoContours.Kind.MODEL_UNAVAILABLE)
                         R.string.model_unavailable else R.string.outcome_missing), color = Color(0xFFFFD18A))
                     5 -> Text(stringResource(R.string.profile_changed), color = Color(0xFFFFD18A))
@@ -310,8 +311,8 @@ private fun ContourPreview(bitmap: Bitmap, drawing: ContourDrawing?, modifier: M
         drawImage(preview,
             dstOffset = androidx.compose.ui.unit.IntOffset(left.roundToInt(), top.roundToInt()),
             dstSize = androidx.compose.ui.unit.IntSize((bitmap.width * factor).roundToInt(), (bitmap.height * factor).roundToInt()))
-        // Detector uses <=640px while the import may have up to 900px.
-        val detectorFactor = minOf(1.0, 640.0 / max(bitmap.width, bitmap.height))
+        // Raster and overlay must use the same dimensions; face points are mapped into that raster.
+        val detectorFactor = minOf(1.0, PhotoContours.RASTER_SIDE.toDouble() / max(bitmap.width, bitmap.height))
         val detectorWidth = max(1, (bitmap.width * detectorFactor).toInt())
         val detectorHeight = max(1, (bitmap.height * detectorFactor).toInt())
         for (stroke in drawing?.sourceStrokes.orEmpty()) {
@@ -395,7 +396,7 @@ private fun decodePhoto(context: Context, uri: Uri): Bitmap {
     boundsStream.use { BitmapFactory.decodeStream(it, null, bounds) }
     if (bounds.outWidth < 1 || bounds.outHeight < 1) throw IllegalArgumentException("Invalid image")
     var downsample = 1
-    while (max(bounds.outWidth, bounds.outHeight) / downsample > 900) downsample *= 2
+    while (max(bounds.outWidth, bounds.outHeight) / downsample > 1800) downsample *= 2
     val options = BitmapFactory.Options().apply { inSampleSize = downsample }
     val bitmap = context.contentResolver.openInputStream(uri)?.use {
         BitmapFactory.decodeStream(it, null, options)

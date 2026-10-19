@@ -14,7 +14,7 @@
     <string name="proof_choose">Test a sample or import an image</string>
     <string name="circle">Circle</string>
     <string name="star">Star</string>
-    <string name="photo_warning">Auto prioritizes facial features. Subject isolates pets and objects. Drawing processes lines without a model. Always inspect the photo overlay.</string>
+    <string name="photo_warning">Auto and Drawing protect facial features and combine them with hair and silhouette. Subject processes objects and pets. Check the overlay and complete result.</string>
     <string name="selected_image">Selected photo preview</string>
     <string name="sensitivity">Mask and detail sensitivity: %1$d</string>
     <string name="reprocess">Try outline again</string>
@@ -25,19 +25,20 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Fourier components: %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.3.0 · Stage 1</string>
+    <string name="proof_version">Experimental version 0.3.1 · Stage 1</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
     <string name="profile_subject">Subject</string>
     <string name="profile_drawing">Drawing</string>
-    <string name="outcome_face">Facial features: %1$d strokes. Check eyes, nose and mouth in the preview.</string>
+    <string name="outcome_face">Portrait: %1$d strokes. Eyes, nose and mouth protected. Check likeness in the complete result.</string>
     <string name="outcome_subject">Subject and details: %1$d strokes. Check that the outline matches your subject.</string>
-    <string name="outcome_drawing">Detected lines: %1$d strokes. This profile does not separate the background.</string>
+    <string name="outcome_drawing">Detected lines: %1$d strokes. Selection balanced across image regions.</string>
     <string name="model_unavailable">The subject model is not available yet. Connect to the Internet and retry so Google Play services can download it. Drawing works without that model.</string>
     <string name="profile_changed">Profile changed. Tap retry to process the photo.</string>
     <string name="no_drawing">The animation appears after strokes have been detected in this image.</string>
-    <string name="face_sensitivity">Facial features use model points. Sensitivity applies to Subject and Drawing.</string>
+    <string name="face_sensitivity">Sensitivity adjusts hair, silhouette and details. Facial features are preserved independently of that filter.</string>
     <string name="show_complete">Show complete result</string>
     <string name="show_animation">Show animation</string>
+    <string name="outcome_face_partial">Partial portrait: %1$d strokes. Some reliable facial features are missing. Try a closer or more frontal photo.</string>
 </resources>

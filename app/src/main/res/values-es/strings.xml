@@ -14,7 +14,7 @@
     <string name="proof_choose">Prueba una figura o importa una imagen</string>
     <string name="circle">Círculo</string>
     <string name="star">Estrella</string>
-    <string name="photo_warning">Automático prioriza rasgos del rostro. Sujeto aísla mascotas y objetos. Dibujo procesa líneas sin modelo. Revisa siempre los trazos sobre la foto.</string>
+    <string name="photo_warning">Auto y Dibujo protegen los rasgos de los rostros y los combinan con cabello y silueta. Sujeto procesa objetos y mascotas. Revisa la vista previa y el resultado completo.</string>
     <string name="selected_image">Vista previa de la foto seleccionada</string>
     <string name="sensitivity">Sensibilidad de máscara y detalles: %1$d</string>
     <string name="reprocess">Reintentar contorno</string>
@@ -25,19 +25,20 @@
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes de Fourier: %1$d</string>
     <string name="proof_explanation">Cada trazo tiene sus propios epiciclos. El lápiz se levanta entre rasgos separados. Más componentes mejoran la reconstrucción del trazo detectado.</string>
-    <string name="proof_version">Versión experimental 0.3.0 · Etapa 1</string>
+    <string name="proof_version">Versión experimental 0.3.1 · Etapa 1</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
     <string name="processing_profile">Perfil de procesamiento</string>
     <string name="profile_auto">Auto</string>
     <string name="profile_subject">Sujeto</string>
     <string name="profile_drawing">Dibujo</string>
-    <string name="outcome_face">Rasgos faciales: %1$d trazos. Comprueba ojos, nariz y boca en la vista previa.</string>
+    <string name="outcome_face">Retrato: %1$d trazos. Ojos, nariz y boca protegidos. Revisa el parecido en el resultado completo.</string>
     <string name="outcome_subject">Sujeto y detalles: %1$d trazos. Revisa si la silueta corresponde al sujeto.</string>
-    <string name="outcome_drawing">Líneas detectadas: %1$d trazos. Este perfil no separa el fondo.</string>
+    <string name="outcome_drawing">Líneas detectadas: %1$d trazos. Selección equilibrada por regiones.</string>
     <string name="model_unavailable">El modelo de sujeto aún no está disponible. Conecta a Internet y vuelve a intentar para que Google Play services lo descargue. Puedes usar Dibujo sin ese modelo.</string>
     <string name="profile_changed">Perfil cambiado. Pulsa Reintentar para procesar la foto.</string>
     <string name="no_drawing">La animación aparecerá cuando se detecten trazos en esta imagen.</string>
-    <string name="face_sensitivity">Los rasgos faciales usan puntos del modelo. La sensibilidad se aplica en Sujeto y Dibujo.</string>
+    <string name="face_sensitivity">La sensibilidad ajusta cabello, silueta y detalles. Los rasgos faciales se conservan independientemente de ese filtro.</string>
     <string name="show_complete">Ver resultado completo</string>
     <string name="show_animation">Ver animación</string>
+    <string name="outcome_face_partial">Retrato parcial: %1$d trazos. Faltan rasgos faciales fiables. Prueba una foto más cercana o frontal.</string>
 </resources>
