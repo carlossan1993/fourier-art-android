@@ -61,7 +61,12 @@ class PhotoFlowTest {
         compose.waitUntil(30000) {compose.onAllNodesWithTag("camera_shutter").fetchSemanticsNodes().firstOrNull()?.config?.contains(SemanticsProperties.Disabled)==false}
         compose.onNodeWithTag("camera_shutter").assertIsEnabled()
         val folder=File(context.getExternalFilesDir(null),"quality").apply {mkdirs()}
-        device.takeScreenshot(File(folder,"stage2-camera.png"))
+        val cameraScreenshot=File(folder,"stage2-camera.png")
+        device.takeScreenshot(cameraScreenshot)
+        val chrome=BitmapFactory.decodeFile(cameraScreenshot.path)
+        val background=chrome.getPixel(chrome.width/2,8)
+        assertTrue("System bar must remain readable over a dark background",Color.red(background)+Color.green(background)+Color.blue(background)<200)
+        chrome.recycle()
         compose.onNodeWithTag("camera_cancel").performClick()
         compose.runOnIdle {assertSame(prepared,model.image)}
         compose.onNodeWithTag("take_photo").performScrollTo().performClick()

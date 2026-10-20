@@ -11,7 +11,7 @@ El propietario pidió el 19/10/2026 continuar esta etapa aquí en Work por dispo
 - Importar/capturar abre el editor; Aplicar y procesar calcula los contornos. Editar permite regresar al original sin acumular recortes. Cancelar una edición mantiene la preparación aplicada. Descartar una foto aún no aplicada vuelve a la demostración; cancelar el selector o la cámara mantiene el trabajo previo.
 - ViewModel conserva foto, preparación y análisis al recrear la actividad. Una única fuente normalizada y metadatos se guardan como trabajo privado en noBackupFilesDir para recuperar una sesión tras recrear el proceso. No es una galería de proyectos. Reemplazar o descartar elimina la foto anterior; las capturas temporales se limpian al importar, cancelar/fallar o volver a iniciar.
 - Manejo de trabajos cancelados y escrituras serializadas para evitar que una operación anterior sobrescriba un resultado nuevo. Fotografías ilegibles o problemas de memoria no deben borrar la imagen previa.
-- Español/inglés en controles y errores. Límites de decodificación y parámetros del motor conservados.
+- Español/inglés en controles y errores. Barras del sistema con fondo/iconos coherentes con el tema oscuro y áreas seguras, también en Android 15. Límites de decodificación y parámetros del motor conservados.
 
 ## Dependencias acotadas
 
