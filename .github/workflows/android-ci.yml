@@ -67,6 +67,9 @@ jobs:
           api-level: 29
           target: default
           arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          heap-size: 256M
           emulator-boot-timeout: 180
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back emulated -camera-front emulated
@@ -85,6 +88,9 @@ jobs:
           api-level: 35
           target: default
           arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          heap-size: 256M
           avd-name: stage2-api35
           emulator-boot-timeout: 180
           disable-animations: true

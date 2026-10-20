@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import androidx.core.content.ContextCompat
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.testTag
+import com.fourierart.app.player.AnimationPlayer
 import com.fourierart.app.photo.PhotoSessionModel
 import com.fourierart.app.photo.CameraCapture
 import com.fourierart.app.contours.ContourEditor
@@ -42,12 +43,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -85,6 +80,7 @@ private val harmonicOptions = listOf(10, 20, 50, 100, 200, 400, 800)
 @Composable
 fun FourierExperimentScreen(model: PhotoSessionModel) {
     val context = LocalContext.current
+    var playerExpanded by rememberSaveable { mutableStateOf(false) }
     var cameraOpen by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) { model.notice = 0; cameraOpen = true } else model.notice = R.string.camera_denied
@@ -103,6 +99,11 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
 
     if (correcting) {
         ContourEditor(this@with)
+        return@with
+    }
+
+    if (playerExpanded && drawing != null && !editing) {
+        AnimationPlayer(this@with, expanded = true, onExpand = { playerExpanded = false })
         return@with
     }
 
@@ -271,28 +272,10 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                     style = MaterialTheme.typography.titleMedium
                 )
                 if (drawing != null) {
-                    FourierDisplay(drawing!!, components, showComplete, Modifier.fillMaxWidth().height(300.dp))
-                    OutlinedButton(onClick = { showComplete = !showComplete; settingsChanged(false) }, modifier = Modifier.fillMaxWidth().testTag("fourier_complete")) {
-                        Text(stringResource(if (showComplete) R.string.show_animation else R.string.show_complete))
-                    }
+                    AnimationPlayer(this@with, onExpand = { playerExpanded = true })
                 } else {
                     Text(stringResource(R.string.no_drawing), Modifier.padding(16.dp))
                 }
-                Text(stringResource(R.string.components_label, components))
-                drawing?.let { current ->
-                    val counts = current.strokes.map { it.curve.effectiveComponents(components) }
-                    Text(stringResource(R.string.effective_components, current.strokes.size, counts.min(), counts.max()),
-                        style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("effective_components"))
-                }
-                Slider(
-                    value = harmonicOptions.indexOf(components).coerceAtLeast(0).toFloat(),
-                    onValueChange = {
-                        components = harmonicOptions[it.roundToInt().coerceIn(0, harmonicOptions.lastIndex)]; settingsChanged(false)
-                    },
-                    modifier = Modifier.testTag("fourier_components"),
-                    valueRange = 0f..harmonicOptions.lastIndex.toFloat(),
-                    steps = harmonicOptions.size - 2
-                )
                 Text(
                     stringResource(R.string.proof_explanation),
                     style = MaterialTheme.typography.bodySmall
@@ -351,62 +334,6 @@ private fun ContourPreview(bitmap: Bitmap, drawing: ContourDrawing?, modifier: M
             }
             if (stroke.closed) path.close()
             drawPath(path, accent, style = Stroke(1.5.dp.toPx()))
-        }
-    }
-}
-
-@Composable
-private fun FourierDisplay(drawing: ContourDrawing, components: Int, showComplete: Boolean, modifier: Modifier = Modifier) {
-    androidx.compose.runtime.key(drawing) {
-        val transition = rememberInfiniteTransition(label = "fourier-animation")
-        val animatedProgress by transition.animateFloat(
-            initialValue = 0f, targetValue = 1.25f,
-            animationSpec = infiniteRepeatable(animation = tween(15000, easing = LinearEasing), repeatMode = RepeatMode.Restart),
-            label = "trace-reveal"
-        )
-        val progress = if (showComplete) 1f else animatedProgress.coerceAtMost(1f)
-        var trails by remember(drawing, components) { mutableStateOf<List<List<Point2>>>(emptyList()) }
-        LaunchedEffect(drawing, components) {
-            trails = withContext(Dispatchers.Default) { drawing.strokes.map { it.trace(components) } }
-        }
-        val timeline = remember(drawing) { DrawingTimeline(drawing) }
-        Canvas(modifier = modifier.clipToBounds().testTag(if (trails.isEmpty()) "fourier_preparing" else "fourier_ready")) {
-            drawRect(background)
-            if (trails.size != drawing.strokes.size) return@Canvas
-            val scale = min(size.width, size.height) * 0.43f
-            val origin = Offset(size.width / 2f, size.height / 2f)
-            fun xy(p: Point2) = Offset(origin.x + p.x.toFloat() * scale, origin.y + p.y.toFloat() * scale)
-            val frame = timeline.frame(progress.toDouble())
-            for (i in trails.indices) {
-                val part = if (i < frame.completed) 1.0 else if (i == frame.active) frame.localProgress else 0.0
-                if (part <= 0) continue
-                val trail = trails[i]
-                val count = (part * trail.lastIndex).toInt().coerceIn(0, trail.lastIndex)
-                val path = Path().apply {
-                    moveTo(xy(trail[0]).x, xy(trail[0]).y)
-                    for (j in 1..count) { val p = xy(trail[j]); lineTo(p.x, p.y) }
-                    // The visible line and epicycle tip evaluate the same time, including between samples.
-                    if (part < 1.0) { val tip = xy(drawing.strokes[i].position(part, components)); lineTo(tip.x, tip.y) }
-                }
-                drawPath(path, Color.White, style = Stroke((if (drawing.strokes.size > 200) 1.2.dp else 1.5.dp).toPx(), cap = StrokeCap.Round))
-            }
-            val active = frame.active ?: return@Canvas
-            val local = frame.localProgress
-            val stroke = drawing.strokes[active]
-            val t = 2 * PI * local * stroke.visibleFraction
-            var pos = Point2(0.0, 0.0)
-            for (h in stroke.curve.harmonics.take(stroke.curve.effectiveComponents(components)).flatMap { it.rotations() }) {
-                val end = h.at(t)
-                val dest = Point2(pos.x + end.x, pos.y + end.y)
-                // DC positions the chain; it is an offset, not a rotating circle.
-                if (h.frequency != 0) {
-                    if (h.radius * scale > 1.2) drawCircle(accent.copy(alpha = 0.3f),
-                        radius = (h.radius * scale).toFloat(), center = xy(pos), style = Stroke(0.7.dp.toPx()))
-                    drawLine(accent.copy(alpha = 0.6f), xy(pos), xy(dest), 0.8.dp.toPx())
-                }
-                pos = dest
-            }
-            drawCircle(accent, 3.dp.toPx(), xy(pos))
         }
     }
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.fourierart.app.R
 import com.fourierart.app.core.*
 import com.fourierart.app.contours.*
+import com.fourierart.app.player.AnimationJson
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -18,6 +19,31 @@ import java.io.File
 class PhotoSessionModel(app: Application): AndroidViewModel(app) {
     var drawing by mutableStateOf<ContourDrawing?>(ContourDrawing.sample(FourierCurve.star()))
     var showComplete by mutableStateOf(false)
+    var animationStyle by mutableStateOf(AnimationStyle()); private set
+    var animationPosition by mutableDoubleStateOf(0.0); private set
+    var animationPlaying by mutableStateOf(true); private set
+    var animationViewport by mutableStateOf(PreviewViewport()); private set
+    private val animationPreferences=app.getSharedPreferences("animation-style",0)
+    fun tickAnimation(seconds: Double) {
+        if(!showComplete && !loading && !editing && !correcting)
+            animationPosition=PlaybackClock.advance(animationPosition,seconds,animationStyle.speed,animationPlaying)
+    }
+    fun updateAnimationStyle(style: AnimationStyle) {animationStyle=style;settingsChanged(false)}
+    fun toggleAnimation() {
+        if(showComplete) {showComplete=false;animationPlaying=true} else animationPlaying=!animationPlaying
+        settingsChanged(false)
+    }
+    fun restartAnimation() {animationPosition=0.0;animationPlaying=true;showComplete=false;settingsChanged(false)}
+    fun seekAnimation(progress: Double) {
+        if(!progress.isFinite()) return
+        animationPosition=progress.coerceIn(0.0,1.0);animationPlaying=false;showComplete=false;settingsChanged(false)
+    }
+    fun updateAnimationViewport(view: PreviewViewport) {animationViewport=view;settingsChanged(false)}
+    fun checkpointAnimation() {
+        saveJob?.cancel();saveJob=viewModelScope.launch {
+            try {persist()} catch(e:CancellationException) {throw e} catch(_:Exception) {notice=R.string.photo_save_error}
+        }
+    }
     var mode by mutableStateOf(PhotoContours.Mode.AUTO)
     var outcome by mutableStateOf(PhotoContours.Kind.NO_SUBJECT)
     var image by mutableStateOf<Bitmap?>(null); private set
@@ -53,14 +79,18 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
     init {
         captures.listFiles()?.forEach {it.delete()}
         operate {
-            val saved=withContext(Dispatchers.IO) {disk.withLock {store.read()}}
+            val saved=withContext(Dispatchers.IO) {disk.withLock {
+                val style=animationPreferences.getString("style",null)
+                animationStyle=AnimationJson.readStyle(try {style?.let {JSONObject(it)}} catch(_:Exception) {null})
+                store.read()
+            }}
             if(saved!=null) {
                 source=saved.source;sourceFile=saved.file;draft=saved.draft;applied=saved.applied;editing=saved.editing
                 readOptions(saved.options)
                 editorPreview=withContext(Dispatchers.Default) {PhotoIO.rotate(saved.source,draft.turns)}
                 image=saved.applied?.let {p -> withContext(Dispatchers.Default) {PhotoIO.prepare(saved.source,p)}}
                 drawing=null;result=5
-                if(!editing && image!=null) process(image!!)
+                if(!editing && image!=null) process(image!!,resetPlayback=false)
             } else withContext(Dispatchers.IO) {disk.withLock {store.clear()}}
         }
     }
@@ -78,8 +108,13 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
     private fun options()=JSONObject().put("mode",mode.name).put("style",lineStyle.name).put("detail",detail.name)
         .put("components",components).put("sensitivity",sensitivity).put("complete",showComplete)
         .put("correction",ContourRecipeJson.encode(correction))
+        .put("animation",AnimationJson.encode(AnimationJson.Snapshot(animationStyle,animationPosition,animationPlaying,animationViewport)))
     private fun readOptions(o: JSONObject) {
         correction=ContourRecipeJson.decode(o.optJSONObject("correction"))
+        o.optJSONObject("animation")?.let {json ->
+            val saved=AnimationJson.decode(json);animationStyle=saved.style;animationPosition=saved.position
+            animationPlaying=saved.playing;animationViewport=saved.viewport
+        }
         mode=PhotoContours.Mode.entries.firstOrNull {it.name==o.optString("mode")} ?: PhotoContours.Mode.AUTO
         lineStyle=LineStyle.entries.firstOrNull {it.name==o.optString("style")} ?: LineStyle.STRUCTURE
         detail=DetailLevel.entries.firstOrNull {it.name==o.optString("detail")} ?: DetailLevel.BALANCED
@@ -88,9 +123,12 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
     }
     private suspend fun persist(file: String?=sourceFile, prep: PhotoPreparation?=applied,
         work: PhotoPreparation=draft, edit: Boolean=editing) {
-        val name=file ?: return
         val settings=options()
-        withContext(Dispatchers.IO) {disk.withLock {ensureActive();store.write(name,prep,work,edit,settings)}}
+        val style=AnimationJson.style(animationStyle).toString()
+        withContext(Dispatchers.IO) {disk.withLock {
+            ensureActive();check(animationPreferences.edit().putString("style",style).commit())
+            if(file!=null) store.write(file,prep,work,edit,settings)
+        }}
     }
     fun settingsChanged(clear: Boolean=true) {
         if(clear) {drawing=null;result=5}
@@ -106,7 +144,7 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
                     ensureActive();val name=store.saveSource(bitmap)
                     store.write(name,null,PhotoPreparation(),true,settings);name
                 }}
-                clearCorrection();source=bitmap;sourceFile=file;editorPreview=bitmap;draft=PhotoPreparation();applied=null;editing=true
+                clearCorrection();animationPosition=0.0;animationViewport=PreviewViewport();source=bitmap;sourceFile=file;editorPreview=bitmap;draft=PhotoPreparation();applied=null;editing=true
                 image=null;analysis=null;analyzedMode=null;drawing=null;result=5
             } finally {temporary?.delete()}
         }
@@ -129,21 +167,21 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
         if(applied==null) {sample(false);return}
         draft=applied!!;editing=false
         val bitmap=image
-        if(bitmap!=null && analysis==null) operate {process(bitmap);persist()} else settingsChanged(false)
+        if(bitmap!=null && analysis==null) operate {process(bitmap,resetPlayback=false);persist()} else settingsChanged(false)
     }
     fun applyPhoto() {
         val original=source ?: return;val prep=draft
         saveJob?.cancel()
         operate {
             val prepared=withContext(Dispatchers.Default) {PhotoIO.prepare(original,prep)}
-            clearCorrection()
+            clearCorrection();animationPosition=0.0;animationViewport=PreviewViewport()
             persist(prep=prep,work=prep,edit=false)
             image=prepared;applied=prep;editing=false;analysis=null;analyzedMode=null;drawing=null;result=5
             process(prepared)
         }
     }
     fun reprocess() {val bitmap=image ?: return;operate {process(bitmap);persist()}}
-    private suspend fun process(bitmap: Bitmap) {
+    private suspend fun process(bitmap: Bitmap,resetPlayback: Boolean=true) {
         val old=analysis?.takeIf {analyzedMode==mode && !it.modelUnavailable}
         val selectedMode=mode;val selectedSensitivity=sensitivity;val selectedDetail=detail;val selectedStyle=lineStyle
         try {
@@ -156,6 +194,7 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
             val rendered=if(correction==ContourRecipe()) detectedStrokes to processed.second.drawing
                 else withContext(Dispatchers.Default) {renderCorrection(correction)}
             drawing=rendered.second;correctionPreview=rendered.first
+            if(resetPlayback) animationPosition=0.0
             result=if(drawing!=null) 1 else if(correction!=ContourRecipe()) 6 else 2
         } catch(e:CancellationException) {throw e} catch(_:Exception) {drawing=null;result=4}
     }
@@ -202,8 +241,8 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
         operate {
             val rendered=withContext(Dispatchers.Default) {renderCorrection(recipe)}
             // Commit only after durable metadata succeeds; a failed save leaves the editor open.
-            val previous=correction;correction=recipe
-            try {persist()} catch(e:Exception) {correction=previous;throw e}
+            val previous=correction;val previousPosition=animationPosition;correction=recipe;animationPosition=0.0
+            try {persist()} catch(e:Exception) {correction=previous;animationPosition=previousPosition;throw e}
             correctionPreview=rendered.first;drawing=rendered.second;outcome=detectedKind
             result=if(drawing!=null) 1 else if(recipe==ContourRecipe()) 2 else 6
             correcting=false
@@ -214,7 +253,7 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
         operate {
             withContext(Dispatchers.IO) {disk.withLock {ensureActive();store.clear();captures.listFiles()?.forEach {it.delete()}}}
             clearCorrection();sourceFile=null;source=null;image=null;editorPreview=null;applied=null;draft=PhotoPreparation();editing=false
-            analysis=null;analyzedMode=null;result=0;showComplete=false
+            analysis=null;analyzedMode=null;result=0;showComplete=false;animationPosition=0.0;animationViewport=PreviewViewport()
             drawing=ContourDrawing.sample(if(circle) FourierCurve.circle() else FourierCurve.star())
         }
     }

@@ -10,7 +10,7 @@
     <string name="language_label">Language</string>
     <string name="version_label">Development version 0.1.0 · Stage 0</string>
 
-    <string name="proof_subtitle">Stage 4 · Fourier engine</string>
+    <string name="proof_subtitle">Stage 5 · Animation and controls</string>
     <string name="proof_choose">Test a sample or import an image</string>
     <string name="circle">Circle</string>
     <string name="star">Star</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Components per stroke (maximum): %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.8.0 · Stage 4</string>
+    <string name="proof_version">Experimental version 0.9.0 · Stage 5</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
@@ -101,4 +101,27 @@
     <string name="contour_empty">The contour is empty. Open Edit contours to restore it or add lines.</string>
     <string name="correction_limit">You reached 100 corrections. Undo or restore detection to continue.</string>
     <string name="effective_components">%1$d strokes · %2$d–%3$d effective components per stroke</string>
+    <string name="close_player">Close</string>
+    <string name="pause_animation">Pause</string>
+    <string name="resume_animation">Play</string>
+    <string name="restart_animation">Restart</string>
+    <string name="playback_speed">Speed</string>
+    <string name="speed_slow">Slow · 0.5×</string>
+    <string name="speed_normal">Normal · 1×</string>
+    <string name="speed_fast">Fast · 2×</string>
+    <string name="speed_very_fast">Very fast · 4×</string>
+    <string name="show_epicircles">Circles and guides</string>
+    <string name="light_background">Light background</string>
+    <string name="trace_color">Stroke color</string>
+    <string name="color_ink">Ink</string>
+    <string name="color_teal">Teal</string>
+    <string name="color_gold">Gold</string>
+    <string name="color_rose">Rose</string>
+    <string name="player_zoom">Zoom: %1$d %%</string>
+    <string name="fit_drawing">Reset framing</string>
+    <string name="expand_player">Expand view</string>
+    <string name="player_help">Seek to review a point: playback will pause. Expand the view to zoom and move the drawing.</string>
+    <string name="player_gesture_help">Pinch to zoom and drag to move the drawing. Reset framing centers it again.</string>
+    <string name="animation_progress">Progress: %1$d %%</string>
+    <string name="animation_canvas_description">Fourier animation. Use the controls to pause, change speed and review the drawing.</string>
 </resources>
