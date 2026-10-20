@@ -10,7 +10,7 @@
     <string name="language_label">Idioma</string>
     <string name="version_label">Versión de desarrollo 0.1.0 · Etapa 0</string>
 
-    <string name="proof_subtitle">Etapa 2 · Captura y preparación</string>
+    <string name="proof_subtitle">Etapa 3 · Corrección de contornos</string>
     <string name="proof_choose">Prueba una figura o importa una imagen</string>
     <string name="circle">Círculo</string>
     <string name="star">Estrella</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes de Fourier: %1$d</string>
     <string name="proof_explanation">Cada trazo tiene sus propios epiciclos. El lápiz se levanta entre rasgos separados. Más componentes mejoran la reconstrucción del trazo detectado.</string>
-    <string name="proof_version">Versión experimental 0.6.0 · Etapa 2</string>
+    <string name="proof_version">Versión experimental 0.7.0 · Etapa 3</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
     <string name="processing_profile">Perfil de procesamiento</string>
     <string name="profile_auto">Auto</string>
@@ -72,4 +72,32 @@
     <string name="photo_memory_error">La foto requiere demasiada memoria. Prueba con una imagen de menor tamaño.</string>
     <string name="photo_save_error">No se pudo conservar la foto de trabajo. Comprueba el espacio disponible y vuelve a intentar.</string>
     <string name="working_photo_notice">Esta foto se conserva como trabajo local hasta que la reemplaces o descartes.</string>
+    <string name="correct_contours">Corregir contornos</string>
+    <string name="contour_canvas_description">Lienzo de corrección de contornos. Usa los botones para elegir zona, borrar, dibujar o mover.</string>
+    <string name="keep_help">Arrastra un rectángulo alrededor del sujeto: se conservarán solo los trazos dentro de esa zona.</string>
+    <string name="erase_help">Desliza el borrador sobre los segmentos que quieras quitar. Cada gesto se puede deshacer.</string>
+    <string name="draw_help">Dibuja sobre la foto para añadir las líneas que faltan. Cada gesto crea un trazo independiente.</string>
+    <string name="move_help">Con zoom, arrastra para desplazar la imagen y llegar a otros detalles.</string>
+    <string name="contour_details">Detalles</string>
+    <string name="contour_silhouette">Silueta</string>
+    <string name="contour_detected">Detectado · %1$d trazos</string>
+    <string name="contour_custom">Personalizado · %1$d trazos</string>
+    <string name="no_silhouette">No hay silueta fiable en esta foto. Usa Detalles o dibuja una corrección.</string>
+    <string name="keep_subject">Conservar zona</string>
+    <string name="erase_segments">Borrar</string>
+    <string name="draw_lines">Dibujar</string>
+    <string name="move_canvas">Mover</string>
+    <string name="undo">Deshacer</string>
+    <string name="redo">Rehacer</string>
+    <string name="show_photo">Mostrar foto</string>
+    <string name="contour_zoom">Zoom: %1$d %%</string>
+    <string name="eraser_size">Tamaño del borrador</string>
+    <string name="small_strokes">Eliminar trazos pequeños: %1$d</string>
+    <string name="restore_detection">Volver a la detección</string>
+    <string name="correction_persistence">Aplicar guarda las correcciones con esta foto. Cancelar mantiene el resultado anterior.</string>
+    <string name="apply_contours">Aplicar contornos</string>
+    <string name="correction_intro">Puedes limpiar o completar el contorno antes de animarlo, incluso si la detección no encontró trazos.</string>
+    <string name="contour_applied">Contorno corregido: %1$d trazos. Revisa el resultado completo.</string>
+    <string name="contour_empty">El contorno quedó vacío. Abre Corregir contornos para restaurarlo o añadir líneas.</string>
+    <string name="correction_limit">Llegaste a 100 correcciones. Puedes deshacer o volver a la detección.</string>
 </resources>

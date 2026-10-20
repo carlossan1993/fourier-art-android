@@ -8,6 +8,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.testTag
 import com.fourierart.app.photo.PhotoSessionModel
 import com.fourierart.app.photo.CameraCapture
+import com.fourierart.app.contours.ContourEditor
+import com.fourierart.app.contours.ContourRecipe
 import com.fourierart.app.photo.PhotoEditor
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -98,6 +100,11 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
         return@with
     }
 
+    if (correcting) {
+        ContourEditor(this@with)
+        return@with
+    }
+
     val currentLanguage = context.resources.configuration.locales[0].language
     Column(
         modifier = Modifier
@@ -164,6 +171,9 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                 )
                 if (!editing && image != null) {
                     ContourPreview(image!!, drawing, Modifier.fillMaxWidth().height(220.dp))
+                    Button(onClick = { openCorrection() }, enabled = !loading && analysis != null && result != 5,
+                        modifier = Modifier.fillMaxWidth().testTag("correct_contours")) { Text(stringResource(R.string.correct_contours)) }
+                    Text(stringResource(R.string.correction_intro), style = MaterialTheme.typography.bodySmall)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedButton(onClick = { editPhoto() }, enabled = !loading, modifier = Modifier.weight(1f).testTag("edit_photo")) { Text(stringResource(R.string.edit_photo)) }
                         OutlinedButton(onClick = { sample(false) }, enabled = !loading, modifier = Modifier.weight(1f).testTag("discard_photo")) { Text(stringResource(R.string.discard_photo)) }
@@ -233,7 +243,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                         style = MaterialTheme.typography.bodySmall)
                 }
                 if (!editing) when (result) {
-                    1 -> Text(stringResource(when (outcome) {
+                    1 -> if (correction != ContourRecipe()) Text(stringResource(R.string.contour_applied, drawing?.strokes?.size ?: 0), color = accent) else Text(stringResource(when (outcome) {
                         PhotoContours.Kind.FACE -> R.string.outcome_face
                         PhotoContours.Kind.FACE_PARTIAL -> R.string.outcome_face_partial
                         PhotoContours.Kind.SUBJECT -> R.string.outcome_subject
@@ -241,6 +251,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                     }, drawing?.strokes?.size ?: 0), color = if (outcome == PhotoContours.Kind.FACE_PARTIAL) Color(0xFFFFD18A) else accent)
                     2 -> Text(stringResource(if (outcome == PhotoContours.Kind.MODEL_UNAVAILABLE)
                         R.string.model_unavailable else R.string.outcome_missing), color = Color(0xFFFFD18A))
+                    6 -> Text(stringResource(R.string.contour_empty), color = Color(0xFFFFD18A))
                     5 -> Text(stringResource(R.string.profile_changed), color = Color(0xFFFFD18A))
                     3 -> Text(stringResource(R.string.outcome_error), color = Color(0xFFFFB3B3))
                     4 -> Text(stringResource(R.string.outcome_contour_error), color = Color(0xFFFFB3B3))

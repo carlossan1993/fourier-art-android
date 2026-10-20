@@ -17,7 +17,11 @@ El propietario pidió el 19/10/2026 continuar esta etapa aquí en Work por dispo
 
 CameraX 1.5.3 (camera2/lifecycle/view), Lifecycle 2.10.0 (ViewModel/runtime Compose) y ExifInterface 1.4.2, requerida también por CameraX 1.5.3 por su corrección de JPEGs. Sin backend, SDK publicitario ni servicio de pago.
 
-## Verificación preparada
+## Verificación y aceptación
+
+El propietario confirmó «funcionó bien» y pidió avanzar el 19/10/2026; PR #8 integrado. Actions 39369356851: 44 JVM, nueve API 29 y cuatro API 35 correctas. La confirmación no especifica dos teléfonos; ese punto permanece pendiente en #6.
+
+### Cobertura automatizada
 
 - Cuatro pruebas JVM de coordenadas, giros, límites y recorte mínimo, además de las 40 pruebas del motor existente.
 - Android: ocho orientaciones EXIF reales en JPEG, giro/recorte con imagen de cuadrantes, recuperación de fuente/preparación en un nuevo almacén y limpieza de versiones anteriores.
