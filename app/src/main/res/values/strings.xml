@@ -10,7 +10,7 @@
     <string name="language_label">Language</string>
     <string name="version_label">Development version 0.1.0 · Stage 0</string>
 
-    <string name="proof_subtitle">Stage 3 · Contour correction</string>
+    <string name="proof_subtitle">Stage 4 · Fourier engine</string>
     <string name="proof_choose">Test a sample or import an image</string>
     <string name="circle">Circle</string>
     <string name="star">Star</string>
@@ -23,9 +23,9 @@
     <string name="outcome_error">The image could not be processed. Try another image.</string>
     <string name="outcome_sample">Mathematical demonstration with a known contour.</string>
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
-    <string name="components_label">Fourier components: %1$d</string>
+    <string name="components_label">Components per stroke (maximum): %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.7.0 · Stage 3</string>
+    <string name="proof_version">Experimental version 0.8.0 · Stage 4</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
@@ -100,4 +100,5 @@
     <string name="contour_applied">Corrected contour: %1$d strokes. Review the complete result.</string>
     <string name="contour_empty">The contour is empty. Open Edit contours to restore it or add lines.</string>
     <string name="correction_limit">You reached 100 corrections. Undo or restore detection to continue.</string>
+    <string name="effective_components">%1$d strokes · %2$d–%3$d effective components per stroke</string>
 </resources>
