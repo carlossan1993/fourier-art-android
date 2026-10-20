@@ -22,6 +22,6 @@ Pruebas JVM: FFT frente a DFT independiente con varios tamaños/frecuencias; Par
 
 Android 10/15: cambiar N desde el control, conservar la misma instancia de dibujo, revisar componentes efectivos, pasar de resultado completo a animación y producir capturas con N=10 y N=800. Una curva sintética densa genera paneles N=10/50/200/800 y métricas RMS repetibles. Se mantienen cámara, edición/recuperación, EXIF y calidad del detector. Consultar Actions del commit para resultados efectivos.
 
-Pendiente: probar 0.8.0 en teléfono. El banco formal de reconocibilidad >=24/30 de #3 y la matriz física de dos teléfonos de #6 siguen pendientes. No se declaran satisfechos por las pruebas matemáticas.
+Aceptación 20/10/2026: el propietario probó 0.8.0, indicó «lo veo bien» y pidió avanzar; PR #12 integrado. El banco formal de reconocibilidad >=24/30 de #3 y la matriz física de dos teléfonos de #6 siguen pendientes. No se declaran satisfechos por las pruebas matemáticas.
 
 Referencias: https://www.fftw.org/fftw3_doc/What-FFTW-Really-Computes.html (convenciones); https://developer.android.com/develop/ui/compose/side-effects (cancelación del trabajo de UI). No se incorpora FFTW ni otra dependencia.

@@ -28,7 +28,7 @@ class PlaybackControlsAndroidTest {
     private fun ready() {compose.waitForIdle();compose.waitUntil(60000) {!model.loading};compose.waitForIdle()}
     private fun setup() {
         ready();compose.runOnIdle {model.sample(false)};ready()
-        compose.runOnIdle {model.setAnimationStyle(AnimationStyle());model.seekAnimation(.25)}
+        compose.runOnIdle {model.updateAnimationStyle(AnimationStyle());model.seekAnimation(.25)}
         compose.waitUntil(60000) {compose.onAllNodesWithTag("fourier_ready").fetchSemanticsNodes().isNotEmpty()}
     }
     private fun click(tag: String) {compose.onNodeWithTag(tag).performScrollTo().performClick();compose.waitForIdle()}
@@ -60,7 +60,7 @@ class PlaybackControlsAndroidTest {
         click("player_restart");assertTrue(model.animationPlaying);assertFalse(model.showComplete)
         // UI clock is an infinite animation; automatic test-clock advancement leaves it stopped.
         assertEquals(0.0,model.animationPosition,1e-6)
-        compose.runOnIdle {model.seekAnimation(0.0);model.setAnimationStyle(AnimationStyle());model.checkpointAnimation()}
+        compose.runOnIdle {model.seekAnimation(0.0);model.updateAnimationStyle(AnimationStyle());model.checkpointAnimation()}
         ready()
     }
     @Test fun frameClockPausesAndDoesNotAccumulateBackgroundTime() {

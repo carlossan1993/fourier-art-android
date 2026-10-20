@@ -98,7 +98,7 @@ private fun PlayerCanvas(model: PhotoSessionModel,drawing: ContourDrawing,expand
             val b=coordinates.boundsInWindow();visible=b.width>1 && b.height>1 && b.bottom>0 && b.top<view.height
         }.pointerInput(expanded) {
             if(expanded) detectTransformGestures {centroid,pan,zoom,_ ->
-                model.setAnimationViewport(model.animationViewport.transform(zoom.toDouble(),pan.x.toDouble()/size.width,pan.y.toDouble()/size.height,
+                model.updateAnimationViewport(model.animationViewport.transform(zoom.toDouble(),pan.x.toDouble()/size.width,pan.y.toDouble()/size.height,
                     centroid.x.toDouble()/size.width,centroid.y.toDouble()/size.height))
             }
         }) {
@@ -166,22 +166,22 @@ private fun PlayerControls(model: PhotoSessionModel,drawing: ContourDrawing,expa
         }
         Text(stringResource(R.string.playback_speed),style=MaterialTheme.typography.labelLarge)
         for(row in PlaybackSpeed.entries.chunked(2)) Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-            for(speed in row) OutlinedButton(onClick={model.setAnimationStyle(model.animationStyle.copy(speed=speed))},enabled=model.animationStyle.speed!=speed,
+            for(speed in row) OutlinedButton(onClick={model.updateAnimationStyle(model.animationStyle.copy(speed=speed))},enabled=model.animationStyle.speed!=speed,
                 modifier=Modifier.weight(1f).testTag("speed_${speed.name.lowercase()}")) {Text(stringResource(when(speed) {
                     PlaybackSpeed.SLOW -> R.string.speed_slow;PlaybackSpeed.NORMAL -> R.string.speed_normal;PlaybackSpeed.FAST -> R.string.speed_fast;PlaybackSpeed.VERY_FAST -> R.string.speed_very_fast
                 }))}
         }
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.show_epicircles),modifier=Modifier.weight(1f).padding(top=12.dp))
-            Switch(checked=model.animationStyle.epicircles,onCheckedChange={model.setAnimationStyle(model.animationStyle.copy(epicircles=it))},modifier=Modifier.testTag("player_epicircles"))
+            Switch(checked=model.animationStyle.epicircles,onCheckedChange={model.updateAnimationStyle(model.animationStyle.copy(epicircles=it))},modifier=Modifier.testTag("player_epicircles"))
         }
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.light_background),modifier=Modifier.weight(1f).padding(top=12.dp))
-            Switch(checked=model.animationStyle.lightBackground,onCheckedChange={model.setAnimationStyle(model.animationStyle.copy(lightBackground=it))},modifier=Modifier.testTag("player_background"))
+            Switch(checked=model.animationStyle.lightBackground,onCheckedChange={model.updateAnimationStyle(model.animationStyle.copy(lightBackground=it))},modifier=Modifier.testTag("player_background"))
         }
         Text(stringResource(R.string.trace_color),style=MaterialTheme.typography.labelLarge)
         for(row in TraceColor.entries.chunked(2)) Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-            for(color in row) OutlinedButton(onClick={model.setAnimationStyle(model.animationStyle.copy(color=color))},enabled=model.animationStyle.color!=color,
+            for(color in row) OutlinedButton(onClick={model.updateAnimationStyle(model.animationStyle.copy(color=color))},enabled=model.animationStyle.color!=color,
                 modifier=Modifier.weight(1f).testTag("color_${color.name.lowercase()}")) {Text(stringResource(when(color) {
                     TraceColor.INK -> R.string.color_ink;TraceColor.TEAL -> R.string.color_teal;TraceColor.GOLD -> R.string.color_gold;TraceColor.ROSE -> R.string.color_rose
                 }))}
@@ -193,8 +193,8 @@ private fun PlayerControls(model: PhotoSessionModel,drawing: ContourDrawing,expa
         Slider(value=options.indexOf(model.components).coerceAtLeast(0).toFloat(),onValueChange={model.components=options[it.roundToInt().coerceIn(0,options.lastIndex)];model.settingsChanged(false)},
             valueRange=0f..options.lastIndex.toFloat(),steps=options.size-2,modifier=Modifier.testTag("fourier_components"))
         Text(stringResource(R.string.player_zoom,(model.animationViewport.zoom*100).roundToInt()))
-        Slider(value=model.animationViewport.zoom.toFloat(),onValueChange={model.setAnimationViewport(model.animationViewport.transform(it/model.animationViewport.zoom,0.0,0.0))},valueRange=1f..4f,modifier=Modifier.testTag("player_zoom"))
-        OutlinedButton(onClick={model.setAnimationViewport(PreviewViewport())},enabled=model.animationViewport!=PreviewViewport(),modifier=Modifier.fillMaxWidth().testTag("player_fit")) {Text(stringResource(R.string.fit_drawing))}
+        Slider(value=model.animationViewport.zoom.toFloat(),onValueChange={model.updateAnimationViewport(model.animationViewport.transform(it/model.animationViewport.zoom,0.0,0.0))},valueRange=1f..4f,modifier=Modifier.testTag("player_zoom"))
+        OutlinedButton(onClick={model.updateAnimationViewport(PreviewViewport())},enabled=model.animationViewport!=PreviewViewport(),modifier=Modifier.fillMaxWidth().testTag("player_fit")) {Text(stringResource(R.string.fit_drawing))}
         if(!expanded) OutlinedButton(onClick=onExpand,modifier=Modifier.fillMaxWidth().testTag("player_expand")) {Text(stringResource(R.string.expand_player))}
         Text(stringResource(if(expanded) R.string.player_gesture_help else R.string.player_help),style=MaterialTheme.typography.bodySmall)
     }

@@ -28,7 +28,7 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
         if(!showComplete && !loading && !editing && !correcting)
             animationPosition=PlaybackClock.advance(animationPosition,seconds,animationStyle.speed,animationPlaying)
     }
-    fun setAnimationStyle(style: AnimationStyle) {animationStyle=style;settingsChanged(false)}
+    fun updateAnimationStyle(style: AnimationStyle) {animationStyle=style;settingsChanged(false)}
     fun toggleAnimation() {
         if(showComplete) {showComplete=false;animationPlaying=true} else animationPlaying=!animationPlaying
         settingsChanged(false)
@@ -38,7 +38,7 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
         if(!progress.isFinite()) return
         animationPosition=progress.coerceIn(0.0,1.0);animationPlaying=false;showComplete=false;settingsChanged(false)
     }
-    fun setAnimationViewport(view: PreviewViewport) {animationViewport=view;settingsChanged(false)}
+    fun updateAnimationViewport(view: PreviewViewport) {animationViewport=view;settingsChanged(false)}
     fun checkpointAnimation() {
         saveJob?.cancel();saveJob=viewModelScope.launch {
             try {persist()} catch(e:CancellationException) {throw e} catch(_:Exception) {notice=R.string.photo_save_error}
