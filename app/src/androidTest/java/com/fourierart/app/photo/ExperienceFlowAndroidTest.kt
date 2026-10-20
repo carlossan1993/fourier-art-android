@@ -105,7 +105,12 @@ class ExperienceFlowAndroidTest {
         home()
         try {
             device.executeShellCommand("settings put system font_scale 1.5")
+            assertEquals("1.5",device.executeShellCommand("settings get system font_scale").trim())
+            compose.waitUntil(15000){kotlin.math.abs(compose.activity.resources.configuration.fontScale-1.5f)<.01f}
             compose.activityRule.scenario.recreate();ready()
+            assertEquals(1.5f,compose.activity.resources.configuration.fontScale,.01f)
+            val evidence=File(compose.activity.getExternalFilesDir(null),"quality/experience").apply{mkdirs()}
+            File(evidence,"stage7-accessibility.txt").writeText("fontScale=${compose.activity.resources.configuration.fontScale}\n")
             screenshot("large-text-home")
             click("resume_animation");click("open_parameters")
             compose.onNodeWithTag("fourier_components").performScrollTo().assertExists()
@@ -120,6 +125,7 @@ class ExperienceFlowAndroidTest {
             compose.onNodeWithTag("export_close").performClick()
         } finally {
             device.executeShellCommand("settings put system font_scale 1.0")
+            compose.waitUntil(15000){kotlin.math.abs(compose.activity.resources.configuration.fontScale-1f)<.01f}
             compose.runOnIdle{compose.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT}
             compose.activityRule.scenario.recreate();ready()
         }
