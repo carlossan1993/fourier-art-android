@@ -1,6 +1,6 @@
 # Etapa 7 · Experiencia final V1 (0.11.0)
 
-Carlos eligió continuar aquí en Work el 20/10/2026. Confirmó que 0.10.0 funcionó bien en teléfono y autorizó integrar el PR #16; quedó integrado en main mediante `2526d84d7446449bbfc17e4333e33fc222685413`. El PR #18 ahora apunta a main. Seguimiento #17. La versión 0.11.0 está preparada para su propia prueba física.
+Carlos eligió continuar aquí en Work el 20/10/2026. Confirmó que 0.10.0 funcionó bien en teléfono y autorizó integrar el PR #16; quedó integrado en main mediante `2526d84d7446449bbfc17e4333e33fc222685413`. El PR #18 ahora apunta a main. Seguimiento #17. Carlos aprobó el APK 0.11.0 el 20/10/2026 («la apk se ve bien»); se registra la aceptación de esta base para integrar el PR #18.
 
 ## Recorrido
 
@@ -31,10 +31,10 @@ Controles de al menos 48 dp, opciones seleccionadas con estado semántico y cont
 - Letra al 150% verificada en la densidad de un TextLayoutResult real, con navegación, parámetros y acción de exportación accesibles.
 - Orientación horizontal real y recreación conservando la sesión de exportación, comprobadas en una prueba independiente de la configuración de letra. No se afirma que se haya probado la combinación de ambas condiciones simultáneamente.
 - Regresiones de cámara, permisos, cancelación, preparación, editor de contornos, Fourier, reproductor, PNG/GIF/MP4, guardado nativo y compartir.
-- Capturas y métricas generadas en el artefacto de evidencias; queda la revisión visual y aceptación de Carlos en teléfono.
+- Capturas y métricas generadas en el artefacto de evidencias. Carlos indicó que el APK se ve bien el 20/10/2026; se registra su aprobación de la base entregada.
 
 La prueba anterior que combinaba reemplazo de contenido para la escala de letra, giro real y Atrás del sistema falló en API 35; otro intento quedó bloqueado. Se separaron las dos condiciones, se restauró el contenido al terminar la prueba de letra y se añadieron límite de 480 segundos y registros de diagnóstico a cada batería. No se modificaron el motor ni los codificadores para resolver estos problemas de validación.
 
 [APK 0.11.0](https://github.com/carlossan1993/fourier-art-android/actions/runs/39494959745/artifacts/12298245955): descargar el ZIP y extraer `app-debug.apk`. Disponible hasta 27/10/2026 según Actions. La actualización documental posterior no cambia el código de ese APK.
 
-La prueba física de **0.11.0** está pendiente; la aceptación de **0.10.0** queda registrada por separado. El banco de reconocibilidad #3 y la matriz de dos teléfonos #6 siguen pendientes. La Etapa 8 posterior cubre pruebas y estabilización de forma más amplia.
+La base **0.11.0** queda aprobada por Carlos el 20/10/2026. La confirmación no acredita una matriz formal de todos los dispositivos, combinaciones de accesibilidad o pruebas de reconocibilidad. La aceptación de **0.10.0** queda registrada por separado. El banco de reconocibilidad #3 y la matriz de dos teléfonos #6 siguen pendientes. La Etapa 8 posterior cubre pruebas y estabilización de forma más amplia.
