@@ -7,14 +7,14 @@ Documento de referencia: **FOURIER_ART_Documento_Oficial_y_Hoja_de_Ruta_v1.pdf**
 - [x] Rama de desarrollo, esqueleto Android con Kotlin y Compose.
 - [x] Interfaz con recursos inglés/español y selector de idioma.
 - [x] GitHub Actions configurado para generar un APK de depuración.
-- [ ] Compilación confirmada en GitHub Actions.
-- [ ] APK instalado y verificado en un teléfono Android.
-- [ ] PR revisado e integrado a main.
+- [x] Compilación confirmada en GitHub Actions.
+- [x] APK instalado y verificado en un teléfono Android.
+- [x] PR revisado e integrado a main.
 
 **Alcance del selector:** inglés/español en toda pantalla V1. Preferencia conservada entre sesiones; no se utilizarán traducciones de API.
 
 ## Etapa 1 — Prueba de concepto crítica
-Pendiente. Prioridad: extraer contornos de dibujo, objeto, rostro y mascota, construir curvas discretas y validar que Fourier produce trazos reconocibles; documentar GO/NO-GO antes de ampliar producto.
+En curso en PR #2. Círculo/estrella verificados por el usuario; fotografías complejas fallaron con el detector de color inicial. 0.4.0 añade detalle ajustable, selección por contraste, continuidad, múltiples sujetos y refinamiento por cara, con pruebas públicas de retrato, grupo compuesto y gato. Ver [revisión del motor y validación pendiente](MOTOR_0.4.0.md). G1 continúa abierto hasta comprobar fotografías reales; no ampliar producto ni declarar GO por compilar.
 
 ## Regla de salida
 Ninguna etapa termina solamente porque el código compila. Se requiere evidencia de la funcionalidad prevista.
