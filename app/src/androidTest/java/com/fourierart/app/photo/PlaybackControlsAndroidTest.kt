@@ -53,10 +53,13 @@ class PlaybackControlsAndroidTest {
         click("player_background");click("color_teal");click("player_epicircles")
         device.takeScreenshot(File(folder,"stage5-player-dark.png"))
         val style=model.animationStyle;val viewport=model.animationViewport;val position=model.animationPosition
-        click("player_close");compose.activityRule.scenario.recreate();ready()
+        compose.onNodeWithTag("player_close").performClick();compose.activityRule.scenario.recreate();ready()
         assertEquals(style,model.animationStyle);assertEquals(viewport,model.animationViewport);assertEquals(position,model.animationPosition,0.0)
         assertSame(original,model.drawing)
         click("player_fit");assertEquals(PreviewViewport(),model.animationViewport)
+        click("fourier_complete");click("player_expand")
+        device.takeScreenshot(File(folder,"stage5-player-fitted.png"))
+        compose.onNodeWithTag("player_close").performClick();compose.waitForIdle()
         click("player_restart");assertTrue(model.animationPlaying);assertFalse(model.showComplete)
         // UI clock is an infinite animation; automatic test-clock advancement leaves it stopped.
         assertEquals(0.0,model.animationPosition,1e-6)
@@ -70,7 +73,8 @@ class PlaybackControlsAndroidTest {
         compose.mainClock.advanceTimeBy(64);compose.waitForIdle()
         val start=model.animationPosition
         compose.mainClock.advanceTimeBy(1000);compose.waitForIdle()
-        assertTrue("Playback clock did not advance",model.animationPosition>start+.04)
+        val advanced=model.animationPosition
+        assertTrue("Playback clock did not advance",advanced>start+.04)
         compose.runOnIdle {model.toggleAnimation()}
         compose.mainClock.advanceTimeBy(32);compose.waitForIdle()
         val paused=model.animationPosition
@@ -82,7 +86,10 @@ class PlaybackControlsAndroidTest {
         compose.mainClock.advanceTimeBy(4000);assertEquals(background,model.animationPosition,0.0)
         compose.activityRule.scenario.moveToState(Lifecycle.State.RESUMED)
         compose.mainClock.advanceTimeBy(32);compose.waitForIdle()
-        assertTrue("Resuming jumped over background time",model.animationPosition-background<.02)
+        val resumed=model.animationPosition
+        assertTrue("Resuming jumped over background time",resumed-background<.02)
+        val folder=File(compose.activity.getExternalFilesDir(null),"quality").apply {mkdirs()}
+        File(folder,"stage5-playback-metrics.txt").writeText("maxHeapBytes=${Runtime.getRuntime().maxMemory()}\nstart=$start after1000ms=$advanced paused=$paused background=$background resumed=$resumed\n")
         compose.runOnIdle {model.seekAnimation(0.0)}
         compose.mainClock.autoAdvance=true;ready()
     }

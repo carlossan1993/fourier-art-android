@@ -22,6 +22,8 @@ Nueva foto, preparación aplicada o contorno reprocesado reinician la posición 
 
 JVM: velocidades, pausa exacta, cambio de velocidad, independencia de fraccionamiento temporal, espera/repetición, límites, zoom/ancla/desplazamiento y contraste de las paletas. Se mantienen las 71 pruebas anteriores.
 
+CI usa un perfil Pixel 2 explícito, 2 GB de RAM y heap de 256 MB: el perfil implícito de una ejecución asignó solo 16 MB y falló en las pruebas anteriores de fotografías antes de abrir el reproductor. No se modifica el heap ni el manifiesto de la app para ocultarlo. Se registra el heap y la progresión del reloj en la evidencia.
+
 Android 10/15: controles, avance, estilos, zoom/desplazamiento, vista ampliada y recreación sin reprocesamiento; reloj real de Compose con avance controlado, pausa, segundo plano y reanudación sin salto; JSON y recuperación desde una nueva instancia de ViewModel con foto privada. Se conservan pruebas de cámara, editor y motor. Produce capturas clara/oscura. Consultar Actions para el resultado efectivo.
 
 Pendiente de prueba física de 0.9.0 y fluidez en dispositivos del propietario. La matriz de dos teléfonos #6 y reconocibilidad formal #3 siguen pendientes. Estos controles no mejoran por sí mismos la detección automática.
