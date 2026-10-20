@@ -10,7 +10,7 @@
     <string name="language_label">Idioma</string>
     <string name="version_label">Versión de desarrollo 0.1.0 · Etapa 0</string>
 
-    <string name="proof_subtitle">Etapa 4 · Motor Fourier</string>
+    <string name="proof_subtitle">Etapa 5 · Animación y controles</string>
     <string name="proof_choose">Prueba una figura o importa una imagen</string>
     <string name="circle">Círculo</string>
     <string name="star">Estrella</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes por trazo (máximo): %1$d</string>
     <string name="proof_explanation">Cada trazo tiene sus propios epiciclos. El lápiz se levanta entre rasgos separados. Más componentes mejoran la reconstrucción del trazo detectado.</string>
-    <string name="proof_version">Versión experimental 0.8.0 · Etapa 4</string>
+    <string name="proof_version">Versión experimental 0.9.0 · Etapa 5</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
     <string name="processing_profile">Perfil de procesamiento</string>
     <string name="profile_auto">Auto</string>
@@ -101,4 +101,27 @@
     <string name="contour_empty">El contorno quedó vacío. Abre Corregir contornos para restaurarlo o añadir líneas.</string>
     <string name="correction_limit">Llegaste a 100 correcciones. Puedes deshacer o volver a la detección.</string>
     <string name="effective_components">%1$d trazos · %2$d–%3$d componentes efectivos por trazo</string>
+    <string name="close_player">Cerrar</string>
+    <string name="pause_animation">Pausar</string>
+    <string name="resume_animation">Reproducir</string>
+    <string name="restart_animation">Reiniciar</string>
+    <string name="playback_speed">Velocidad</string>
+    <string name="speed_slow">Lenta · 0,5×</string>
+    <string name="speed_normal">Normal · 1×</string>
+    <string name="speed_fast">Rápida · 2×</string>
+    <string name="speed_very_fast">Muy rápida · 4×</string>
+    <string name="show_epicircles">Círculos y guías</string>
+    <string name="light_background">Fondo claro</string>
+    <string name="trace_color">Color del trazo</string>
+    <string name="color_ink">Tinta</string>
+    <string name="color_teal">Turquesa</string>
+    <string name="color_gold">Dorado</string>
+    <string name="color_rose">Rosa</string>
+    <string name="player_zoom">Zoom: %1$d %%</string>
+    <string name="fit_drawing">Restablecer encuadre</string>
+    <string name="expand_player">Ampliar vista</string>
+    <string name="player_help">Usa el avance para revisar un punto: la animación se pausará. Amplía la vista para acercar y mover el dibujo.</string>
+    <string name="player_gesture_help">Pellizca para acercar o alejar y arrastra para mover el dibujo. Restablecer encuadre vuelve a centrarlo.</string>
+    <string name="animation_progress">Avance: %1$d %%</string>
+    <string name="animation_canvas_description">Animación de Fourier. Usa los controles para pausar, cambiar velocidad y revisar el dibujo.</string>
 </resources>

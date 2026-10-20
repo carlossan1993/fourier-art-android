@@ -37,7 +37,12 @@ El 19/10/2026 el propietario pidió continuar esta etapa en Work por su disponib
 ## Etapa 4 — Motor Fourier definitivo (Work por elección del propietario)
 El 20/10/2026 el propietario pidió continuar aquí en Work por disponibilidad de consumo. 0.8.0 consolida FFT, selección de componentes, simetría de trazos abiertos, error espectral, densidad de render y secuencia multitrazo determinista. Seguimiento: #11 y [alcance y validación](ETAPA_4_FOURIER.md).
 
-**Estado: implementación en validación.** Se conserva la detección y la corrección de contornos aceptadas; la precisión matemática no acredita reconocibilidad fotográfica.
+**Estado: 0.8.0 probada y aceptada por el propietario el 20/10/2026; PR #12 integrado.** Se conserva la detección y la corrección aceptadas; la precisión matemática no acredita reconocibilidad fotográfica.
+
+## Etapa 5 — Animación y controles (Work)
+El propietario pidió continuar aquí. 0.9.0 añade reproducción, pausa, reinicio, avance manual, cuatro velocidades, epiciclos opcionales, colores/fondo, vista ampliada y zoom/encuadre. Reloj detenido al salir de la app o de la vista. Seguimiento: #13 y [alcance](ETAPA_5_ANIMACION.md).
+
+**Estado: implementación en validación.** Se entrega APK para comprobar controles y fluidez en teléfono; los emuladores no acreditan rendimiento físico universal. Exportaciones corresponden a Etapa 6.
 
 ## Distribución de herramientas aprobada
 
