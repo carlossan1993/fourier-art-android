@@ -23,9 +23,19 @@ import java.io.File
 class ContourCorrectionFlowTest {
     @get:Rule val compose=createAndroidComposeRule<MainActivity>()
     private val model get()=compose.activity.photoSession
-    private fun ready()=compose.waitUntil(60000) {!model.loading}
+    private fun ready() {compose.waitForIdle();compose.waitUntil(60000) {!model.loading};compose.waitForIdle()}
     private fun tool(name: String) {compose.onNodeWithTag("tool_$name").performScrollTo().performClick()}
-    private fun draw() {tool("draw");compose.onNodeWithTag("contour_canvas").performTouchInput {swipe(Offset(width*.2f,height*.4f),Offset(width*.8f,height*.6f),500)};ready()}
+    private fun gesture(x0: Float,y0: Float,x1: Float,y1: Float) {
+        val photo=model.image!!
+        compose.onNodeWithTag("contour_canvas").performTouchInput {
+            val scale=kotlin.math.min(width.toFloat()/photo.width,height.toFloat()/photo.height)
+            val w=photo.width*scale;val h=photo.height*scale
+            val left=(width-w)/2;val top=(height-h)/2
+            swipe(Offset(left+x0*w,top+y0*h),Offset(left+x1*w,top+y1*h),500)
+        }
+        ready()
+    }
+    private fun draw() {tool("draw");gesture(.2f,.4f,.8f,.6f)}
     @Test fun drawEraseSelectUndoApplyRecoverCancelAndRestore() {
         ready();compose.runOnIdle {model.sample(false)};ready()
         val context=compose.activity.applicationContext
@@ -43,10 +53,10 @@ class ContourCorrectionFlowTest {
         compose.onNodeWithTag("contour_undo").performScrollTo().performClick();ready();assertTrue(model.correctionHistory.current.edits.isEmpty())
         compose.onNodeWithTag("contour_redo").performScrollTo().performClick();ready();assertEquals(1,model.correctionHistory.current.edits.size)
         tool("erase")
-        compose.onNodeWithTag("contour_canvas").performTouchInput {swipe(Offset(width*.5f,height*.3f),Offset(width*.5f,height*.7f),500)};ready()
+        gesture(.5f,.3f,.5f,.7f)
         assertTrue(model.correctionHistory.current.edits.last() is ContourEdit.Erase)
         tool("keep")
-        compose.onNodeWithTag("contour_canvas").performTouchInput {swipe(Offset(width*.15f,height*.15f),Offset(width*.85f,height*.85f),500)};ready()
+        gesture(.15f,.15f,.85f,.85f)
         assertTrue(model.correctionHistory.current.edits.last() is ContourEdit.Keep)
         val original=model.image
         val recipe=model.correctionHistory.current

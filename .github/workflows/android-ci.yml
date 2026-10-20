@@ -76,8 +76,8 @@ jobs:
             mkdir -p quality-output
             adb shell am instrument -w com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner > quality-output/instrumentation.txt
             cat quality-output/instrumentation.txt
-            python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/instrumentation.txt").read_text()), "Instrumented portrait test did not pass"'
             adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/
+            python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/instrumentation.txt").read_text()), "Instrumented portrait test did not pass"'
 
       - name: Test preparation and camera on Android 15
         uses: reactivecircus/android-emulator-runner@v2
@@ -95,8 +95,8 @@ jobs:
             mkdir -p quality-output/api35
             adb shell am instrument -w -e package com.fourierart.app.photo com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner > quality-output/api35/instrumentation.txt
             cat quality-output/api35/instrumentation.txt
-            python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/api35/instrumentation.txt").read_text()), "Android 15 photo flow did not pass"'
             adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/api35/
+            python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/api35/instrumentation.txt").read_text()), "Android 15 photo flow did not pass"'
 
       - name: Upload quality evidence
         if: always()

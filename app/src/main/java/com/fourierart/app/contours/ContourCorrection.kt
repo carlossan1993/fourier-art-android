@@ -104,8 +104,14 @@ object ContourCorrection {
         require(radius.isFinite() && radius>0 && path.all {it.x.isFinite() && it.y.isFinite()})
         if(path.isEmpty()) return strokes
         val sweep=if(path.size==1) listOf(path[0] to path[0]) else path.zipWithNext()
+        val boxes=sweep.map {(c,d)->doubleArrayOf(min(c.x,d.x)-radius,min(c.y,d.y)-radius,max(c.x,d.x)+radius,max(c.y,d.y)+radius)}
+        val bounds=doubleArrayOf(path.minOf {it.x}-radius,path.minOf {it.y}-radius,path.maxOf {it.x}+radius,path.maxOf {it.y}+radius)
         return strokes.flatMap {s -> pieces(s) {a,b ->
-            val removed=merge(sweep.flatMap {(c,d)->capsule(a,b,c,d,radius)})
+            val x0=min(a.x,b.x);val x1=max(a.x,b.x);val y0=min(a.y,b.y);val y1=max(a.y,b.y)
+            fun overlaps(box: DoubleArray)=x1>=box[0] && y1>=box[1] && x0<=box[2] && y0<=box[3]
+            val removed=if(!overlaps(bounds)) emptyList() else merge(sweep.flatMapIndexed {i,(c,d)->
+                if(overlaps(boxes[i])) capsule(a,b,c,d,radius) else emptyList()
+            })
             val kept=mutableListOf<Pair<Double,Double>>();var start=0.0
             for((l,h) in removed) {if(l-start>EPS) kept.add(start to l);start=max(start,h)}
             if(1-start>EPS) kept.add(start to 1.0)
