@@ -52,6 +52,13 @@ jobs:
           curl --fail --location --retry 2 https://raw.githubusercontent.com/pytorch/hub/3b54eaafd931b0c0f3ee2df391bb4be7ba6f1ca3/images/dog.jpg -o app/src/androidTest/assets/dog.jpg
           echo "f3f87bb8ab3c26c7ecfd3ac60421d7f32b0503d1d6c5baf8bac42ed93d86351a  app/src/androidTest/assets/dog.jpg" | sha256sum --check
 
+      - name: Install independent media verifier
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
+          ffprobe -version
+          python3 -m pip install Pillow==11.3.0
+
       - name: Build app and test APK
         run: gradle :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest --no-daemon --stacktrace
 
@@ -131,7 +138,6 @@ jobs:
 
       - name: Independently verify exports and report stability measurements
         run: |
-          python3 -m pip install Pillow==11.3.0
           python3 tools/verify_exports.py quality-output/exports > quality-output/export-validation-api29.json
           python3 tools/verify_exports.py quality-output/api35/exports > quality-output/export-validation-api35.json
           python3 tools/report_stability.py quality-output

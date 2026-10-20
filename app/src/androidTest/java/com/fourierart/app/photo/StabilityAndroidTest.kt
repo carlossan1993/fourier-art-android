@@ -18,6 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.PI
@@ -150,11 +151,12 @@ class StabilityAndroidTest {
                 frames[i]=SystemClock.elapsedRealtimeNanos()-start
             }
         } finally {bitmap.recycle()}
-        val beats=AtomicInteger();val gap=AtomicLong();var previous=SystemClock.uptimeMillis()
+        val active=AtomicBoolean(true);val beats=AtomicInteger();val gap=AtomicLong();var previous=SystemClock.uptimeMillis()
         val handler=Handler(Looper.getMainLooper())
         val pulse=object:Runnable {override fun run() {
+            if(!active.get())return
             val now=SystemClock.uptimeMillis();gap.updateAndGet{maxOf(it,now-previous)}
-            previous=now;beats.incrementAndGet();handler.postDelayed(this,16)
+            previous=now;beats.incrementAndGet();if(active.get())handler.postDelayed(this,16)
         }}
         val before=memory();handler.post(pulse)
         var file: File?=null
@@ -165,7 +167,7 @@ class StabilityAndroidTest {
             assertNotNull(movie);assertEquals(6000,movie.duration())
             frames.sort()
             record("performance","syntheticStrokes=220 componentsMaximum=400\ndirectTraceMs=${directNanos/1e6} firstCachedTraceMs=${firstNanos/1e6} cached20PassesMs=${reuseNanos/1e6}\nsoftware360FrameMedianMs=${frames[30]/1e6} software360FrameP95Ms=${frames[57]/1e6}\ngifMs=${(SystemClock.elapsedRealtimeNanos()-exportStart)/1e6} gifBytes=${file.length()} mainHeartbeatCount=${beats.get()} mainHeartbeatMaxGapMs=${gap.get()}\nbefore $before\nafter ${memory()}\nThese are debug-emulator observations, not screen FPS or universal device limits.\n")
-        } finally {handler.removeCallbacks(pulse);file?.delete()}
+        } finally {active.set(false);handler.removeCallbacks(pulse);file?.delete()}
     }
 
     @Test fun closingDuringExportCancelsAndAllowsASecondExport() {
