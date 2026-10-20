@@ -9,6 +9,8 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Until
 import androidx.test.uiautomator.UiDevice
 import com.fourierart.app.MainActivity
 import com.fourierart.app.core.*
@@ -142,6 +144,12 @@ class ExportAndroidTest {
         click("export_save");device.waitForIdle();assertFalse(device.currentPackageName==context.packageName)
         device.pressBack();device.waitForIdle();compose.waitForIdle()
         assertNotNull(compose.activity.exportSession.completed)
+        click("export_save");device.waitForIdle()
+        val saveButton = device.wait(Until.findObject(By.text(java.util.regex.Pattern.compile("(?i)save|guardar"))),15000)
+        assertNotNull("Native save button",saveButton);saveButton.click()
+        device.waitForIdle()
+        compose.waitUntil(60000) {compose.activity.exportSession.notice==com.fourierart.app.R.string.export_saved}
+        assertFalse(compose.activity.exportSession.saving)
         click("export_share");device.waitForIdle()
         // Native chooser is launched, but no recipient is selected and no message is sent.
         assertNotNull(compose.activity.exportSession.completed)

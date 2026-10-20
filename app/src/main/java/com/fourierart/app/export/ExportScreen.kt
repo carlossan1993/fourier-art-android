@@ -37,19 +37,30 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
     var previewProgress by remember { mutableFloatStateOf(.5f) }
     var preview by remember { mutableStateOf<Bitmap?>(null) }
     var previewError by remember { mutableStateOf(false) }
-    // A single preview bitmap, at display resolution. Final output is rendered separately at its selected resolution.
-    LaunchedEffect(snapshot,spec,previewProgress) {
-        previewError = false
-        try {
-            preview = withContext(Dispatchers.Default) {
-                val width = 360; val height = if (spec.frame == ExportFrame.SQUARE) 360 else 640
-                Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888).also {
-                    ExportRenderer(snapshot).draw(Canvas(it),width,height,if (spec.format == ExportFormat.PNG) 1.0 else previewProgress.toDouble())
-                }
-            }
-        } catch (e: kotlinx.coroutines.CancellationException) { throw e }
+    var renderer by remember(snapshot) { mutableStateOf<ExportRenderer?>(null) }
+    LaunchedEffect(snapshot) {
+        try { renderer = withContext(Dispatchers.Default) { ExportRenderer(snapshot) } }
+        catch (e: kotlinx.coroutines.CancellationException) { throw e }
         catch (e: Exception) { previewError = true }
         catch (e: OutOfMemoryError) { previewError = true }
+    }
+    // Prepare curves once; position changes only render one bitmap at display resolution.
+    LaunchedEffect(renderer,spec,previewProgress) {
+        val prepared = renderer ?: return@LaunchedEffect
+        previewError = false
+        var rendered: Bitmap? = null
+        try {
+            val result = withContext(Dispatchers.Default) {
+                val width = 360; val height = if (spec.frame == ExportFrame.SQUARE) 360 else 640
+                Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888).also {
+                    rendered = it
+                    prepared.draw(Canvas(it),width,height,if (spec.format == ExportFormat.PNG) 1.0 else previewProgress.toDouble())
+                }
+            }
+            preview = result
+        } catch (e: kotlinx.coroutines.CancellationException) { rendered?.recycle(); throw e }
+        catch (e: Exception) { rendered?.recycle(); previewError = true }
+        catch (e: OutOfMemoryError) { rendered?.recycle(); previewError = true }
     }
     val save = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) result.data?.data?.let(model::save)

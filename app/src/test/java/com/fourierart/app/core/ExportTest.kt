@@ -4,8 +4,6 @@ import org.junit.Assert.*
 import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import javax.imageio.ImageIO
-import javax.imageio.stream.MemoryCacheImageInputStream
 import kotlin.random.Random
 
 class ExportTest {
@@ -31,16 +29,28 @@ class ExportTest {
         val palette=IntArray(256){(0xff000000L or (it.toLong() shl 16) or (it.toLong() shl 8) or it.toLong()).toInt()}
         val output=ByteArrayOutputStream()
         StreamingGif(output,w,h,palette).apply {frames.forEachIndexed {i,f ->frame(f,8+i)};finish()}
-        val reader=ImageIO.getImageReadersByFormatName("gif").next()
+        // Android's compile bootclasspath omits java.desktop; this JVM-only test uses the JDK
+        // decoder reflectively so production never depends on desktop classes.
+        val imageIO=Class.forName("javax.imageio.ImageIO")
+        val readers=imageIO.getMethod("getImageReadersByFormatName",String::class.java).invoke(null,"gif") as Iterator<*>
+        val reader=readers.next()!!
+        val readerClass=Class.forName("javax.imageio.ImageReader")
+        val stream=Class.forName("javax.imageio.stream.MemoryCacheImageInputStream")
+            .getConstructor(java.io.InputStream::class.java).newInstance(ByteArrayInputStream(output.toByteArray()))
+        val imageClass=Class.forName("java.awt.image.BufferedImage")
         try {
-            reader.input=MemoryCacheImageInputStream(ByteArrayInputStream(output.toByteArray()))
-            assertEquals(3,reader.getNumImages(true))
+            readerClass.getMethod("setInput",Any::class.java).invoke(reader,stream)
+            assertEquals(3,readerClass.getMethod("getNumImages",Boolean::class.javaPrimitiveType).invoke(reader,true))
             frames.forEachIndexed {index,expected ->
-                val image=reader.read(index)
-                assertEquals(w,image.width);assertEquals(h,image.height)
-                for(y in 0 until h) for(x in 0 until w) assertEquals("frame=$index x=$x y=$y",palette[expected[y*w+x].toInt() and 255],image.getRGB(x,y))
+                val image=readerClass.getMethod("read",Int::class.javaPrimitiveType).invoke(reader,index)
+                assertEquals(w,imageClass.getMethod("getWidth").invoke(image));assertEquals(h,imageClass.getMethod("getHeight").invoke(image))
+                val rgb=imageClass.getMethod("getRGB",Int::class.javaPrimitiveType,Int::class.javaPrimitiveType)
+                for(y in 0 until h) for(x in 0 until w) assertEquals("frame=$index x=$x y=$y",palette[expected[y*w+x].toInt() and 255],rgb.invoke(image,x,y))
             }
-        } finally {reader.dispose()}
+        } finally {
+            readerClass.getMethod("dispose").invoke(reader)
+            Class.forName("javax.imageio.stream.ImageInputStream").getMethod("close").invoke(stream)
+        }
     }
     @Test fun palettePreservesEndpointsAndCanCancelWhileWriting() {
         val palette=ExportPalette(0xff0d1929.toInt(),0xffff8fae.toInt(),0xff65dcd0.toInt())
