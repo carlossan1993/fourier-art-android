@@ -186,7 +186,7 @@
     <string name="no_saved_photo">No hay una fotografía guardada. Las figuras de demostración no son fotos personales.</string>
     <string name="saved_photo_help">Se conserva una sola foto de trabajo con su recorte y correcciones. Puedes retomarla desde Inicio.</string>
     <string name="about_title">Acerca de</string>
-    <string name="app_version">Versión de prueba 0.11.0</string>
+    <string name="app_version">Versión de prueba 0.12.0</string>
     <string name="about_body">Series de Fourier y epiciclos para crear dibujos animados. Procesamiento local, sin cuenta y sin pagos.</string>
     <string name="language_system">Usar idioma del dispositivo</string>
     <string name="replace_title">¿Cambiar a una demostración?</string>

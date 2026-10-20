@@ -8,10 +8,11 @@ import kotlin.math.PI
 import kotlin.math.min
 
 /** Same deterministic Fourier sampling and timeline as the player. No screen capture or photo processing. */
-class ExportRenderer(private val snapshot: ExportSnapshot) {
+class ExportRenderer(private val snapshot: ExportSnapshot, checkCancelled: ()->Unit = {}) {
     private data class Stroke(val points: List<Point2>, val path: Path, val rotations: List<Harmonic>)
     private val timeline = DrawingTimeline(snapshot.drawing)
     private val strokes = snapshot.drawing.strokes.map { s ->
+        checkCancelled()
         val points = s.trace(snapshot.components)
         Stroke(points, Path().apply { points.forEachIndexed { i, p ->
             if (i == 0) moveTo(p.x.toFloat(), p.y.toFloat()) else lineTo(p.x.toFloat(), p.y.toFloat())

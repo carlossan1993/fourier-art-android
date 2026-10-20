@@ -1,0 +1,39 @@
+{
+  "devices": {
+    "24": {
+      "passed": 7,
+      "observations": {
+        "input": "input=3601x2401\ndecoded=901x601 bytes=2166004 decodeMs=8.92182\ninvalidAndMissingPreservedWork=true\npssKb=62062 javaUsedBytes=11965856 nativeAllocatedBytes=22785656 maxJavaHeapBytes=536870912\n",
+        "navigation": "cycles=4 elapsedMs=4919.80758\nreusedDrawingAndPoints=true releasedExportSnapshot=true\npssKb=65511 javaUsedBytes=21730184 nativeAllocatedBytes=22303048 maxJavaHeapBytes=536870912\n",
+        "performance": "syntheticStrokes=220 componentsMaximum=400\ndirectTraceMs=81.30706 firstCachedTraceMs=79.2607 cached20PassesMs=9.65475\nsoftware360FrameMedianMs=17.08912 software360FrameP95Ms=31.81124\ngifMs=1961.18462 gifBytes=1065699 mainHeartbeatCount=121 mainHeartbeatMaxGapMs=17\nbefore pssKb=65022 javaUsedBytes=23413176 nativeAllocatedBytes=20583584 maxJavaHeapBytes=536870912\nafter pssKb=80779 javaUsedBytes=24397952 nativeAllocatedBytes=39736216 maxJavaHeapBytes=536870912\nThese are debug-emulator observations, not screen FPS or universal device limits.\n",
+        "cancellation": "closeAndCancelMs=22.34907 noPartialFiles=true secondExportReadableAfterClose=true\npssKb=59655 javaUsedBytes=18996000 nativeAllocatedBytes=17772264 maxJavaHeapBytes=536870912\n"
+      }
+    },
+    "29": {
+      "passed": 28,
+      "observations": {
+        "input": "input=3601x2401\ndecoded=901x601 bytes=2166004 decodeMs=6.7104\ninvalidAndMissingPreservedWork=true\npssKb=149412 javaUsedBytes=18102232 nativeAllocatedBytes=35033440 maxJavaHeapBytes=536870912\n",
+        "navigation": "cycles=4 elapsedMs=5109.72018\nreusedDrawingAndPoints=true releasedExportSnapshot=true\npssKb=150252 javaUsedBytes=12587592 nativeAllocatedBytes=41279896 maxJavaHeapBytes=536870912\n",
+        "performance": "syntheticStrokes=220 componentsMaximum=400\ndirectTraceMs=129.31843 firstCachedTraceMs=84.81966 cached20PassesMs=11.84724\nsoftware360FrameMedianMs=14.68866 software360FrameP95Ms=27.97051\ngifMs=1757.71927 gifBytes=1070167 mainHeartbeatCount=108 mainHeartbeatMaxGapMs=17\nbefore pssKb=152493 javaUsedBytes=18435224 nativeAllocatedBytes=37291440 maxJavaHeapBytes=536870912\nafter pssKb=174848 javaUsedBytes=21966032 nativeAllocatedBytes=57913408 maxJavaHeapBytes=536870912\nThese are debug-emulator observations, not screen FPS or universal device limits.\n",
+        "cancellation": "closeAndCancelMs=21.75168 noPartialFiles=true secondExportReadableAfterClose=true\npssKb=150029 javaUsedBytes=16149144 nativeAllocatedBytes=37520664 maxJavaHeapBytes=536870912\n"
+      }
+    },
+    "35": {
+      "passed": 23,
+      "observations": {
+        "input": "input=3601x2401\ndecoded=901x601 bytes=2166004 decodeMs=6.53942\ninvalidAndMissingPreservedWork=true\npssKb=152926 javaUsedBytes=11786896 nativeAllocatedBytes=23798864 maxJavaHeapBytes=201326592\n",
+        "navigation": "cycles=4 elapsedMs=5102.253064\nreusedDrawingAndPoints=true releasedExportSnapshot=true\npssKb=158095 javaUsedBytes=11251168 nativeAllocatedBytes=29224832 maxJavaHeapBytes=201326592\n",
+        "performance": "syntheticStrokes=220 componentsMaximum=400\ndirectTraceMs=104.329268 firstCachedTraceMs=98.035726 cached20PassesMs=44.283698\nsoftware360FrameMedianMs=21.139025 software360FrameP95Ms=39.462942\ngifMs=2411.253984 gifBytes=1546116 mainHeartbeatCount=149 mainHeartbeatMaxGapMs=19\nbefore pssKb=167688 javaUsedBytes=24992400 nativeAllocatedBytes=25347040 maxJavaHeapBytes=201326592\nafter pssKb=178584 javaUsedBytes=18934416 nativeAllocatedBytes=42610816 maxJavaHeapBytes=201326592\nThese are debug-emulator observations, not screen FPS or universal device limits.\n",
+        "cancellation": "closeAndCancelMs=26.765402 noPartialFiles=true secondExportReadableAfterClose=true\npssKb=168335 javaUsedBytes=25844368 nativeAllocatedBytes=25103424 maxJavaHeapBytes=201326592\n"
+      }
+    }
+  },
+  "unitTests": {
+    "tests": 89,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "externalExportFilesVerified": 12,
+  "limits": "Debug emulators; software render cost and main-thread heartbeat are not screen FPS. Physical device matrix and recognizability bank remain pending."
+}

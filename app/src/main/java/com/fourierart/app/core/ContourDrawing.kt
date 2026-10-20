@@ -12,8 +12,16 @@ data class ContourStroke(val points: List<Point2>, val closed: Boolean) {
 data class DrawingStroke(val curve: FourierCurve, val closed: Boolean) {
     // An open stroke is reflected for Fourier periodicity, but only the outward half is drawn.
     val visibleFraction: Double get() = if (closed) 1.0 else 0.5
-    fun trace(components: Int, frames: Int = curve.recommendedFrames(components, visibleFraction)): List<Point2> =
-        curve.trace(components, frames, visibleFraction)
+    // Keep one configuration per stroke; the cache dies with its drawing.
+    // Player, parameter preview and exporter share immutable points, not mutable Paths.
+    private data class Trace(val components: Int, val frames: Int, val points: List<Point2>)
+    private var cachedTrace: Trace? = null
+    @Synchronized
+    fun trace(components: Int, frames: Int = curve.recommendedFrames(components, visibleFraction)): List<Point2> {
+        val count=curve.effectiveComponents(components)
+        cachedTrace?.takeIf {it.components==count && it.frames==frames}?.let {return it.points}
+        return curve.trace(count,frames,visibleFraction).also {cachedTrace=Trace(count,frames,it)}
+    }
     fun position(progress: Double, components: Int): Point2 {
         require(progress.isFinite())
         return curve.sample(2 * kotlin.math.PI * progress.coerceIn(0.0, 1.0) * visibleFraction, components)

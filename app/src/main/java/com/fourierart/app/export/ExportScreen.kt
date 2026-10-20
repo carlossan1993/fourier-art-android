@@ -45,7 +45,10 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
     val previewMutex = remember { kotlinx.coroutines.sync.Mutex() }
     var renderer by remember(snapshot) { mutableStateOf<ExportRenderer?>(null) }
     LaunchedEffect(snapshot) {
-        try { renderer = withContext(Dispatchers.Default) { ExportRenderer(snapshot) } }
+        try { renderer = withContext(Dispatchers.Default) {
+            val worker=kotlinx.coroutines.currentCoroutineContext()
+            ExportRenderer(snapshot) {worker.ensureActive()}
+        } }
         catch (e: kotlinx.coroutines.CancellationException) { throw e }
         catch (e: Exception) { previewError = true }
         catch (e: OutOfMemoryError) { previewError = true }
@@ -74,7 +77,7 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
     val save = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) result.data?.data?.let(model::save)
     }
-    fun close() { model.cancel(); onClose() }
+    fun close() { model.close(); onClose() }
     BackHandler { close() }
     Column(Modifier.fillMaxSize().safeDrawingPadding().padding(12.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment=Alignment.CenterVertically) {

@@ -115,7 +115,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel, exports: ExportModel) {
                 model.drawing?.let {drawing ->
                     model.checkpointAnimation();exports.open(ExportSnapshot(drawing,model.components,model.animationStyle,model.animationViewport));exportOpen=true
                 }
-            },enabled=!model.loading && model.drawing!=null,modifier=Modifier.fillMaxWidth().testTag("open_export"))}) {
+            },enabled=!model.loading && model.drawing!=null && !exports.busy && !exports.saving,modifier=Modifier.fillMaxWidth().testTag("open_export"))}) {
             SessionStatus(model)
             if(model.drawing!=null) {
                 AnimationPlayer(model,onExpand={playerExpanded=true},showParameters=false)
