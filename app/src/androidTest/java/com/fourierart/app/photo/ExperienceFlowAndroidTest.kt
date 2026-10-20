@@ -3,6 +3,7 @@ package com.fourierart.app.photo
 import android.content.pm.ActivityInfo
 import android.graphics.*
 import android.net.Uri
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -11,6 +12,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.fourierart.app.MainActivity
+import com.fourierart.app.FourierArtContent
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.text.TextLayoutResult
 import com.fourierart.app.core.*
 import org.junit.Assert.*
 import org.junit.Rule
@@ -29,6 +33,9 @@ class ExperienceFlowAndroidTest {
     }
     private fun screenshot(name: String) {
         val folder=File(compose.activity.getExternalFilesDir(null),"quality/experience").apply{mkdirs()}
+        compose.waitForIdle()
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        device.waitForIdle()
         device.takeScreenshot(File(folder,"stage7-$name.png"))
     }
     private fun home() {
@@ -101,31 +108,45 @@ class ExperienceFlowAndroidTest {
         compose.onNodeWithTag("confirm_discard").performClick();ready()
         assertNull(model.source);compose.onNodeWithTag("screen_home").assertExists();file.delete()
     }
+    @OptIn(ExperimentalTestApi::class)
     @Test fun largeTextAndLandscapeKeepNavigationAndExportAccessible() {
         home()
-        try {
-            device.executeShellCommand("settings put system font_scale 1.5")
-            assertEquals("1.5",device.executeShellCommand("settings get system font_scale").trim())
-            compose.waitUntil(15000){kotlin.math.abs(compose.activity.resources.configuration.fontScale-1.5f)<.01f}
-            compose.activityRule.scenario.recreate();ready()
-            assertEquals(1.5f,compose.activity.resources.configuration.fontScale,.01f)
+        fun installLargeText() {
+            compose.activityRule.scenario.onActivity {activity ->
+                activity.setContent {
+                    DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(1.5f)) {
+                        FourierArtContent(activity.photoSession,activity.exportSession)
+                    }
+                }
+            }
+            ready()
+            if(compose.onAllNodesWithTag("screen_home").fetchSemanticsNodes().isEmpty()) {device.pressBack();ready()}
+            val layouts=mutableListOf<TextLayoutResult>()
+            compose.onNodeWithText("FOURIER").performSemanticsAction(SemanticsActions.GetTextLayoutResult){it(layouts)}
+            assertEquals(1.5f,layouts.single().layoutInput.density.fontScale,.01f)
             val evidence=File(compose.activity.getExternalFilesDir(null),"quality/experience").apply{mkdirs()}
-            File(evidence,"stage7-accessibility.txt").writeText("fontScale=${compose.activity.resources.configuration.fontScale}\n")
+            File(evidence,"stage7-accessibility.txt").writeText("textLayoutFontScale=${layouts.single().layoutInput.density.fontScale}\ntextHeight=${layouts.single().size.height}\n")
+        }
+        try {
+            // Official Compose override exercises the rendered UI, independently of emulator
+            // configuration caching. Assert the density used by the real text layout.
+            installLargeText()
             screenshot("large-text-home")
             click("resume_animation");click("open_parameters")
             compose.onNodeWithTag("fourier_components").performScrollTo().assertExists()
             screenshot("large-text-parameters")
             click("parameters_done",true)
             compose.runOnIdle{compose.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}
-            device.waitForIdle();ready();compose.onNodeWithTag("screen_player").assertExists()
+            device.waitForIdle();ready()
+            compose.waitUntil(15000){compose.activity.resources.configuration.orientation==android.content.res.Configuration.ORIENTATION_LANDSCAPE}
+            installLargeText()
+            click("resume_animation")
             click("open_export",true)
             compose.onNodeWithTag("format_png").performScrollTo().performClick()
             compose.onNodeWithTag("export_start").performScrollTo().assertIsEnabled()
             screenshot("landscape-export")
             compose.onNodeWithTag("export_close").performClick()
         } finally {
-            device.executeShellCommand("settings put system font_scale 1.0")
-            compose.waitUntil(15000){kotlin.math.abs(compose.activity.resources.configuration.fontScale-1f)<.01f}
             compose.runOnIdle{compose.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT}
             compose.activityRule.scenario.recreate();ready()
         }

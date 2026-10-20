@@ -26,28 +26,31 @@ class MainActivity : AppCompatActivity() {
             statusBarStyle = SystemBarStyle.dark(0xFF06131E.toInt()),
             navigationBarStyle = SystemBarStyle.dark(0xFF06131E.toInt())
         )
-        setContent {
-            MaterialTheme(
-                colorScheme = darkColorScheme(
-                    primary = Color(0xFF35D4DE),
-                    onPrimary = Color(0xFF06131E),
-                    background = Color(0xFF06131E),
-                    surface = Color(0xFF102532),
-                    outline = Color(0xFF35515F),
-                    onSurfaceVariant = Color(0xFFAFBFCD),
-                    onBackground = Color.White,
-                    onSurface = Color.White
-                ),
-                shapes = androidx.compose.material3.Shapes(
-                    small = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-                    medium = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
-                    large = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)
-                )
-            ) {
-                Surface(Modifier.fillMaxSize()) {
-                    FourierExperimentScreen(photoSession, exportSession)
-                }
-            }
+        setContent { FourierArtContent(photoSession, exportSession) }
+    }
+}
+
+@androidx.compose.runtime.Composable
+fun FourierArtContent(photoSession: PhotoSessionModel, exportSession: com.fourierart.app.export.ExportModel) {
+    MaterialTheme(
+        colorScheme = darkColorScheme(
+            primary = Color(0xFF35D4DE),
+            onPrimary = Color(0xFF06131E),
+            background = Color(0xFF06131E),
+            surface = Color(0xFF102532),
+            outline = Color(0xFF35515F),
+            onSurfaceVariant = Color(0xFFAFBFCD),
+            onBackground = Color.White,
+            onSurface = Color.White
+        ),
+        shapes = androidx.compose.material3.Shapes(
+            small = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
+            medium = androidx.compose.foundation.shape.RoundedCornerShape(18.dp),
+            large = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)
+        )
+    ) {
+        Surface(Modifier.fillMaxSize()) {
+            FourierExperimentScreen(photoSession, exportSession)
         }
     }
 }
