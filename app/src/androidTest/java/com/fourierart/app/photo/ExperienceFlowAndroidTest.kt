@@ -109,9 +109,9 @@ class ExperienceFlowAndroidTest {
         assertNull(model.source);compose.onNodeWithTag("screen_home").assertExists();file.delete()
     }
     @OptIn(ExperimentalTestApi::class)
-    @Test fun largeTextAndLandscapeKeepNavigationAndExportAccessible() {
+    @Test fun largeTextKeepsNavigationAndExportAccessible() {
         home()
-        fun installLargeText() {
+        try {
             compose.activityRule.scenario.onActivity {activity ->
                 activity.setContent {
                     DeviceConfigurationOverride(DeviceConfigurationOverride.FontScale(1.5f)) {
@@ -120,8 +120,6 @@ class ExperienceFlowAndroidTest {
                 }
             }
             ready()
-            // Replacing test content must not send a system Back event: on API 35
-            // that can finish the Activity and affect subsequent instrumentation tests.
             compose.onNodeWithTag("screen_home").assertExists()
             val layouts=mutableListOf<TextLayoutResult>()
             compose.onNodeWithText("FOURIER",useUnmergedTree=true).performScrollTo()
@@ -129,35 +127,48 @@ class ExperienceFlowAndroidTest {
             assertEquals(1.5f,layouts.single().layoutInput.density.fontScale,.01f)
             val evidence=File(compose.activity.getExternalFilesDir(null),"quality/experience").apply{mkdirs()}
             File(evidence,"stage7-accessibility.txt").writeText("textLayoutFontScale=${layouts.single().layoutInput.density.fontScale}\ntextHeight=${layouts.single().size.height}\n")
-        }
-        try {
-            // Official Compose override exercises the rendered UI, independently of emulator
-            // configuration caching. Assert the density used by the real text layout.
-            installLargeText()
             screenshot("large-text-home")
             click("resume_animation");click("open_parameters")
             compose.onNodeWithTag("fourier_components").performScrollTo().assertExists()
             screenshot("large-text-parameters")
-            click("parameters_done",true)
-            // Navigate through the app before rotating/reinstalling the override.
-            // Explicitly establish the screen instead of relying on timing of system Back.
-            click("nav_back",true)
-            compose.onNodeWithTag("screen_home").assertExists()
-            compose.runOnIdle{compose.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}
-            device.waitForIdle();ready()
-            compose.waitUntil(15000){compose.activity.resources.configuration.orientation==android.content.res.Configuration.ORIENTATION_LANDSCAPE}
-            installLargeText()
-            click("resume_animation")
-            click("open_export",true)
+            click("parameters_done",true);click("open_export",true)
             compose.onNodeWithTag("format_png").performScrollTo().performClick()
+            compose.onNodeWithTag("export_start").performScrollTo().assertIsEnabled()
+            screenshot("large-text-export")
+            compose.onNodeWithTag("export_close").performClick()
+        } finally {
+            // Dispose the test-only configuration before the Activity rule closes.
+            // Real rotation is tested separately with the Activity's own content.
+            compose.activityRule.scenario.onActivity {activity ->
+                activity.setContent {FourierArtContent(activity.photoSession,activity.exportSession)}
+            }
+            ready()
+        }
+    }
+
+    @Test fun landscapeKeepsNavigationAndExportAccessibleAfterRecreation() {
+        home();click("resume_animation")
+        try {
+            compose.activityRule.scenario.onActivity {it.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}
+            compose.waitUntil(15000){compose.activity.resources.configuration.orientation==android.content.res.Configuration.ORIENTATION_LANDSCAPE}
+            ready()
+            compose.onNodeWithTag("screen_player").assertExists()
+            click("open_parameters")
+            compose.onNodeWithTag("fourier_components").performScrollTo().assertExists()
+            screenshot("landscape-parameters")
+            click("parameters_done",true);click("open_export",true)
+            compose.onNodeWithTag("format_png").performScrollTo().performClick()
+            compose.onNodeWithTag("export_start").performScrollTo().assertIsEnabled()
+            val source=compose.activity.exportSession.snapshot
+            compose.activityRule.scenario.recreate();ready()
+            assertSame(source,compose.activity.exportSession.snapshot)
             compose.onNodeWithTag("export_start").performScrollTo().assertIsEnabled()
             screenshot("landscape-export")
             compose.onNodeWithTag("export_close").performClick()
         } finally {
             compose.activityRule.scenario.onActivity {it.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT}
-            device.waitForIdle()
             compose.waitUntil(15000){compose.activity.resources.configuration.orientation==android.content.res.Configuration.ORIENTATION_PORTRAIT}
-            compose.activityRule.scenario.recreate();ready()
+            ready()
         }
     }
 }
