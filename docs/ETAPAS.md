@@ -47,7 +47,7 @@ El propietario pidió continuar aquí. 0.9.0 añade reproducción, pausa, reinic
 ## Etapa 6 — Exportación local (Work)
 0.10.0 añade PNG, GIF y MP4, vista previa exacta de encuadre 1:1/9:16, duración, progreso/cancelación y guardado/compartir nativos. Seguimiento: #15 y [alcance](ETAPA_6_EXPORTACION.md).
 
-**Estado: implementación en validación.** Pendiente CI, archivos reproducibles y aceptación física del APK.
+**Estado: 0.10.0 implementada y validada automáticamente; pendiente aceptación física del APK.** CI: 86 JVM, 20 API 29 y 15 API 35 correctas. Archivos PNG/GIF/MP4 comprobados también con Pillow/FFmpeg. PR #16 listo para revisión. Tras la aceptación corresponde Etapa 7 (interfaz y experiencia final).
 
 ## Distribución de herramientas aprobada
 

@@ -26,4 +26,17 @@ No se agregan dependencias, servicios, permisos de almacenamiento ni acceso a ru
 
 ## Validación
 
-Pendiente de completar: JVM (timeline, dimensiones, LZW decodificado por ImageIO), Android 10 y 15 (PNG/GIF/MP4 reales en ambos encuadres, decodificación final, tiempos, cancelación, UI, guardar/compartir), inspección externa de evidencias. Tras CI se entrega APK para prueba física. Las comprobaciones de reconocimiento #3 y dos teléfonos #6 siguen pendientes; emuladores no las sustituyen.
+Completada el 20/10/2026 sobre el código `5fe71eab7d46f40db7715d5117071f1a5ca739ba`:
+
+- **86 pruebas JVM correctas**: timeline, dimensiones, marcas de tiempo, LZW con crecimiento/reinicio de diccionario y todos los píxeles decodificados por ImageIO del JDK.
+- **20 pruebas API 29 y 15 API 35 correctas**: incluye las regresiones previas y tres nuevas pruebas de exportación (PNG/GIF/MP4 reales en ambos encuadres, último fotograma comparado, dimensiones, duración y PTS, cancelación sin archivos parciales, conservación de resultado previo, recreación, FileProvider, guardar de verdad en el selector nativo y abrir el menú para compartir sin seleccionar destinatario).
+- **Verificación externa correcta** con `tools/verify_exports.py` sobre los seis archivos de cada Android: Pillow decodifica 72 fotogramas GIF, confirma bucle y duración exacta de 6000 ms; ffprobe identifica H.264, 24 fps, 144 fotogramas, 6 s y una sola pista; FFmpeg decodifica el vídeo entero sin errores. PNG alcanza 1080×1080 y 1080×1920. Inspección visual del encuadre y del fotograma final sin inversión vertical.
+- El render de vista previa se serializa con un mutex para evitar acceso simultáneo a Canvas/Path al arrastrar rápidamente el control. Progreso y cancelación permanecen fijos fuera del panel desplazable.
+
+[CI final y evidencias](https://github.com/carlossan1993/fourier-art-android/actions/runs/39475764600) · [PR #16](https://github.com/carlossan1993/fourier-art-android/pull/16).
+
+APK: `fourier-art-0.10.0-debug.apk`, 51.766.088 bytes. SHA-256: `b82b9244e866beaf8f50f86bd31fbc33abc0f80fd18a568bbdc0c320e75a8b0a`.
+
+**Pendiente: prueba y aceptación del propietario en teléfono.** Probar una fotografía propia en PNG, GIF y MP4, los dos encuadres y 6/10 segundos; guardar, abrir el archivo fuera de la app y compartir desde el menú nativo. Confirmar el resultado visual con color/fondo/epiciclos/encuadre elegidos. El tiempo de exportación de figuras sintéticas en emulador no acredita rendimiento con todas las fotos en teléfonos.
+
+Las comprobaciones de reconocimiento #3 y dos teléfonos #6 siguen pendientes; emuladores no las sustituyen.

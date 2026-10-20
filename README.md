@@ -2,7 +2,7 @@
 
 Aplicación Android nativa que transformará fotografías en animaciones matemáticas mediante Series de Fourier y epiciclos.
 
-**Estado:** 0.9.0 aceptada e integrada en main. Etapa 6 en validación: 0.10.0 con exportación local PNG/GIF/MP4. Motor y contornos aceptados conservados.
+**Estado:** 0.9.0 aceptada e integrada en main. Etapa 6: 0.10.0 con exportación local PNG/GIF/MP4, CI y archivos validados; pendiente prueba física. Motor y contornos aceptados conservados.
 
 Estado actual: [Etapa 6: exportación local](docs/ETAPA_6_EXPORTACION.md). Se continúa en Work por elección del propietario. La matriz física de dos teléfonos y el banco formal de reconocibilidad siguen pendientes.
 
