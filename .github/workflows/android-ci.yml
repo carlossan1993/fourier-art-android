@@ -42,6 +42,11 @@ jobs:
           curl --fail --location --retry 2 https://raw.githubusercontent.com/scikit-image/scikit-image/v0.25.2/skimage/data/astronaut.png -o app/src/androidTest/assets/portrait.png
           echo "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5  app/src/androidTest/assets/portrait.png" | sha256sum --check
 
+      - name: Fetch pinned public cat fixture
+        run: |
+          curl --fail --location --retry 2 https://raw.githubusercontent.com/scikit-image/scikit-image/v0.25.2/skimage/data/chelsea.png -o app/src/androidTest/assets/cat.png
+          echo "596aa1e7cb875eb79f437e310381d26b338a81c2da23439704a73c4651e8c4bb  app/src/androidTest/assets/cat.png" | sha256sum --check
+
       - name: Build app and test APK
         run: gradle :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest --no-daemon --stacktrace
 

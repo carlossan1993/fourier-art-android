@@ -51,4 +51,23 @@ class StrokeRefinementTest {
         assertTrue(clipped.flatMap { it.points }.any { it.y==15.0 })
     }
 
+    @Test fun joinsLongChainInAnyInputOrderWithoutBridgingParallelLines() {
+        val fragments = (0 until 25).map { i -> line(i * 8.0, 10.0, i * 8.0 + 6, 10.0) }.reversed()
+        val parallel = line(0.0, 12.0, 198.0, 12.0)
+        val result = StrokeRefinement.join(fragments + parallel, 3.0)
+        assertEquals(2, result.size)
+        assertTrue(result.any { it.points.minOf { p -> p.x } == 0.0 && it.points.maxOf { p -> p.x } == 198.0 && it.points.all { p -> p.y == 10.0 } })
+    }
+
+    @Test fun separateSubjectsSurviveWhileTinyMaskSpecklesAreDropped() {
+        val w = 160; val h = 100
+        val p = IntArray(w * h) { i ->
+            val x = i % w; val y = i / w
+            if ((x in 10..50 && y in 20..80) || (x in 100..125 && y in 30..65) || (x == 75 && y == 10)) 0xff202020.toInt() else -1
+        }
+        val mask = RasterContours.plainBackgroundMask(p, w, h, 50)!!
+        assertTrue(mask[50*w+30]); assertTrue(mask[50*w+110]); assertFalse(mask[10*w+75])
+        assertEquals(2, RasterContours.outlines(mask, w, h).size)
+    }
+
 }

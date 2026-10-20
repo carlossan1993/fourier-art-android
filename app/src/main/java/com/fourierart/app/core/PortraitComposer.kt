@@ -22,6 +22,26 @@ data class FacialGeometry(val parts: Map<FacePart, ContourStroke>) {
 object PortraitComposer {
     fun compose(face: FacialGeometry, pixels: IntArray, width: Int, height: Int,
         outline: List<ContourStroke>, details: List<ContourStroke>): List<ContourStroke> {
+        return composeFaces(listOf(face), pixels, width, height, outline, details,
+            RasterContours.edges(pixels, width, height, 65, blurPasses = 3), 64)
+    }
+
+    fun composeFaces(faces: List<FacialGeometry>, pixels: IntArray, width: Int, height: Int,
+        outline: List<ContourStroke>, details: List<ContourStroke>, structural: BooleanArray,
+        budget: Int): List<ContourStroke> {
+        val protected = faces.filter { it.complete }.map { it.oval }
+        val context = details.flatMap { stroke ->
+            fun allowed(p: Point2) = protected.none { StrokeRefinement.contains(it, p) }
+            if (stroke.points.all { allowed(it) }) listOf(stroke)
+            else split(stroke.points, ::allowed).filter { it.size >= 3 }.map { ContourStroke(it, false) }
+        }
+        val joined = StrokeRefinement.join(context, max(1.5, max(width, height) * 0.004))
+        val selected = DetailSelector.select(joined, pixels, width, height, structural, budget)
+        return outline.map { StrokeRefinement.smooth(it) } + faces.flatMap { features(it, pixels, width, height) } +
+            selected.map { StrokeRefinement.smooth(it) }
+    }
+
+    private fun features(face: FacialGeometry, pixels: IntArray, width: Int, height: Int): List<ContourStroke> {
         val parts = face.parts
         val semantic = ArrayList<ContourStroke>()
         fun add(part: FacePart) { parts[part]?.let { semantic.add(it) } }
@@ -56,16 +76,7 @@ object PortraitComposer {
         for (part in listOf(FacePart.LEFT_EYE, FacePart.RIGHT_EYE)) {
             parts[part]?.let { eye -> iris(pixels, width, height, eye.points)?.let { semantic.add(it) } }
         }
-        // Raw edges inside the facial oval create shadow/noise duplicates. Keep semantic features there.
-        val context = details.flatMap { stroke ->
-            if (oval.size < 3 || stroke.points.none { StrokeRefinement.contains(oval, it) }) listOf(stroke)
-            else split(stroke.points, { !StrokeRefinement.contains(oval, it) })
-                .filter { it.size >= 3 }.map { ContourStroke(it, false) }
-        }
-        val minContext = max(5.0, max(width, height) * 0.012)
-        val joined = StrokeRefinement.join(context.filter { it.length >= minContext }, max(1.5, max(width, height) * 0.004))
-        val selected = StrokeRefinement.select(joined, width, height, 64)
-        return outline.take(3).map { StrokeRefinement.smooth(it) } + semantic + selected.map { StrokeRefinement.smooth(it) }
+        return semantic
     }
 
     private fun split(points: List<Point2>, allowed: (Point2) -> Boolean): List<List<Point2>> {

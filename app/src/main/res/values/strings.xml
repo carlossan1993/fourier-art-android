@@ -25,7 +25,7 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Fourier components: %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.3.1 · Stage 1</string>
+    <string name="proof_version">Experimental version 0.4.0 · Stage 1</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
@@ -33,12 +33,18 @@
     <string name="profile_drawing">Drawing</string>
     <string name="outcome_face">Portrait: %1$d strokes. Eyes, nose and mouth protected. Check likeness in the complete result.</string>
     <string name="outcome_subject">Subject and details: %1$d strokes. Check that the outline matches your subject.</string>
-    <string name="outcome_drawing">Detected lines: %1$d strokes. Selection balanced across image regions.</string>
+    <string name="outcome_drawing">Detected lines: %1$d strokes. Check features and line continuity.</string>
     <string name="model_unavailable">The subject model is not available yet. Connect to the Internet and retry so Google Play services can download it. Drawing works without that model.</string>
-    <string name="profile_changed">Profile changed. Tap retry to process the photo.</string>
+    <string name="profile_changed">Settings changed. Tap retry to process the photo.</string>
     <string name="no_drawing">The animation appears after strokes have been detected in this image.</string>
     <string name="face_sensitivity">Sensitivity adjusts hair, silhouette and details. Facial features are preserved independently of that filter.</string>
     <string name="show_complete">Show complete result</string>
     <string name="show_animation">Show animation</string>
     <string name="outcome_face_partial">Partial portrait: %1$d strokes. Some reliable facial features are missing. Try a closer or more frontal photo.</string>
+    <string name="detail_label">Drawing detail</string>
+    <string name="detail_clean">Simple</string>
+    <string name="detail_balanced">Medium</string>
+    <string name="detail_fine">Fine</string>
+    <string name="detail_help">Simple keeps fewer lines; Fine includes more detail and may add texture. Tap retry to apply.</string>
+    <string name="face_count">Faces with contours: %1$d of %2$d detected.</string>
 </resources>

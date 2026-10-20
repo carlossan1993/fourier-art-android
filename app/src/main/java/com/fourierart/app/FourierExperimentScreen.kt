@@ -30,6 +30,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -57,6 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
+import com.fourierart.app.core.DetailLevel
 import com.fourierart.app.core.FourierCurve
 import com.fourierart.app.core.ContourDrawing
 import com.fourierart.app.core.PhotoContours
@@ -71,7 +73,7 @@ import kotlin.math.roundToInt
 
 private val accent = Color(0xFF65DCD0)
 private val background = Color(0xFF0D1929)
-private val harmonicOptions = listOf(10, 20, 50, 100, 200)
+private val harmonicOptions = listOf(10, 20, 50, 100, 200, 400, 800)
 
 @Composable
 fun FourierExperimentScreen() {
@@ -84,7 +86,8 @@ fun FourierExperimentScreen() {
     var analyzedMode by remember { mutableStateOf<PhotoContours.Mode?>(null) }
     var outcome by remember { mutableStateOf(PhotoContours.Kind.NO_SUBJECT) }
     var image by remember { mutableStateOf<Bitmap?>(null) }
-    var components by remember { mutableIntStateOf(200) }
+    var components by remember { mutableIntStateOf(400) }
+    var detail by remember { mutableStateOf(DetailLevel.BALANCED) }
     var sensitivity by remember { mutableIntStateOf(50) }
     var loading by remember { mutableStateOf(false) }
     // 0 = sample; 1 = detected strokes; 2 = no contour; 3 = read failure; 4 = contour error; 5 = profile changed
@@ -93,7 +96,7 @@ fun FourierExperimentScreen() {
     suspend fun process(bitmap: Bitmap) {
         val processed = withContext(Dispatchers.Default) {
             val cached = analysis?.takeIf { analyzedMode == mode && !it.modelUnavailable } ?: PhotoContours.analyze(bitmap, mode)
-            Pair(cached, PhotoContours.extract(cached, mode, sensitivity))
+            Pair(cached, PhotoContours.extract(cached, mode, sensitivity, detail))
         }
         analysis = processed.first
         analyzedMode = mode
@@ -193,6 +196,21 @@ fun FourierExperimentScreen() {
                             })) }
                         }
                     }
+                    Text(stringResource(R.string.detail_label))
+                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        for (level in DetailLevel.entries) {
+                            OutlinedButton(
+                                onClick = { detail = level; drawing = null; result = 5 },
+                                enabled = !loading && detail != level,
+                                modifier = Modifier.weight(1f)
+                            ) { Text(stringResource(when (level) {
+                                DetailLevel.CLEAN -> R.string.detail_clean
+                                DetailLevel.BALANCED -> R.string.detail_balanced
+                                DetailLevel.FINE -> R.string.detail_fine
+                            })) }
+                        }
+                    }
+                    Text(stringResource(R.string.detail_help), style = MaterialTheme.typography.bodySmall)
                     Text(stringResource(R.string.sensitivity, sensitivity))
                     Slider(
                         value = sensitivity.toFloat(),
@@ -224,6 +242,10 @@ fun FourierExperimentScreen() {
                     ) { Text(stringResource(R.string.reprocess)) }
                 }
                 if (loading) CircularProgressIndicator()
+                if (result == 1 && (analysis?.detectedFaceCount ?: 0) > 0) {
+                    Text(stringResource(R.string.face_count, analysis!!.faces.size, analysis!!.detectedFaceCount),
+                        style = MaterialTheme.typography.bodySmall)
+                }
                 when (result) {
                     1 -> Text(stringResource(when (outcome) {
                         PhotoContours.Kind.FACE -> R.string.outcome_face
@@ -262,10 +284,10 @@ fun FourierExperimentScreen() {
                 Slider(
                     value = harmonicOptions.indexOf(components).coerceAtLeast(0).toFloat(),
                     onValueChange = {
-                        components = harmonicOptions[it.roundToInt().coerceIn(0, 4)]
+                        components = harmonicOptions[it.roundToInt().coerceIn(0, harmonicOptions.lastIndex)]
                     },
-                    valueRange = 0f..4f,
-                    steps = 3
+                    valueRange = 0f..harmonicOptions.lastIndex.toFloat(),
+                    steps = harmonicOptions.size - 2
                 )
                 Text(
                     stringResource(R.string.proof_explanation),
@@ -338,7 +360,10 @@ private fun FourierDisplay(drawing: ContourDrawing, components: Int, showComplet
             label = "trace-reveal"
         )
         val progress = if (showComplete) 1f else animatedProgress.coerceAtMost(1f)
-        val trails = remember(drawing, components) { drawing.strokes.map { it.trace(components) } }
+        var trails by remember(drawing, components) { mutableStateOf<List<List<Point2>>>(emptyList()) }
+        LaunchedEffect(drawing, components) {
+            trails = withContext(Dispatchers.Default) { drawing.strokes.map { it.trace(components, 640) } }
+        }
         val weights = remember(drawing) {
             drawing.strokes.map { stroke ->
                 stroke.curve.points.zipWithNext().sumOf { (a, b) -> kotlin.math.hypot(b.x - a.x, b.y - a.y) }

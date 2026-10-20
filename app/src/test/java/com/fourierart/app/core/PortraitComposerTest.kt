@@ -73,4 +73,14 @@ class PortraitComposerTest {
         assertTrue(observed.flatMap{it.points}.all{it.x in 89.0..111.0 && it.y in 72.0..96.0})
     }
 
+    @Test fun twoFacesKeepBothPairsOfEyesWithoutRepeatingContext() {
+        val a = face()
+        val b = FacialGeometry(a.parts.mapValues { (_,s) -> ContourStroke(s.points.map { Point2(it.x+210,it.y) },s.closed) })
+        val result = PortraitComposer.composeFaces(listOf(a,b),IntArray(420*200){-1},420,200,emptyList(),
+            listOf(line(10.0,180.0,400.0,180.0)),BooleanArray(420*200),220)
+        for (f in listOf(a,b)) for (part in listOf(FacePart.LEFT_EYE,FacePart.RIGHT_EYE))
+            assertTrue(result.any { it.points==f.parts[part]!!.points })
+        assertEquals(1,result.count { it.points.all { p -> p.y==180.0 } })
+    }
+
 }

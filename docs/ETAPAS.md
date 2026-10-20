@@ -14,7 +14,7 @@ Documento de referencia: **FOURIER_ART_Documento_Oficial_y_Hoja_de_Ruta_v1.pdf**
 **Alcance del selector:** inglés/español en toda pantalla V1. Preferencia conservada entre sesiones; no se utilizarán traducciones de API.
 
 ## Etapa 1 — Prueba de concepto crítica
-En curso en PR #2. Círculo/estrella verificados por el usuario; fotografías complejas fallaron con el detector de color inicial. 0.3.1 corrige pérdida de rasgos, combina retrato/silueta y añade prueba instrumentada con fotografía pública. Ver [revisión del motor y validación pendiente](MOTOR_0.3.1.md). G1 continúa abierto hasta comprobar fotografías reales; no ampliar producto ni declarar GO por compilar.
+En curso en PR #2. Círculo/estrella verificados por el usuario; fotografías complejas fallaron con el detector de color inicial. 0.4.0 añade detalle ajustable, selección por contraste, continuidad, múltiples sujetos y refinamiento por cara, con pruebas públicas de retrato, grupo compuesto y gato. Ver [revisión del motor y validación pendiente](MOTOR_0.4.0.md). G1 continúa abierto hasta comprobar fotografías reales; no ampliar producto ni declarar GO por compilar.
 
 ## Regla de salida
 Ninguna etapa termina solamente porque el código compila. Se requiere evidencia de la funcionalidad prevista.

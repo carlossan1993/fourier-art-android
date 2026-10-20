@@ -24,3 +24,5 @@ private-tests/
 private-photos/
 # Public-domain CI fixture is downloaded at a pinned version and checksum, not committed.
 app/src/androidTest/assets/portrait.png
+
+app/src/androidTest/assets/cat.png

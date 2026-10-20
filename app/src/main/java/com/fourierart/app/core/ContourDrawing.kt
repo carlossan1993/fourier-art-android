@@ -13,7 +13,7 @@ data class DrawingStroke(val curve: FourierCurve, val closed: Boolean) {
     // An open stroke is reflected for Fourier periodicity, but only the outward half is drawn.
     val visibleFraction: Double get() = if (closed) 1.0 else 0.5
     fun trace(components: Int, frames: Int = 320): List<Point2> =
-        (0..frames).map { curve.sample(2 * kotlin.math.PI * visibleFraction * it / frames, components) }
+        curve.trace(components, frames, visibleFraction)
 }
 
 class ContourDrawing private constructor(
@@ -33,8 +33,12 @@ class ContourDrawing private constructor(
             val cx = (minX + maxX) / 2; val cy = (minY + maxY) / 2
             return ContourDrawing(usable, usable.map { stroke ->
                 val normalized = stroke.points.map { Point2(1.7 * (it.x - cx) / side, 1.7 * (it.y - cy) / side) }
-                DrawingStroke(if (stroke.closed) FourierCurve.fromClosedPath(normalized)
-                    else FourierCurve.fromOpenPath(normalized), stroke.closed)
+                // About one sample per 1.5 raster pixels; open strokes require the return journey too.
+                val target = stroke.length * (if (stroke.closed) 1 else 2) / 1.5
+                var samples = 64
+                while (samples < target && samples < 1024) samples *= 2
+                DrawingStroke(if (stroke.closed) FourierCurve.fromClosedPath(normalized, samples)
+                    else FourierCurve.fromOpenPath(normalized, samples), stroke.closed)
             })
         }
 

@@ -6,8 +6,35 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.PI
 
-/** Platform-free raster processing, bounded to <=768px by the caller. */
+/** Platform-free raster processing; the caller bounds image size. */
 object RasterContours {
+    /** Keep significant disconnected subjects, not just the largest animal/person. */
+    fun subjectComponents(mask: BooleanArray, width: Int, height: Int): BooleanArray {
+        require(mask.size == width * height && width > 0 && height > 0)
+        val seen = BooleanArray(mask.size)
+        val queue = IntArray(mask.size)
+        val components = ArrayList<IntArray>()
+        val minimum = max(8, (mask.size * 0.0005).toInt())
+        for (start in mask.indices) {
+            if (!mask[start] || seen[start]) continue
+            var read = 0; var end = 1
+            queue[0] = start; seen[start] = true
+            while (read < end) {
+                val i = queue[read++]; val x = i % width; val y = i / width
+                for (j in intArrayOf(if (x > 0) i - 1 else -1, if (x + 1 < width) i + 1 else -1,
+                    if (y > 0) i - width else -1, if (y + 1 < height) i + width else -1)) {
+                    if (j >= 0 && mask[j] && !seen[j]) { seen[j] = true; queue[end++] = j }
+                }
+            }
+            if (end >= minimum) components.add(queue.copyOf(end))
+        }
+        val largest = components.maxOfOrNull { it.size } ?: 0
+        return BooleanArray(mask.size).also { output ->
+            components.filter { it.size >= largest * 0.01 }.sortedByDescending { it.size }.take(16)
+                .forEach { c -> c.forEach { output[it] = true } }
+        }
+    }
+
     fun largestComponent(mask: BooleanArray, width: Int, height: Int): BooleanArray {
         require(mask.size == width * height && width > 0 && height > 0)
         val seen = BooleanArray(mask.size)
@@ -67,7 +94,7 @@ object RasterContours {
                 if (j >= 0 && background[j] && !flooded[j]) { flooded[j] = true; queue[end++] = j }
             }
         }
-        val subject = largestComponent(BooleanArray(pixels.size) { !flooded[it] }, width, height)
+        val subject = subjectComponents(BooleanArray(pixels.size) { !flooded[it] }, width, height)
         val area = subject.count { it }
         return subject.takeIf { area > pixels.size * 0.01 && area < pixels.size * 0.92 }
     }
@@ -118,19 +145,24 @@ object RasterContours {
     } / 2
 
     /** Smoothed Sobel + nonmaximum suppression + hysteresis; no thresholded filled blobs as details. */
-    fun edges(pixels: IntArray, width: Int, height: Int, sensitivity: Int, subject: BooleanArray? = null): BooleanArray {
+    fun edges(pixels: IntArray, width: Int, height: Int, sensitivity: Int, subject: BooleanArray? = null,
+        blurPasses: Int = 1): BooleanArray {
         require(pixels.size == width * height && (subject == null || subject.size == pixels.size))
         val gray = DoubleArray(pixels.size) { i ->
             val c = pixels[i]
             (0.299 * ((c shr 16) and 255) + 0.587 * ((c shr 8) and 255) + 0.114 * (c and 255)) * ((c ushr 24) / 255.0) +
                 255 * (1 - (c ushr 24) / 255.0)
         }
-        val blur = gray.copyOf()
-        for (y in 1 until height - 1) for (x in 1 until width - 1) {
-            var sum = 0.0
-            for (dy in -1..1) for (dx in -1..1) sum += gray[(y + dy) * width + x + dx] *
-                (if (dx == 0) 2 else 1) * (if (dy == 0) 2 else 1)
-            blur[y * width + x] = sum / 16
+        var blur = gray
+        repeat(blurPasses.coerceIn(1, 4)) {
+            val previous = blur
+            blur = previous.copyOf()
+            for (y in 1 until height - 1) for (x in 1 until width - 1) {
+                var sum = 0.0
+                for (dy in -1..1) for (dx in -1..1) sum += previous[(y + dy) * width + x + dx] *
+                    (if (dx == 0) 2 else 1) * (if (dy == 0) 2 else 1)
+                blur[y * width + x] = sum / 16
+            }
         }
         val mag = DoubleArray(pixels.size); val angle = IntArray(pixels.size)
         for (y in 1 until height - 1) for (x in 1 until width - 1) {

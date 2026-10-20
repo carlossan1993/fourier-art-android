@@ -20,36 +20,72 @@ object StrokeRefinement {
     }
 
     fun join(input: List<ContourStroke>, maxGap: Double): List<ContourStroke> {
-        val paths = input.toMutableList()
-        fun compatible(a: List<Point2>, b: List<Point2>): Boolean {
-            if (distance(a.last(), b.first()) > maxGap) return false
-            val a0 = a[max(0, a.size - 4)]; val a1 = a.last()
-            val b0 = b.first(); val b1 = b[minOf(3, b.lastIndex)]
-            val ux = a1.x - a0.x; val uy = a1.y - a0.y
-            val vx = b1.x - b0.x; val vy = b1.y - b0.y
-            val len = hypot(ux, uy) * hypot(vx, vy)
-            if (len < 1e-6 || (ux * vx + uy * vy) / len < 0.88) return false
-            val gap = distance(a1, b0)
-            // Prevent a sideways jump between parallel edges (double eyelids / clothing seams).
-            return gap < 0.1 || ((b0.x - a1.x) * ux + (b0.y - a1.y) * uy) / (gap * hypot(ux, uy)) > 0.72
-        }
-        // Two passes are sufficient to reconnect short raster breaks without quadratic unbounded merging.
-        repeat(2) {
-            for (i in paths.indices) {
-                if (paths[i].closed || paths[i].points.isEmpty()) continue
-                for (j in i + 1 until paths.size) {
-                    if (paths[j].closed || paths[j].points.isEmpty()) continue
-                    val a = paths[i].points; val b = paths[j].points
-                    if (minOf(distance(a.first(), b.first()), distance(a.first(), b.last()),
-                        distance(a.last(), b.first()), distance(a.last(), b.last())) > maxGap) continue
-                    val pair = listOf(a to b, a to b.reversed(), a.reversed() to b, a.reversed() to b.reversed())
-                        .filter { (x, y) -> compatible(x, y) }.minByOrNull { (x, y) -> distance(x.last(), y.first()) } ?: continue
-                    paths[i] = ContourStroke(pair.first + pair.second, false)
-                    paths[j] = ContourStroke(emptyList(), false)
+        if (maxGap <= 0 || input.size < 2) return input
+        data class End(val stroke: Int, val first: Boolean, val point: Point2, val dx: Double, val dy: Double)
+        val ends = ArrayList<End>()
+        input.forEachIndexed { i, s ->
+            if (!s.closed && s.points.size >= 3) {
+                for (first in listOf(true, false)) {
+                    val p = if (first) s.points.first() else s.points.last()
+                    val q = if (first) s.points[minOf(3, s.points.lastIndex)] else s.points[max(0, s.points.size - 4)]
+                    val d = distance(p, q)
+                    if (d > 1e-6) ends.add(End(i, first, p, (p.x - q.x) / d, (p.y - q.y) / d))
                 }
             }
         }
-        return paths.filter { it.points.isNotEmpty() }
+        fun cell(x: Int, y: Int) = (x.toLong() shl 32) xor (y.toLong() and 0xffffffffL)
+        val grid = HashMap<Long, MutableList<Int>>()
+        data class Link(val a: Int, val b: Int, val cost: Double)
+        val links = ArrayList<Link>()
+        ends.forEachIndexed { i, a ->
+            val x = kotlin.math.floor(a.point.x / maxGap).toInt()
+            val y = kotlin.math.floor(a.point.y / maxGap).toInt()
+            for (dy in -1..1) for (dx in -1..1) for (j in grid[cell(x + dx, y + dy)].orEmpty()) {
+                val b = ends[j]
+                if (a.stroke == b.stroke) continue
+                val gap = distance(a.point, b.point)
+                if (gap > maxGap) continue
+                val alignment = -(a.dx * b.dx + a.dy * b.dy)
+                if (alignment < 0.88) continue
+                if (gap > 0.1) {
+                    val gx = (b.point.x - a.point.x) / gap; val gy = (b.point.y - a.point.y) / gap
+                    if (gx * a.dx + gy * a.dy < 0.72 || -(gx * b.dx + gy * b.dy) < 0.72) continue
+                }
+                links.add(Link(i, j, gap + (1 - alignment) * maxGap))
+            }
+            grid.getOrPut(cell(x, y)) { ArrayList() }.add(i)
+        }
+        val parent = IntArray(input.size) { it }
+        fun root(i: Int): Int { var r = i; while (parent[r] != r) r = parent[r]; return r }
+        val partner = IntArray(ends.size) { -1 }
+        for (link in links.sortedBy { it.cost }) {
+            val a = ends[link.a]; val b = ends[link.b]
+            if (partner[link.a] >= 0 || partner[link.b] >= 0 || root(a.stroke) == root(b.stroke)) continue
+            partner[link.a] = link.b; partner[link.b] = link.a
+            parent[root(a.stroke)] = root(b.stroke)
+        }
+        val endIndex = HashMap<Pair<Int, Boolean>, Int>()
+        ends.forEachIndexed { i, e -> endIndex[e.stroke to e.first] = i }
+        val used = BooleanArray(input.size)
+        val result = ArrayList<ContourStroke>()
+        // Walk whole chains from a free endpoint; independent of input order or number of fragments.
+        for ((index, end) in ends.withIndex()) {
+            if (partner[index] >= 0 || used[end.stroke]) continue
+            val points = ArrayList<Point2>()
+            var current = end
+            while (!used[current.stroke]) {
+                used[current.stroke] = true
+                val p = input[current.stroke].points
+                points.addAll(if (current.first) p else p.reversed())
+                val exit = endIndex[current.stroke to !current.first] ?: break
+                val next = partner[exit]
+                if (next < 0) break
+                current = ends[next]
+            }
+            result.add(ContourStroke(points, false))
+        }
+        input.forEachIndexed { i, s -> if (!used[i]) result.add(s) }
+        return result
     }
 
     /** Spatial coverage: reserve room in each cell instead of spending the whole budget on long seams. */
