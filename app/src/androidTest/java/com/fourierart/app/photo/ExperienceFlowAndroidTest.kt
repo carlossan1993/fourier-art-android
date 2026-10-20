@@ -120,9 +120,12 @@ class ExperienceFlowAndroidTest {
                 }
             }
             ready()
-            if(compose.onAllNodesWithTag("screen_home").fetchSemanticsNodes().isEmpty()) {device.pressBack();ready()}
+            // Replacing test content must not send a system Back event: on API 35
+            // that can finish the Activity and affect subsequent instrumentation tests.
+            compose.onNodeWithTag("screen_home").assertExists()
             val layouts=mutableListOf<TextLayoutResult>()
-            compose.onNodeWithText("FOURIER").performSemanticsAction(SemanticsActions.GetTextLayoutResult){it(layouts)}
+            compose.onNodeWithText("FOURIER",useUnmergedTree=true).performScrollTo()
+                .performSemanticsAction(SemanticsActions.GetTextLayoutResult){it(layouts)}
             assertEquals(1.5f,layouts.single().layoutInput.density.fontScale,.01f)
             val evidence=File(compose.activity.getExternalFilesDir(null),"quality/experience").apply{mkdirs()}
             File(evidence,"stage7-accessibility.txt").writeText("textLayoutFontScale=${layouts.single().layoutInput.density.fontScale}\ntextHeight=${layouts.single().size.height}\n")
@@ -136,6 +139,10 @@ class ExperienceFlowAndroidTest {
             compose.onNodeWithTag("fourier_components").performScrollTo().assertExists()
             screenshot("large-text-parameters")
             click("parameters_done",true)
+            // Navigate through the app before rotating/reinstalling the override.
+            // Explicitly establish the screen instead of relying on timing of system Back.
+            click("nav_back",true)
+            compose.onNodeWithTag("screen_home").assertExists()
             compose.runOnIdle{compose.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}
             device.waitForIdle();ready()
             compose.waitUntil(15000){compose.activity.resources.configuration.orientation==android.content.res.Configuration.ORIENTATION_LANDSCAPE}
@@ -147,7 +154,9 @@ class ExperienceFlowAndroidTest {
             screenshot("landscape-export")
             compose.onNodeWithTag("export_close").performClick()
         } finally {
-            compose.runOnIdle{compose.activity.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT}
+            compose.activityRule.scenario.onActivity {it.requestedOrientation=ActivityInfo.SCREEN_ORIENTATION_PORTRAIT}
+            device.waitForIdle()
+            compose.waitUntil(15000){compose.activity.resources.configuration.orientation==android.content.res.Configuration.ORIENTATION_PORTRAIT}
             compose.activityRule.scenario.recreate();ready()
         }
     }
