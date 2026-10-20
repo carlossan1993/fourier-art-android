@@ -2,9 +2,9 @@
 
 Aplicación Android nativa que transformará fotografías en animaciones matemáticas mediante Series de Fourier y epiciclos.
 
-**Estado:** Etapa 2 en desarrollo y pruebas, versión 0.6.0: cámara, preparación y recuperación de la foto. Motor 0.5.0 conservado. Pendiente de prueba física de captura/recorte en dos dispositivos.
+**Estado:** 0.6.0 aceptada por el propietario e integrada en main. Etapa 3 en desarrollo: versión 0.7.0 con corrección manual de contornos, limpieza y selección de zona. Detección 0.5.0 conservada como base.
 
-Estado actual: [Etapa 2: captura y preparación](docs/ETAPA_2_CAPTURA.md). El propietario pidió continuar esta etapa en Work el 19/10/2026.
+Estado actual: [Etapa 3: contornos editables](docs/ETAPA_3_CONTORNOS.md). La matriz física de dos teléfonos de Etapa 2 y el banco formal de reconocibilidad siguen pendientes.
 
 ## Alcance V1
 - Android nativo con **Kotlin** y **Jetpack Compose**.

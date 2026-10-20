@@ -24,7 +24,7 @@ object PhotoContours {
         val faces: List<FacialGeometry>, val detectedFaceCount: Int, val confidence: FloatArray?,
         val plainBackground: Boolean, val modelUnavailable: Boolean
     ) { val face: FacialGeometry? get() = faces.firstOrNull() }
-    data class Result(val drawing: ContourDrawing?, val kind: Kind)
+    data class Result(val drawing: ContourDrawing?, val kind: Kind, val silhouette: List<ContourStroke> = emptyList())
 
     // Worker dispatcher only. Facial inference uses the original oriented bitmap, not the small raster.
     fun analyze(input: Bitmap, mode: Mode): Analysis {
@@ -105,7 +105,8 @@ object PhotoContours {
             strokes = outline.map { StrokeRefinement.smooth(it) } + selected
             kind = if (mode == Mode.DRAWING) Kind.DRAWING else Kind.SUBJECT
         }
-        return if (strokes.isEmpty()) Result(null, Kind.NO_SUBJECT) else Result(ContourDrawing.fromStrokes(strokes), kind)
+        return if (strokes.isEmpty()) Result(null, Kind.NO_SUBJECT) else Result(ContourDrawing.fromStrokes(strokes), kind,
+            outline.ifEmpty { a.faces.mapNotNull { it.parts[FacePart.OVAL] } })
     }
 
     /** First detect ALL boxes without contour mode, then run contours on each individual crop. */

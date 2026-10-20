@@ -27,7 +27,12 @@ El 19/10/2026 el propietario pidió continuar esta etapa en Work por su disponib
 
 0.6.0 añade CameraX, permiso al usarla, editor de rotación/recorte, conservación del original y recuperación del trabajo. Photo Picker y EXIF se mantienen; `core/` conserva el motor 0.5.0. Ver [implementación y pruebas](ETAPA_2_CAPTURA.md).
 
-**Estado: implementación en validación.** Falta probar captura/selección y preparación en dos dispositivos físicos conforme al plan. No cerrar la etapa solo por compilar o usar cámara emulada. El documento de continuación anterior queda como referencia del alcance inicial.
+**Estado: 0.6.0 probada y aceptada por el propietario el 19/10/2026; PR #8 integrado.** Actions: 44 pruebas JVM, nueve API 29 y cuatro API 35 correctas. La confirmación no identifica dos dispositivos: la matriz física completa queda pendiente en #6. Se avanza por decisión del propietario.
+
+## Etapa 3 — Contornos robustos (Work)
+0.7.0 incorpora vista previa editable, Silueta/Detalles, limpieza, conservación de una zona, borrador de segmentos, dibujo correctivo y deshacer/rehacer. La detección aceptada sigue siendo el valor predeterminado. Seguimiento: #9 y [alcance](ETAPA_3_CONTORNOS.md).
+
+**Estado: implementación en validación.** No se declara superado el banco formal de reconocibilidad >=24/30 de #3. La edición permite corregir trazos; no acredita por sí sola una mejora de detección automática.
 
 ## Distribución de herramientas aprobada
 

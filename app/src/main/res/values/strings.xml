@@ -10,7 +10,7 @@
     <string name="language_label">Language</string>
     <string name="version_label">Development version 0.1.0 · Stage 0</string>
 
-    <string name="proof_subtitle">Stage 2 · Capture and preparation</string>
+    <string name="proof_subtitle">Stage 3 · Contour correction</string>
     <string name="proof_choose">Test a sample or import an image</string>
     <string name="circle">Circle</string>
     <string name="star">Star</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Fourier components: %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.6.0 · Stage 2</string>
+    <string name="proof_version">Experimental version 0.7.0 · Stage 3</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
@@ -72,4 +72,32 @@
     <string name="photo_memory_error">This photo needs too much memory. Try a smaller image.</string>
     <string name="photo_save_error">The working photo could not be saved. Check the available storage and retry.</string>
     <string name="working_photo_notice">This photo stays as local work until you replace or discard it.</string>
+    <string name="correct_contours">Edit contours</string>
+    <string name="contour_canvas_description">Contour correction canvas. Use the buttons to keep a region, erase, draw or move.</string>
+    <string name="keep_help">Drag a rectangle around the subject to keep only the strokes inside that region.</string>
+    <string name="erase_help">Drag the eraser over the segments to remove. Each gesture can be undone.</string>
+    <string name="draw_help">Draw over the photo to add missing lines. Each gesture creates a separate stroke.</string>
+    <string name="move_help">When zoomed in, drag to move the image and reach other details.</string>
+    <string name="contour_details">Details</string>
+    <string name="contour_silhouette">Silhouette</string>
+    <string name="contour_detected">Detected · %1$d strokes</string>
+    <string name="contour_custom">Custom · %1$d strokes</string>
+    <string name="no_silhouette">No reliable silhouette is available. Use Details or draw a correction.</string>
+    <string name="keep_subject">Keep region</string>
+    <string name="erase_segments">Erase</string>
+    <string name="draw_lines">Draw</string>
+    <string name="move_canvas">Move</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="show_photo">Show photo</string>
+    <string name="contour_zoom">Zoom: %1$d %%</string>
+    <string name="eraser_size">Eraser size</string>
+    <string name="small_strokes">Remove small strokes: %1$d</string>
+    <string name="restore_detection">Restore detection</string>
+    <string name="correction_persistence">Apply saves corrections with this photo. Cancel keeps the previous result.</string>
+    <string name="apply_contours">Apply contours</string>
+    <string name="correction_intro">Clean or complete the contour before animating it, including when detection found no strokes.</string>
+    <string name="contour_applied">Corrected contour: %1$d strokes. Review the complete result.</string>
+    <string name="contour_empty">The contour is empty. Open Edit contours to restore it or add lines.</string>
+    <string name="correction_limit">You reached 100 corrections. Undo or restore detection to continue.</string>
 </resources>
