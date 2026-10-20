@@ -10,7 +10,7 @@
     <string name="language_label">Language</string>
     <string name="version_label">Development version 0.1.0 · Stage 0</string>
 
-    <string name="proof_subtitle">Stage 1 · Mathematical proof of concept</string>
+    <string name="proof_subtitle">Stage 2 · Capture and preparation</string>
     <string name="proof_choose">Test a sample or import an image</string>
     <string name="circle">Circle</string>
     <string name="star">Star</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Fourier components: %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.5.0 · Stage 1</string>
+    <string name="proof_version">Experimental version 0.6.0 · Stage 2</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
@@ -51,4 +51,25 @@
     <string name="style_structure">Structure</string>
     <string name="style_detail">Texture</string>
     <string name="style_help">Structure seeks main shapes and reduces texture. Texture keeps more fine lines. Tap retry to apply.</string>
+    <string name="prepare_title">Prepare your photo</string>
+    <string name="crop_description">Photo crop; adjust the corners or the horizontal and vertical controls.</string>
+    <string name="crop_help">Drag the corners to crop or the center to move the crop. You can also use the controls below.</string>
+    <string name="rotate_left">Rotate left</string>
+    <string name="rotate_right">Rotate right</string>
+    <string name="crop_horizontal">Horizontal: %1$d–%2$d %%</string>
+    <string name="crop_vertical">Vertical: %1$d–%2$d %%</string>
+    <string name="reset_original">Back to original</string>
+    <string name="discard_photo">Discard photo</string>
+    <string name="cancel">Cancel</string>
+    <string name="apply_photo">Apply and process</string>
+    <string name="edit_photo">Edit photo</string>
+    <string name="camera_title">Take a photo</string>
+    <string name="camera_prepare_hint">You can rotate and crop the photo before processing it.</string>
+    <string name="camera_shutter">Capture</string>
+    <string name="camera_switch">Switch camera</string>
+    <string name="camera_denied">Camera access was not granted. You can choose a photo or enable the permission in your phone settings.</string>
+    <string name="camera_error">The camera could not open or capture a photo. Retry or choose a photo.</string>
+    <string name="photo_memory_error">This photo needs too much memory. Try a smaller image.</string>
+    <string name="photo_save_error">The working photo could not be saved. Check the available storage and retry.</string>
+    <string name="working_photo_notice">This photo stays as local work until you replace or discard it.</string>
 </resources>

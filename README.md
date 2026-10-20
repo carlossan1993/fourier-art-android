@@ -2,9 +2,9 @@
 
 Aplicación Android nativa que transformará fotografías en animaciones matemáticas mediante Series de Fourier y epiciclos.
 
-**Estado:** base 0.5.0 elegida por el propietario e integrada en main. Prueba de concepto cerrada como decisión de continuidad; siguiente: **Etapa 2 — captura e importación, en Chat**. El banco formal de reconocibilidad sigue pendiente.
+**Estado:** Etapa 2 en desarrollo y pruebas, versión 0.6.0: cámara, preparación y recuperación de la foto. Motor 0.5.0 conservado. Pendiente de prueba física de captura/recorte en dos dispositivos.
 
-Punto de continuación: [Etapa 2 en Chat](docs/CONTINUAR_EN_CHAT_ETAPA_2.md).
+Estado actual: [Etapa 2: captura y preparación](docs/ETAPA_2_CAPTURA.md). El propietario pidió continuar esta etapa en Work el 19/10/2026.
 
 ## Alcance V1
 - Android nativo con **Kotlin** y **Jetpack Compose**.
@@ -18,7 +18,7 @@ Punto de continuación: [Etapa 2 en Chat](docs/CONTINUAR_EN_CHAT_ETAPA_2.md).
 - Android Gradle Plugin 8.13.2; Kotlin 2.3.21.
 - En un equipo con Gradle instalado: `gradle :app:assembleDebug`.
 - En GitHub: la pestaña **Actions** ejecuta la compilación y permite descargar el **APK de pruebas** en el artefacto `fourier-art-debug-apk`.
-- Importación desde galería, perfiles Auto/Sujeto/Dibujo, vista previa de trazos y reconstrucción Fourier. Cámara y exportación pendientes.
+- Galería y cámara, giro/recorte antes de procesar, perfiles Auto/Sujeto/Dibujo, vista previa y Fourier. Exportación pendiente.
 - Ver [motor 0.5.0 y comparaciones de trazado](docs/MOTOR_0.5.0.md).
 
 ## Trabajo por etapas
