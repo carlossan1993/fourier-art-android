@@ -25,6 +25,8 @@ import com.fourierart.app.R
 import com.fourierart.app.core.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.sync.withLock
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -37,6 +39,7 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
     var previewProgress by remember { mutableFloatStateOf(.5f) }
     var preview by remember { mutableStateOf<Bitmap?>(null) }
     var previewError by remember { mutableStateOf(false) }
+    val previewMutex = remember { kotlinx.coroutines.sync.Mutex() }
     var renderer by remember(snapshot) { mutableStateOf<ExportRenderer?>(null) }
     LaunchedEffect(snapshot) {
         try { renderer = withContext(Dispatchers.Default) { ExportRenderer(snapshot) } }
@@ -51,10 +54,13 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
         var rendered: Bitmap? = null
         try {
             val result = withContext(Dispatchers.Default) {
-                val width = 360; val height = if (spec.frame == ExportFrame.SQUARE) 360 else 640
-                Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888).also {
-                    rendered = it
-                    prepared.draw(Canvas(it),width,height,if (spec.format == ExportFormat.PNG) 1.0 else previewProgress.toDouble())
+                previewMutex.withLock {
+                    kotlinx.coroutines.currentCoroutineContext().ensureActive()
+                    val width = 360; val height = if (spec.frame == ExportFrame.SQUARE) 360 else 640
+                    Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888).also {
+                        rendered = it
+                        prepared.draw(Canvas(it),width,height,if (spec.format == ExportFormat.PNG) 1.0 else previewProgress.toDouble())
+                    }
                 }
             }
             preview = result
