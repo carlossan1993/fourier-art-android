@@ -79,6 +79,25 @@ jobs:
             python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/instrumentation.txt").read_text()), "Instrumented portrait test did not pass"'
             adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/
 
+      - name: Test preparation and camera on Android 15
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: default
+          arch: x86_64
+          avd-name: stage2-api35
+          emulator-boot-timeout: 180
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back emulated -camera-front emulated
+          script: |
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            mkdir -p quality-output/api35
+            adb shell am instrument -w -e package com.fourierart.app.photo com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner > quality-output/api35/instrumentation.txt
+            cat quality-output/api35/instrumentation.txt
+            python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/api35/instrumentation.txt").read_text()), "Android 15 photo flow did not pass"'
+            adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/api35/
+
       - name: Upload quality evidence
         if: always()
         uses: actions/upload-artifact@v4

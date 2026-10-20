@@ -19,6 +19,7 @@ class PhotoSessionStore(context: Context, directory: File = File(context.noBacku
         val name=json.getString("file")
         require(name.matches(Regex("[a-f0-9-]+\\.png")))
         val bitmap=BitmapFactory.decodeFile(File(folder,name).path) ?: error("Missing work photo")
+        folder.listFiles()?.filter { it.extension=="png" && it.name!=name }?.forEach { it.delete() }
         Snapshot(bitmap,name,json.optJSONObject("applied")?.let { decode(it) },decode(json.getJSONObject("draft")),
             json.optBoolean("editing",true),json.optJSONObject("options") ?: JSONObject())
     } catch (_:Exception) { null }

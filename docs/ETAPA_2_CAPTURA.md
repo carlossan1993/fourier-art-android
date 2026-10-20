@@ -21,7 +21,7 @@ CameraX 1.5.3 (camera2/lifecycle/view), Lifecycle 2.10.0 (ViewModel/runtime Comp
 
 - Cuatro pruebas JVM de coordenadas, giros, límites y recorte mínimo, además de las 40 pruebas del motor existente.
 - Android: ocho orientaciones EXIF reales en JPEG, giro/recorte con imagen de cuadrantes, recuperación de fuente/preparación en un nuevo almacén y limpieza de versiones anteriores.
-- Flujo UI en emulador: importar, arrastrar recorte, girar, recrear actividad conservando ViewModel, aplicar, cancelar selector, denegar permiso, concederlo, cancelar cámara conservando la foto previa y capturar realmente con CameraX y cámara emulada. Produce capturas en la evidencia de Actions.
+- Flujo UI en emuladores API 29 y 35: importar, arrastrar recorte, girar, recrear actividad conservando ViewModel, aplicar, cancelar selector, denegar permiso, concederlo, cancelar cámara conservando la foto previa y capturar realmente con CameraX y cámara emulada. Produce capturas en la evidencia de Actions.
 - Se conservan las cinco pruebas instrumentadas de calidad del motor.
 
 Consultar Actions del commit para los resultados efectivos. La cámara emulada no sustituye cámaras físicas ni fabricantes distintos. La salida de Etapa 2 requiere probar captura/selección, giros y recorte en dos teléfonos según el plan; no se declara completada esa validación por compilar o por las pruebas del emulador. G1 formal 24/30 sigue sin medir en #3.

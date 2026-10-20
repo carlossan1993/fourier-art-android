@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.Observer
 import com.fourierart.app.R
 import java.io.File
 import java.util.UUID
@@ -30,12 +31,18 @@ fun CameraCapture(folder: File, onCaptured: (File)->Unit, onClose: ()->Unit, onE
     var front by remember {mutableStateOf(false)}
     var canSwitch by remember {mutableStateOf(false)}
     var busy by remember {mutableStateOf(false)}
+    var streaming by remember {mutableStateOf(false)}
+    DisposableEffect(view,owner) {
+        val observer=Observer<PreviewView.StreamState> {streaming=it==PreviewView.StreamState.STREAMING}
+        view.previewStreamState.observe(owner,observer)
+        onDispose {view.previewStreamState.removeObserver(observer)}
+    }
     val latestCaptured by rememberUpdatedState(onCaptured);val latestError by rememberUpdatedState(onError)
     var active by remember {mutableStateOf(true)}
     DisposableEffect(owner,front) {
         var alive=true;active=true
         var provider: ProcessCameraProvider?=null;var boundPreview: Preview?=null;var boundCapture: ImageCapture?=null
-        capture=null
+        capture=null;streaming=false
         val future=ProcessCameraProvider.getInstance(context)
         future.addListener({
             if(alive) try {
@@ -62,7 +69,7 @@ fun CameraCapture(folder: File, onCaptured: (File)->Unit, onClose: ()->Unit, onE
         Text(stringResource(R.string.camera_title),color=Color.White,style=MaterialTheme.typography.titleLarge)
         AndroidView(factory={view},modifier=Modifier.fillMaxWidth().weight(1f))
         Text(stringResource(R.string.camera_prepare_hint),color=Color.White,style=MaterialTheme.typography.bodySmall)
-        if(capture==null || busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+        if(capture==null || !streaming || busy) LinearProgressIndicator(Modifier.fillMaxWidth())
         Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick=onClose,modifier=Modifier.weight(1f).testTag("camera_cancel")) {Text(stringResource(R.string.cancel))}
             if(canSwitch) OutlinedButton(onClick={front=!front},enabled=!busy,modifier=Modifier.weight(1f).testTag("camera_switch")) {Text(stringResource(R.string.camera_switch))}
@@ -79,6 +86,6 @@ fun CameraCapture(folder: File, onCaptured: (File)->Unit, onClose: ()->Unit, onE
                 }
                 override fun onError(exception: ImageCaptureException) {file.delete();if(active) {busy=false;latestError()}}
             })} catch(_:Exception) {file.delete();busy=false;latestError()}
-        },enabled=capture!=null && !busy,modifier=Modifier.fillMaxWidth().testTag("camera_shutter")) {Text(stringResource(R.string.camera_shutter))}
+        },enabled=capture!=null && streaming && !busy,modifier=Modifier.fillMaxWidth().testTag("camera_shutter")) {Text(stringResource(R.string.camera_shutter))}
     }
 }

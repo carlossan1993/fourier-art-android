@@ -47,7 +47,7 @@ class PhotoFlowTest {
         compose.runOnIdle {assertFalse(model.editing);assertNotNull(model.image);assertNotNull(model.drawing)}
         val prepared=model.image
         compose.onNodeWithTag("choose_photo").performScrollTo().performClick()
-        assertTrue("Photo Picker did not open",device.wait(Until.hasObject(By.pkg("com.android.documentsui")),10000));device.pressBack()
+        assertTrue("Photo Picker did not open",device.wait(Until.hasObject(By.pkg(Pattern.compile(".*(documentsui|providers.media|photopicker).*"))),10000));device.pressBack()
         compose.waitUntil(10000) {compose.onAllNodesWithTag("choose_photo").fetchSemanticsNodes().isNotEmpty()}
         compose.runOnIdle {assertSame(prepared,model.image)}
         compose.onNodeWithTag("take_photo").performScrollTo().performClick()

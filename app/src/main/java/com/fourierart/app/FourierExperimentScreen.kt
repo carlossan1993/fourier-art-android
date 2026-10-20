@@ -84,7 +84,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
     val context = LocalContext.current
     var cameraOpen by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) cameraOpen = true else model.notice = R.string.camera_denied
+        if (granted) { model.notice = 0; cameraOpen = true } else model.notice = R.string.camera_denied
     }
     with(model) {
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -141,12 +141,13 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(
-                        onClick = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                        onClick = { notice = 0; picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                         enabled = !loading,
                         modifier = Modifier.weight(1f).testTag("choose_photo")
                     ) { Text(stringResource(R.string.choose_photo)) }
                     Button(
                         onClick = {
+                            notice = 0
                             if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) notice = R.string.camera_error
                             else if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) cameraOpen = true
                             else permission.launch(Manifest.permission.CAMERA)
@@ -155,6 +156,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                         modifier = Modifier.weight(1f).testTag("take_photo")
                     ) { Text(stringResource(R.string.take_photo)) }
                 }
+                if (notice != 0) Text(stringResource(notice), color = Color(0xFFFFD18A), modifier = Modifier.testTag("photo_notice"))
                 if (editing) PhotoEditor(this@with)
                 Text(
                     stringResource(R.string.photo_warning),
@@ -226,7 +228,6 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                     ) { Text(stringResource(R.string.reprocess)) }
                 }
                 if (loading) CircularProgressIndicator(Modifier.testTag("photo_loading"))
-                if (notice != 0) Text(stringResource(notice), color = Color(0xFFFFD18A), modifier = Modifier.testTag("photo_notice"))
                 if (result == 1 && (analysis?.detectedFaceCount ?: 0) > 0) {
                     Text(stringResource(R.string.face_count, analysis!!.faces.size, analysis!!.detectedFaceCount),
                         style = MaterialTheme.typography.bodySmall)
