@@ -107,11 +107,6 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
             OutlinedButton(onClick=model::fit,enabled=!working && snapshot.viewport!=PreviewViewport(),modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.fit_drawing)) }
             Text(stringResource(R.string.export_style),style=MaterialTheme.typography.bodySmall)
             Button(onClick=model::start,enabled=!working,modifier=Modifier.fillMaxWidth().testTag("export_start")) { Text(stringResource(R.string.export_create)) }
-            if (working) {
-                LinearProgressIndicator(progress={model.progress},modifier=Modifier.fillMaxWidth().testTag("export_progress"))
-                Text(stringResource(if(model.saving) R.string.export_saving else R.string.export_rendering,(model.progress*100).roundToInt()))
-                OutlinedButton(onClick=model::cancel,modifier=Modifier.fillMaxWidth().testTag("export_cancel")) { Text(stringResource(R.string.export_cancel)) }
-            }
             if (model.notice!=0) Text(stringResource(model.notice),modifier=Modifier.testTag("export_notice"))
             val completed = model.completed
             val output = model.completedSpec
@@ -130,6 +125,11 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
                 }
                 Text(stringResource(R.string.export_cache_notice),style=MaterialTheme.typography.bodySmall)
             }
+        }
+        if (working) {
+            LinearProgressIndicator(progress={model.progress},modifier=Modifier.fillMaxWidth().testTag("export_progress"))
+            Text(stringResource(if(model.saving) R.string.export_saving else R.string.export_rendering,(model.progress*100).roundToInt()))
+            OutlinedButton(onClick=model::cancel,modifier=Modifier.fillMaxWidth().testTag("export_cancel")) { Text(stringResource(R.string.export_cancel)) }
         }
     }
 }
