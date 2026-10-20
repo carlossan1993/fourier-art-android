@@ -54,7 +54,7 @@ fun LineIcon(kind: Glyph, modifier: Modifier = Modifier, tint: Color = Aqua) {
 
 @Composable
 fun ChoiceButton(label: String, selected: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
-    OutlinedButton(onClick,modifier.heightIn(min=48.dp).semantics {this.selected=selected},enabled=enabled,
+    OutlinedButton({if(!selected)onClick()},modifier.heightIn(min=48.dp).semantics {this.selected=selected},enabled=enabled,
         shape=RoundedCornerShape(12.dp),border=BorderStroke(1.dp,if(selected) Aqua else MaterialTheme.colorScheme.outline),
         colors=ButtonDefaults.outlinedButtonColors(containerColor=if(selected) Aqua.copy(alpha=.15f) else Color.Transparent,
             contentColor=if(selected) Aqua else MaterialTheme.colorScheme.onSurface)) {Text(label)}

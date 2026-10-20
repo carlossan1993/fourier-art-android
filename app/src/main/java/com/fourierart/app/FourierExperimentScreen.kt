@@ -56,6 +56,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel, exports: ExportModel) {
         if(!model.loading && observedWork!=workKey) {
             observedWork=workKey
             page=when {
+                page==Page.SETTINGS || page==Page.GUIDE -> page
                 model.editing && model.source!=null -> Page.PREPARE
                 model.image!=null -> Page.REVIEW
                 page==Page.REVIEW || page==Page.PREPARE -> Page.HOME
@@ -213,7 +214,8 @@ private fun ReviewScreen(model: PhotoSessionModel,onBack: ()->Unit,onAnimate: ()
 @Composable
 private fun ContourPreview(bitmap: Bitmap, drawing: ContourDrawing?, modifier: Modifier) {
     val preview = remember(bitmap) { bitmap.asImageBitmap() }
-    Canvas(modifier) {
+    val description=stringResource(R.string.selected_image)
+    Canvas(modifier.semantics{contentDescription=description}) {
         val factor = min(size.width / bitmap.width, size.height / bitmap.height)
         val left = (size.width - bitmap.width * factor) / 2f
         val top = (size.height - bitmap.height * factor) / 2f

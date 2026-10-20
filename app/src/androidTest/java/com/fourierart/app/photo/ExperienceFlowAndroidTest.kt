@@ -81,6 +81,13 @@ class ExperienceFlowAndroidTest {
         compose.onNodeWithTag("start_animation").assertIsEnabled()
         click("start_animation",true);compose.onNodeWithTag("screen_player").assertExists()
         compose.activityRule.scenario.recreate();ready();compose.onNodeWithTag("screen_player").assertExists()
+        val photoDrawing=model.drawing
+        click("open_export",true);click("format_png");click("export_start")
+        compose.waitUntil(60000){!compose.activity.exportSession.busy};compose.waitForIdle()
+        assertSame(photoDrawing,compose.activity.exportSession.snapshot!!.drawing)
+        assertNotNull(compose.activity.exportSession.completed)
+        screenshot("photo-export")
+        compose.onNodeWithTag("export_close").performClick();ready()
         click("nav_back",true);click("correct_contours")
         compose.runOnIdle{model.addContourEdit(com.fourierart.app.contours.ContourEdit.Erase((0..10).flatMap{row ->
             val y=row/10.0;if(row%2==0)listOf(Point2(0.0,y),Point2(1.0,y))else listOf(Point2(1.0,y),Point2(0.0,y))
