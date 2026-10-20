@@ -28,7 +28,7 @@ La prueba Android usa el modelo facial real con imágenes públicas fijadas por 
 
 `portrait-quality-evidence` contiene imágenes comparativas y métricas de número de trazos y tiempo en emulador. Retención de 3 días; APK 7 días. Consultar la ejecución del commit para el resultado efectivo. Las imágenes de prueba no forman parte del APK de usuario. No se publican fotografías personales.
 
-La comparación local del gato permite revisar rasgos y textura, pero no acredita calidad universal ni rendimiento en el Samsung. El modo Fino puede ser demasiado denso: usar Simple cuando se busque simplificación extrema. G1 y PR #2 permanecen abiertos hasta evaluar las fotografías originales y el banco acordado; no se declara GO por compilar.
+La comparación local del gato permite revisar rasgos y textura, pero no acredita calidad universal ni rendimiento en el Samsung. El modo Fino puede ser demasiado denso: usar Simple cuando se busque simplificación extrema. El propietario aceptó esta versión como base tras probarla en su teléfono y autorizó integrar PR #2 el 19/10/2026. PR #2 está integrado. El banco formal de G1 continúa pendiente en #3; la aceptación no acredita calidad universal.
 
 ## Fuentes de los modelos y fixtures
 

@@ -25,7 +25,7 @@
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes de Fourier: %1$d</string>
     <string name="proof_explanation">Cada trazo tiene sus propios epiciclos. El lápiz se levanta entre rasgos separados. Más componentes mejoran la reconstrucción del trazo detectado.</string>
-    <string name="proof_version">Versión experimental 0.4.0 · Etapa 1</string>
+    <string name="proof_version">Versión experimental 0.5.0 · Etapa 1</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
     <string name="processing_profile">Perfil de procesamiento</string>
     <string name="profile_auto">Auto</string>
@@ -47,4 +47,8 @@
     <string name="detail_fine">Fino</string>
     <string name="detail_help">Simple conserva menos líneas; Fino incluye más detalles y puede añadir textura. Pulsa Reintentar para aplicar.</string>
     <string name="face_count">Rostros con contornos: %1$d de %2$d detectados.</string>
+    <string name="line_style">Tipo de trazado</string>
+    <string name="style_structure">Estructura</string>
+    <string name="style_detail">Textura</string>
+    <string name="style_help">Estructura busca las formas principales y reduce textura. Textura conserva más líneas finas. Pulsa Reintentar para aplicar.</string>
 </resources>
