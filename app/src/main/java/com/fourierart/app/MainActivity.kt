@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 class MainActivity : AppCompatActivity() {
     val photoSession: PhotoSessionModel by lazy { ViewModelProvider(this)[PhotoSessionModel::class.java] }
 
+    val exportSession: com.fourierart.app.export.ExportModel by lazy { ViewModelProvider(this)[com.fourierart.app.export.ExportModel::class.java] }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 )
             ) {
                 Surface(Modifier.fillMaxSize()) {
-                    FourierExperimentScreen(photoSession)
+                    FourierExperimentScreen(photoSession, exportSession)
                 }
             }
         }

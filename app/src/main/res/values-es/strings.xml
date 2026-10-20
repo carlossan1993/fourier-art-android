@@ -10,7 +10,7 @@
     <string name="language_label">Idioma</string>
     <string name="version_label">Versión de desarrollo 0.1.0 · Etapa 0</string>
 
-    <string name="proof_subtitle">Etapa 5 · Animación y controles</string>
+    <string name="proof_subtitle">Etapa 6 · Exportación</string>
     <string name="proof_choose">Prueba una figura o importa una imagen</string>
     <string name="circle">Círculo</string>
     <string name="star">Estrella</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes por trazo (máximo): %1$d</string>
     <string name="proof_explanation">Cada trazo tiene sus propios epiciclos. El lápiz se levanta entre rasgos separados. Más componentes mejoran la reconstrucción del trazo detectado.</string>
-    <string name="proof_version">Versión experimental 0.9.0 · Etapa 5</string>
+    <string name="proof_version">Versión experimental 0.10.0 · Etapa 6</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
     <string name="processing_profile">Perfil de procesamiento</string>
     <string name="profile_auto">Auto</string>
@@ -124,4 +124,26 @@
     <string name="player_gesture_help">Pellizca para acercar o alejar y arrastra para mover el dibujo. Restablecer encuadre vuelve a centrarlo.</string>
     <string name="animation_progress">Avance: %1$d %%</string>
     <string name="animation_canvas_description">Animación de Fourier. Usa los controles para pausar, cambiar velocidad y revisar el dibujo.</string>
+<string name="export_title">Exportar</string>
+<string name="export_preview">Vista previa del encuadre de exportación</string>
+<string name="export_dimensions">%1$d × %2$d px</string>
+<string name="export_preview_position">Vista previa: posición del dibujo</string>
+<string name="export_seconds">%1$d segundos</string>
+<string name="export_timing">Dibuja una vez en la duración elegida y mantiene el resultado al final. Esta duración reemplaza la velocidad del reproductor. MP4 sin audio.</string>
+<string name="export_style">Conserva los trazos, componentes, color, fondo y epiciclos del reproductor. El encuadre visible aquí es el que se exporta. PNG contiene el dibujo completo.</string>
+<string name="export_create">Crear archivo</string>
+<string name="export_rendering">Creando archivo… %1$d%%</string>
+<string name="export_saving">Guardando… %1$d%%</string>
+<string name="export_cancel">Cancelar</string>
+<string name="export_ready">Archivo listo para guardar o compartir.</string>
+<string name="export_cancelled">Operación cancelada.</string>
+<string name="export_failed">No se pudo crear el archivo. Comprueba el espacio disponible o prueba PNG o GIF si el dispositivo no permite MP4.</string>
+<string name="export_memory">No hay memoria suficiente. Prueba una resolución menor o cierra otras aplicaciones.</string>
+<string name="export_saved">Archivo guardado en la ubicación elegida.</string>
+<string name="export_save_failed">No se pudo guardar. Comprueba el espacio y elige una ubicación disponible.</string>
+<string name="export_share_failed">No se pudo abrir el menú para compartir. Puedes guardar el archivo.</string>
+<string name="export_result">%1$s · %2$d × %3$d · %4$s MB</string>
+<string name="export_save">Guardar</string>
+<string name="export_share">Compartir</string>
+<string name="export_cache_notice">Guarda el resultado para conservarlo. Los archivos temporales pueden eliminarse después de 24 horas.</string>
 </resources>
