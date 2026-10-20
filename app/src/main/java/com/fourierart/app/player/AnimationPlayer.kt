@@ -25,12 +25,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import com.fourierart.app.ui.ChoiceButton
 import com.fourierart.app.R
 import com.fourierart.app.core.*
 import com.fourierart.app.photo.PhotoSessionModel
@@ -40,7 +42,7 @@ import kotlin.math.PI
 import kotlin.math.roundToInt
 
 @Composable
-fun AnimationPlayer(model: PhotoSessionModel,expanded: Boolean=false,onExpand: ()->Unit={}) {
+fun AnimationPlayer(model: PhotoSessionModel,expanded: Boolean=false,onExpand: ()->Unit={},showParameters: Boolean=true) {
     val drawing=model.drawing ?: return
     val owner=LocalLifecycleOwner.current
     DisposableEffect(owner,model) {
@@ -57,15 +59,15 @@ fun AnimationPlayer(model: PhotoSessionModel,expanded: Boolean=false,onExpand: (
         PlayerCanvas(model,drawing,expanded,if(expanded) Modifier.fillMaxWidth().weight(1f) else Modifier.fillMaxWidth().height(300.dp))
         if(expanded) {
             val height=(LocalConfiguration.current.screenHeightDp*.36f).dp
-            Column(Modifier.heightIn(max=height).verticalScroll(rememberScrollState())) {PlayerControls(model,drawing,expanded,onExpand)}
-        } else PlayerControls(model,drawing,expanded,onExpand)
+            Column(Modifier.heightIn(max=height).verticalScroll(rememberScrollState())) {PlayerControls(model,drawing,expanded,onExpand,showParameters)}
+        } else PlayerControls(model,drawing,expanded,onExpand,showParameters)
     }
 }
 
 private data class PreparedStroke(val points: List<Point2>,val path: Path,val rotations: List<Harmonic>)
 
 @Composable
-private fun PlayerCanvas(model: PhotoSessionModel,drawing: ContourDrawing,expanded: Boolean,modifier: Modifier) {
+private fun PlayerCanvas(model: PhotoSessionModel,drawing: ContourDrawing,expanded: Boolean,modifier: Modifier,fixedProgress: Double?=null) {
     val components=model.components
     var prepared by remember(drawing,components) {mutableStateOf<List<PreparedStroke>>(emptyList())}
     LaunchedEffect(drawing,components) {
@@ -82,7 +84,7 @@ private fun PlayerCanvas(model: PhotoSessionModel,drawing: ContourDrawing,expand
     val lifecycle=LocalLifecycleOwner.current.lifecycle
     val view=LocalView.current
     var visible by remember {mutableStateOf(false)}
-    val running=model.animationPlaying && !model.showComplete && !model.loading && ready && visible
+    val running=fixedProgress==null && model.animationPlaying && !model.showComplete && !model.loading && ready && visible
     LaunchedEffect(lifecycle,drawing,running) {
         if(running) lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             var previous: Long?=null
@@ -111,7 +113,7 @@ private fun PlayerCanvas(model: PhotoSessionModel,drawing: ContourDrawing,expand
         val origin=Offset(size.width*(.5+viewport.panX).toFloat(),size.height*(.5+viewport.panY).toFloat())
         val ink=Color(style.color.argb(light))
         val guide=if(light) Color(0xFF005F57) else Color(0xFF65DCD0)
-        val progress=if(model.showComplete) 1.0 else PlaybackClock.progress(model.animationPosition)
+        val progress=fixedProgress ?: if(model.showComplete) 1.0 else PlaybackClock.progress(model.animationPosition)
         val frame=timeline.frame(progress)
         withTransform({translate(origin.x,origin.y);scale(scale,scale,pivot=Offset.Zero)}) {
             val line=Stroke((if(drawing.strokes.size>200) 1.2.dp else 1.5.dp).toPx()/scale,cap=StrokeCap.Round)
@@ -147,12 +149,13 @@ private fun PlayerCanvas(model: PhotoSessionModel,drawing: ContourDrawing,expand
 @Composable
 private fun PlaybackProgress(model: PhotoSessionModel) {
     val progress=if(model.showComplete) 1.0 else PlaybackClock.progress(model.animationPosition)
-    Text(stringResource(R.string.animation_progress,(progress*100).roundToInt()),style=MaterialTheme.typography.bodySmall)
-    Slider(value=progress.toFloat(),onValueChange={model.seekAnimation(it.toDouble())},valueRange=0f..1f,modifier=Modifier.testTag("player_progress"))
+    val progressLabel=stringResource(R.string.animation_progress,(progress*100).roundToInt())
+    Text(progressLabel,style=MaterialTheme.typography.bodySmall)
+    Slider(value=progress.toFloat(),onValueChange={model.seekAnimation(it.toDouble())},valueRange=0f..1f,modifier=Modifier.testTag("player_progress").semantics{contentDescription=progressLabel})
 }
 
 @Composable
-private fun PlayerControls(model: PhotoSessionModel,drawing: ContourDrawing,expanded: Boolean,onExpand: ()->Unit) {
+private fun PlayerControls(model: PhotoSessionModel,drawing: ContourDrawing,expanded: Boolean,onExpand: ()->Unit,showParameters: Boolean) {
     Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
         PlaybackProgress(model)
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
@@ -164,38 +167,57 @@ private fun PlayerControls(model: PhotoSessionModel,drawing: ContourDrawing,expa
         OutlinedButton(onClick={model.showComplete=!model.showComplete;model.settingsChanged(false)},modifier=Modifier.fillMaxWidth().testTag("fourier_complete")) {
             Text(stringResource(if(model.showComplete) R.string.show_animation else R.string.show_complete))
         }
+        if(showParameters) AnimationParameters(model)
+        if(!expanded) OutlinedButton(onClick=onExpand,modifier=Modifier.fillMaxWidth().testTag("player_expand")) {Text(stringResource(R.string.expand_player))}
+        Text(stringResource(if(expanded) R.string.player_gesture_help else R.string.player_help),style=MaterialTheme.typography.bodySmall)
+    }
+}
+
+/** Static, complete artwork for checking parameters without advancing playback. */
+@Composable
+fun AnimationStill(model: PhotoSessionModel,modifier: Modifier) {
+    val drawing=model.drawing ?: return
+    PlayerCanvas(model,drawing,false,modifier,1.0)
+}
+
+@Composable
+fun AnimationParameters(model: PhotoSessionModel) {
+    val drawing=model.drawing ?: return
+    val circleLabel=stringResource(R.string.show_epicircles)
+    val backgroundLabel=stringResource(R.string.light_background)
+    val componentsLabel=stringResource(R.string.fourier_components_description)
+    val zoomLabel=stringResource(R.string.player_zoom,(model.animationViewport.zoom*100).roundToInt())
+    Column(verticalArrangement=Arrangement.spacedBy(10.dp)) {
         Text(stringResource(R.string.playback_speed),style=MaterialTheme.typography.labelLarge)
         for(row in PlaybackSpeed.entries.chunked(2)) Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-            for(speed in row) OutlinedButton(onClick={model.updateAnimationStyle(model.animationStyle.copy(speed=speed))},enabled=model.animationStyle.speed!=speed,
-                modifier=Modifier.weight(1f).testTag("speed_${speed.name.lowercase()}")) {Text(stringResource(when(speed) {
+            for(speed in row) ChoiceButton(label=stringResource(when(speed) {
                     PlaybackSpeed.SLOW -> R.string.speed_slow;PlaybackSpeed.NORMAL -> R.string.speed_normal;PlaybackSpeed.FAST -> R.string.speed_fast;PlaybackSpeed.VERY_FAST -> R.string.speed_very_fast
-                }))}
+                }),selected=model.animationStyle.speed==speed,onClick={model.updateAnimationStyle(model.animationStyle.copy(speed=speed))},
+                modifier=Modifier.weight(1f).testTag("speed_${speed.name.lowercase()}"))
         }
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.show_epicircles),modifier=Modifier.weight(1f).padding(top=12.dp))
-            Switch(checked=model.animationStyle.epicircles,onCheckedChange={model.updateAnimationStyle(model.animationStyle.copy(epicircles=it))},modifier=Modifier.testTag("player_epicircles"))
+            Switch(checked=model.animationStyle.epicircles,onCheckedChange={model.updateAnimationStyle(model.animationStyle.copy(epicircles=it))},modifier=Modifier.testTag("player_epicircles").semantics{contentDescription=circleLabel})
         }
         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.light_background),modifier=Modifier.weight(1f).padding(top=12.dp))
-            Switch(checked=model.animationStyle.lightBackground,onCheckedChange={model.updateAnimationStyle(model.animationStyle.copy(lightBackground=it))},modifier=Modifier.testTag("player_background"))
+            Switch(checked=model.animationStyle.lightBackground,onCheckedChange={model.updateAnimationStyle(model.animationStyle.copy(lightBackground=it))},modifier=Modifier.testTag("player_background").semantics{contentDescription=backgroundLabel})
         }
         Text(stringResource(R.string.trace_color),style=MaterialTheme.typography.labelLarge)
         for(row in TraceColor.entries.chunked(2)) Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-            for(color in row) OutlinedButton(onClick={model.updateAnimationStyle(model.animationStyle.copy(color=color))},enabled=model.animationStyle.color!=color,
-                modifier=Modifier.weight(1f).testTag("color_${color.name.lowercase()}")) {Text(stringResource(when(color) {
+            for(color in row) ChoiceButton(label=stringResource(when(color) {
                     TraceColor.INK -> R.string.color_ink;TraceColor.TEAL -> R.string.color_teal;TraceColor.GOLD -> R.string.color_gold;TraceColor.ROSE -> R.string.color_rose
-                }))}
+                }),selected=model.animationStyle.color==color,onClick={model.updateAnimationStyle(model.animationStyle.copy(color=color))},
+                modifier=Modifier.weight(1f).testTag("color_${color.name.lowercase()}"))
         }
         Text(stringResource(R.string.components_label,model.components))
         val options=listOf(10,20,50,100,200,400,800)
         val counts=drawing.strokes.map {it.curve.effectiveComponents(model.components)}
         Text(stringResource(R.string.effective_components,drawing.strokes.size,counts.min(),counts.max()),style=MaterialTheme.typography.bodySmall,modifier=Modifier.testTag("effective_components"))
         Slider(value=options.indexOf(model.components).coerceAtLeast(0).toFloat(),onValueChange={model.components=options[it.roundToInt().coerceIn(0,options.lastIndex)];model.settingsChanged(false)},
-            valueRange=0f..options.lastIndex.toFloat(),steps=options.size-2,modifier=Modifier.testTag("fourier_components"))
+            valueRange=0f..options.lastIndex.toFloat(),steps=options.size-2,modifier=Modifier.testTag("fourier_components").semantics{contentDescription=componentsLabel;stateDescription=model.components.toString()})
         Text(stringResource(R.string.player_zoom,(model.animationViewport.zoom*100).roundToInt()))
-        Slider(value=model.animationViewport.zoom.toFloat(),onValueChange={model.updateAnimationViewport(model.animationViewport.transform(it/model.animationViewport.zoom,0.0,0.0))},valueRange=1f..4f,modifier=Modifier.testTag("player_zoom"))
+        Slider(value=model.animationViewport.zoom.toFloat(),onValueChange={model.updateAnimationViewport(model.animationViewport.transform(it/model.animationViewport.zoom,0.0,0.0))},valueRange=1f..4f,modifier=Modifier.testTag("player_zoom").semantics{contentDescription=zoomLabel})
         OutlinedButton(onClick={model.updateAnimationViewport(PreviewViewport())},enabled=model.animationViewport!=PreviewViewport(),modifier=Modifier.fillMaxWidth().testTag("player_fit")) {Text(stringResource(R.string.fit_drawing))}
-        if(!expanded) OutlinedButton(onClick=onExpand,modifier=Modifier.fillMaxWidth().testTag("player_expand")) {Text(stringResource(R.string.expand_player))}
-        Text(stringResource(if(expanded) R.string.player_gesture_help else R.string.player_help),style=MaterialTheme.typography.bodySmall)
     }
 }

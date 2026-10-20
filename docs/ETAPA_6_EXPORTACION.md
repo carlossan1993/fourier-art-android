@@ -37,6 +37,6 @@ Completada el 20/10/2026 sobre el código `5fe71eab7d46f40db7715d5117071f1a5ca73
 
 APK: `fourier-art-0.10.0-debug.apk`, 51.766.088 bytes. SHA-256: `b82b9244e866beaf8f50f86bd31fbc33abc0f80fd18a568bbdc0c320e75a8b0a`.
 
-**Pendiente: prueba y aceptación del propietario en teléfono.** Probar una fotografía propia en PNG, GIF y MP4, los dos encuadres y 6/10 segundos; guardar, abrir el archivo fuera de la app y compartir desde el menú nativo. Confirmar el resultado visual con color/fondo/epiciclos/encuadre elegidos. El tiempo de exportación de figuras sintéticas en emulador no acredita rendimiento con todas las fotos en teléfonos.
+**Aceptada por Carlos en teléfono el 20/10/2026:** confirmó que la versión 0.10.0 funcionó bien y autorizó integrar el PR #16. Integrado en main mediante el commit `2526d84d7446449bbfc17e4333e33fc222685413`. La confirmación del propietario no constituye una matriz formal de todos los dispositivos, combinaciones o duraciones. El tiempo de exportación de figuras sintéticas en emulador no acredita rendimiento con todas las fotos en teléfonos.
 
 Las comprobaciones de reconocimiento #3 y dos teléfonos #6 siguen pendientes; emuladores no las sustituyen.

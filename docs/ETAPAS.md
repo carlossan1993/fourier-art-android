@@ -47,7 +47,15 @@ El propietario pidió continuar aquí. 0.9.0 añade reproducción, pausa, reinic
 ## Etapa 6 — Exportación local (Work)
 0.10.0 añade PNG, GIF y MP4, vista previa exacta de encuadre 1:1/9:16, duración, progreso/cancelación y guardado/compartir nativos. Seguimiento: #15 y [alcance](ETAPA_6_EXPORTACION.md).
 
-**Estado: 0.10.0 implementada y validada automáticamente; pendiente aceptación física del APK.** CI: 86 JVM, 20 API 29 y 15 API 35 correctas. Archivos PNG/GIF/MP4 comprobados también con Pillow/FFmpeg. PR #16 listo para revisión. Tras la aceptación corresponde Etapa 7 (interfaz y experiencia final).
+**Estado: 0.10.0 probada y aceptada por Carlos el 20/10/2026; PR #16 integrado en main.** CI: 86 JVM, 20 API 29 y 15 API 35 correctas. Archivos PNG/GIF/MP4 comprobados también con Pillow/FFmpeg.
+
+## Etapa 7 — Interfaz y experiencia final (Work por elección del propietario)
+El 20/10/2026 Carlos pidió continuar aquí. 0.11.0 organiza el recorrido por pantallas, guía y ajustes, estados, recuperación y accesibilidad básica. [Alcance](ETAPA_7_EXPERIENCIA.md), seguimiento #17. Base 0.10.0 aceptada y PR #16 integrado en main. El PR #18 apunta a main.
+
+**Estado: Carlos aprobó el APK 0.11.0 el 20/10/2026 («la apk se ve bien»); integración mediante PR #18.** La compilación y suite JVM pasaron, con 24 pruebas en Android 10 y 19 en Android 15. Esta aceptación conserva las pendientes formales #3 y #6.
+
+## Etapa 8 — Pruebas y estabilización (Work)
+Siguiente etapa según el plan. Revisar estabilidad y rendimiento del recorrido completo sobre la base 0.11.0 aceptada y resolver incidencias verificadas. El banco formal de reconocibilidad #3 y la matriz física de dos dispositivos #6 conservan su estado pendiente; no se consideran superados por aceptar una versión.
 
 ## Distribución de herramientas aprobada
 

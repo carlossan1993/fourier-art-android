@@ -117,12 +117,16 @@ class ExportAndroidTest {
             }
         } finally {previous.delete()}
     }
-    private fun click(tag: String) {compose.onNodeWithTag(tag).performScrollTo().performClick();compose.waitForIdle()}
+    private fun click(tag: String) {
+        val node=compose.onNodeWithTag(tag)
+        if(tag!="open_export") node.performScrollTo()
+        node.performClick();compose.waitForIdle()
+    }
     @Test fun exportUiPreviewRecreationSaveAndNativeShare() {
         compose.waitForIdle();compose.waitUntil(60000) {!compose.activity.photoSession.loading}
         compose.runOnIdle {compose.activity.photoSession.sample(false)}
         compose.waitUntil(60000) {!compose.activity.photoSession.loading}
-        click("open_export");click("format_png");click("frame_vertical")
+        click("resume_animation");click("open_export");click("format_png");click("frame_vertical")
         compose.waitUntil(60000) {compose.onAllNodesWithTag("export_preview").fetchSemanticsNodes().isNotEmpty()}
         val source=compose.activity.exportSession.snapshot
         compose.activityRule.scenario.recreate();compose.waitForIdle()

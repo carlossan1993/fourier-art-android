@@ -44,7 +44,7 @@ class ContourCorrectionFlowTest {
         Canvas(bitmap).apply {drawColor(Color.WHITE);drawRect(30f,30f,130f,130f,Paint().apply {color=Color.BLACK;style=Paint.Style.STROKE;strokeWidth=3f})}
         file.outputStream().use {bitmap.compress(Bitmap.CompressFormat.PNG,100,it)}
         compose.runOnIdle {model.mode=PhotoContours.Mode.DRAWING;model.importPhoto(Uri.fromFile(file))};ready()
-        compose.onNodeWithTag("apply_photo").performScrollTo().performClick();ready()
+        compose.onNodeWithTag("apply_photo").performClick();ready()
         val baseline=model.drawing!!.sourceStrokes
         compose.onNodeWithTag("correct_contours").performScrollTo().performClick();ready()
         draw()
@@ -91,7 +91,7 @@ class ContourCorrectionFlowTest {
         val bitmap=Bitmap.createBitmap(80,80,Bitmap.Config.ARGB_8888).apply {eraseColor(Color.WHITE)}
         file.outputStream().use {bitmap.compress(Bitmap.CompressFormat.PNG,100,it)}
         compose.runOnIdle {model.mode=PhotoContours.Mode.DRAWING;model.importPhoto(Uri.fromFile(file))};ready()
-        compose.onNodeWithTag("apply_photo").performScrollTo().performClick();ready()
+        compose.onNodeWithTag("apply_photo").performClick();ready()
         assertNull(model.drawing)
         compose.onNodeWithTag("correct_contours").performScrollTo().performClick();ready();draw()
         compose.onNodeWithTag("contour_apply").performClick();ready()

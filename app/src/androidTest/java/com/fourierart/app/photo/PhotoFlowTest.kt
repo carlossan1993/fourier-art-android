@@ -43,7 +43,7 @@ class PhotoFlowTest {
         val model=compose.activity.photoSession;val crop=model.draft
         compose.activityRule.scenario.recreate();ready()
         compose.runOnIdle {assertSame(model,compose.activity.photoSession);assertEquals(crop,compose.activity.photoSession.draft)}
-        compose.onNodeWithTag("apply_photo").performScrollTo().performClick();ready()
+        compose.onNodeWithTag("apply_photo").performClick();ready()
         compose.runOnIdle {assertFalse(model.editing);assertNotNull(model.image);assertNotNull(model.drawing)}
         val prepared=model.image
         compose.onNodeWithTag("choose_photo").performScrollTo().performClick()
@@ -76,7 +76,7 @@ class PhotoFlowTest {
         assertNotNull(model.source);assertTrue(model.captures.listFiles().orEmpty().isEmpty())
         compose.onNodeWithTag("crop_canvas").performScrollTo()
         device.takeScreenshot(File(folder,"stage2-editor.png"))
-        compose.onNodeWithTag("editor_cancel").performScrollTo().performClick();ready()
+        compose.onNodeWithTag("editor_cancel").performClick();ready()
         compose.runOnIdle {assertNull(model.source);assertNull(model.image)}
         input.delete()
     }

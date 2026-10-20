@@ -77,8 +77,9 @@ jobs:
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             mkdir -p quality-output
-            adb shell am instrument -w com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner > quality-output/instrumentation.txt
-            cat quality-output/instrumentation.txt
+            timeout 480s adb shell am instrument -w com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner | tee quality-output/instrumentation.txt
+            adb logcat -d -t 1500 > quality-output/logcat.txt
+            adb shell dumpsys activity activities > quality-output/activities.txt
             adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/
             python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/instrumentation.txt").read_text()), "Instrumented portrait test did not pass"'
 
@@ -99,8 +100,9 @@ jobs:
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             mkdir -p quality-output/api35
-            adb shell am instrument -w -e package com.fourierart.app.photo com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner > quality-output/api35/instrumentation.txt
-            cat quality-output/api35/instrumentation.txt
+            timeout 480s adb shell am instrument -w -e package com.fourierart.app.photo com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner | tee quality-output/api35/instrumentation.txt
+            adb logcat -d -t 1500 > quality-output/api35/logcat.txt
+            adb shell dumpsys activity activities > quality-output/api35/activities.txt
             adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/api35/
             python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/api35/instrumentation.txt").read_text()), "Android 15 photo flow did not pass"'
 
