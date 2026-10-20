@@ -25,7 +25,7 @@ Actions genera comparaciones reales en Android con ambos tipos de trazado y el m
 
 La foto original del perro aportada por el usuario se usa **solo localmente** para comparar la etapa raster. Esa comparación no usa la máscara de Google Play services y no debe confundirse con una validación completa del perfil Sujeto en el teléfono. Se observa recuperación parcial del límite boca/lengua y menos pelaje; no se declara resuelto el parecido del hocico. Las referencias humanas recibidas como capturas anotadas no sustituyen a sus originales para una regresión exacta.
 
-Consultar la ejecución de Actions del commit para el resultado efectivo, imágenes y tiempos. G1 formal (24/30) continúa pendiente; 0.5.0 requiere nueva valoración visual. La aceptación de 0.4.0 no equivale a aceptación de esta nueva ruta.
+Consultar la ejecución de Actions del commit para el resultado efectivo, imágenes y tiempos. El 19/10/2026 el propietario eligió conservar 0.5.0, integrar PR #5 y pasar a la siguiente etapa. Se registra esa decisión de continuidad con las limitaciones conocidas. G1 formal (24/30) continúa sin medir en issue #3; no se declara cumplido. Las mejoras adicionales del motor quedan aparcadas por ahora.
 
 ## Referencias
 
