@@ -38,7 +38,7 @@ class ExportModel(app: Application) : AndroidViewModel(app) {
             try {
                 val result = ExportEngine.render(getApplication(),source,options) { value ->
                     // A small number of frame updates, delivered on the UI dispatcher.
-                    viewModelScope.launch(Dispatchers.Main.immediate) { progress = value }
+                    viewModelScope.launch(Dispatchers.Main.immediate) { if(snapshot===source && busy) progress = value }
                 }
                 completed = result; completedSpec = options; notice = R.string.export_ready
             } catch (e: CancellationException) { notice = R.string.export_cancelled; throw e }
@@ -48,6 +48,11 @@ class ExportModel(app: Application) : AndroidViewModel(app) {
         }
     }
     fun cancel() { job?.cancel() }
+    fun close() {
+        job?.cancel()
+        // Keep shared files on disk until their normal expiry, but release drawing ownership.
+        snapshot=null;completed=null;completedSpec=null;notice=0;progress=0f
+    }
     fun save(uri: Uri) {
         val file = completed ?: return
         if (busy || saving) return

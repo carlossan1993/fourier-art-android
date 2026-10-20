@@ -29,7 +29,7 @@ object ExportEngine {
         var bitmap: Bitmap? = null
         try {
             checkCancelled()
-            val renderer = ExportRenderer(snapshot)
+            val renderer = ExportRenderer(snapshot,checkCancelled)
             bitmap = Bitmap.createBitmap(spec.width,spec.height,Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             when (spec.format) {

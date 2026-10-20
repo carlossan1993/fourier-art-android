@@ -106,6 +106,36 @@ jobs:
             adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/api35/
             python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/api35/instrumentation.txt").read_text()), "Android 15 photo flow did not pass"'
 
+      - name: Smoke and stability on minimum Android 7
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 24
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          heap-size: 256M
+          avd-name: stage8-api24
+          emulator-boot-timeout: 180
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: |
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            mkdir -p quality-output/api24
+            timeout 480s adb shell am instrument -w -e class com.fourierart.app.photo.StabilityAndroidTest,com.fourierart.app.photo.PhotoPreparationAndroidTest com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner | tee quality-output/api24/instrumentation.txt
+            adb logcat -d -t 1500 > quality-output/api24/logcat.txt
+            adb shell dumpsys activity activities > quality-output/api24/activities.txt
+            adb pull /sdcard/Android/data/com.fourierart.app/files/quality/. quality-output/api24/
+            python3 -c 'from pathlib import Path; import re; assert re.search(r"OK \(\d+ tests?\)", Path("quality-output/api24/instrumentation.txt").read_text()), "Android 7 smoke/stability did not pass"'
+
+      - name: Independently verify exports and report stability measurements
+        run: |
+          python3 -m pip install Pillow==11.3.0
+          python3 tools/verify_exports.py quality-output/exports > quality-output/export-validation-api29.json
+          python3 tools/verify_exports.py quality-output/api35/exports > quality-output/export-validation-api35.json
+          python3 tools/report_stability.py quality-output
+
       - name: Upload quality evidence
         if: always()
         uses: actions/upload-artifact@v4

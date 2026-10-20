@@ -14,7 +14,7 @@ object PhotoIO {
         (context.contentResolver.openInputStream(uri) ?: error("Image unavailable")).use { BitmapFactory.decodeStream(it,null,bounds) }
         require(bounds.outWidth>0 && bounds.outHeight>0) { "Invalid image" }
         var sample=1
-        while(max(bounds.outWidth,bounds.outHeight)/sample>1800) sample*=2
+        while(max(bounds.outWidth,bounds.outHeight).toLong()>1800L*sample) sample*=2
         val bitmap=context.contentResolver.openInputStream(uri)?.use {
             BitmapFactory.decodeStream(it,null,BitmapFactory.Options().apply { inSampleSize=sample })
         } ?: error("Image decoding failed")
@@ -43,7 +43,13 @@ object PhotoIO {
         source.width,source.height,Matrix().apply { setRotate(turns*90f) },true)
     fun prepare(source: Bitmap, preparation: PhotoPreparation): Bitmap {
         val rotated=rotate(source,preparation.turns)
-        val r=preparation.crop.pixels(rotated.width,rotated.height)
-        return Bitmap.createBitmap(rotated,r[0],r[1],r[2],r[3])
+        var result: Bitmap?=null
+        try {
+            val r=preparation.crop.pixels(rotated.width,rotated.height)
+            return Bitmap.createBitmap(rotated,r[0],r[1],r[2],r[3]).also {result=it}
+        } finally {
+            // Never recycle the original or the bitmap returned to the caller.
+            if(rotated!==source && rotated!==result) rotated.recycle()
+        }
     }
 }
