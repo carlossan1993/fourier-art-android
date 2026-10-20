@@ -2,7 +2,7 @@
 
 Aplicación Android nativa que transformará fotografías en animaciones matemáticas mediante Series de Fourier y epiciclos.
 
-**Estado:** 0.11.0 aprobada e integrada en main. Etapa 8: 0.12.0 en preparación, con estabilización, reutilización de curvas y mediciones reproducibles. Motor y contornos conservados.
+**Estado:** 0.11.0 aprobada e integrada en main. Etapa 8: 0.12.0 validada técnicamente en PR #20, pendiente de prueba del propietario y criterios físicos/visuales. Incluye reutilización de curvas y mediciones reproducibles. Motor y contornos conservados.
 
 Estado actual: [Etapa 8: pruebas y estabilización](docs/ETAPA_8_ESTABILIDAD.md). Se continúa en Work por elección del propietario. La matriz física de dos teléfonos y el banco formal de reconocibilidad siguen pendientes.
 
