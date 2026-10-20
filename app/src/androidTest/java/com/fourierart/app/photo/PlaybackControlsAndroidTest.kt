@@ -29,9 +29,17 @@ class PlaybackControlsAndroidTest {
     private fun setup() {
         ready();compose.runOnIdle {model.sample(false)};ready()
         compose.runOnIdle {model.updateAnimationStyle(AnimationStyle());model.seekAnimation(.25)}
+        compose.onNodeWithTag("resume_animation").performScrollTo().performClick()
         compose.waitUntil(60000) {compose.onAllNodesWithTag("fourier_ready").fetchSemanticsNodes().isNotEmpty()}
     }
-    private fun click(tag: String) {compose.onNodeWithTag(tag).performScrollTo().performClick();compose.waitForIdle()}
+    private fun click(tag: String) {
+        val parameter=tag.startsWith("speed_") || tag.startsWith("color_") || tag in listOf("player_background","player_epicircles","player_fit")
+        if(parameter && compose.onAllNodesWithTag(tag).fetchSemanticsNodes().isEmpty())
+            compose.onNodeWithTag("open_parameters").performScrollTo().performClick()
+        if(!parameter && compose.onAllNodesWithTag("screen_parameters").fetchSemanticsNodes().isNotEmpty())
+            compose.onNodeWithTag("nav_back").performClick()
+        compose.onNodeWithTag(tag).performScrollTo().performClick();compose.waitForIdle()
+    }
     @Test fun controlsStyleFramingAndRecreationKeepTheSameDrawing() {
         setup();val original=model.drawing
         click("player_toggle");assertTrue(model.animationPlaying)

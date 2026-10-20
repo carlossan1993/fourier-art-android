@@ -69,6 +69,7 @@ class PhotoSessionModel(app: Application): AndroidViewModel(app) {
     private var detectedKind=PhotoContours.Kind.NO_SUBJECT
     private var analyzedMode: PhotoContours.Mode?=null
     private var sourceFile: String?=null
+    val workingPhotoId: String? get()=sourceFile
     private val store=PhotoSessionStore(app)
     private val disk=Mutex()
     private var operation: Job?=null

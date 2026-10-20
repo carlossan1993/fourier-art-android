@@ -49,6 +49,11 @@ El propietario pidió continuar aquí. 0.9.0 añade reproducción, pausa, reinic
 
 **Estado: 0.10.0 implementada y validada automáticamente; pendiente aceptación física del APK.** CI: 86 JVM, 20 API 29 y 15 API 35 correctas. Archivos PNG/GIF/MP4 comprobados también con Pillow/FFmpeg. PR #16 listo para revisión. Tras la aceptación corresponde Etapa 7 (interfaz y experiencia final).
 
+## Etapa 7 — Interfaz y experiencia final (Work por elección del propietario)
+El 20/10/2026 Carlos pidió continuar aquí. 0.11.0 organiza el recorrido por pantallas, guía y ajustes, estados, recuperación y accesibilidad básica. [Alcance](ETAPA_7_EXPERIENCIA.md), seguimiento #17. Base 0.10.0 del PR #16, que conserva pendiente la confirmación física de exportación. Se prepara un PR dependiente para avanzar sin dar por completada esa prueba.
+
+**Estado: implementación en validación.** Siguiente etapa: 8, pruebas técnicas y estabilización (Work).
+
 ## Distribución de herramientas aprobada
 
 | Etapa | Trabajo | Herramienta |

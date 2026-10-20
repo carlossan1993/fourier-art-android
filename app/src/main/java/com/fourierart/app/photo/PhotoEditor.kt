@@ -23,13 +23,12 @@ import com.fourierart.app.R
 import kotlin.math.*
 
 @Composable
-fun PhotoEditor(model: PhotoSessionModel) {
+fun PhotoEditor(model: PhotoSessionModel,showActions: Boolean=true) {
     val bitmap=model.editorPreview ?: return
     val preview=remember(bitmap) {bitmap.asImageBitmap()}
     val currentCrop by rememberUpdatedState(model.draft.crop)
     val label=stringResource(R.string.crop_description)
     Column(verticalArrangement=Arrangement.spacedBy(10.dp),modifier=Modifier.fillMaxWidth().testTag("photo_editor")) {
-        Text(stringResource(R.string.prepare_title),style=MaterialTheme.typography.titleLarge)
         Text(stringResource(R.string.crop_help),style=MaterialTheme.typography.bodySmall)
         Canvas(Modifier.fillMaxWidth().height(280.dp).testTag("crop_canvas").semantics {contentDescription=label}
             .pointerInput(bitmap,model.loading) {
@@ -86,7 +85,7 @@ fun PhotoEditor(model: PhotoSessionModel) {
         RangeSlider(value=crop.top..crop.bottom,onValueChange={v -> if(v.endInclusive-v.start>=0.05f) model.setCrop(currentCrop.copy(top=v.start,bottom=v.endInclusive))},
             enabled=!model.loading,modifier=Modifier.testTag("crop_vertical"))
         OutlinedButton(onClick=model::resetOriginal,enabled=!model.loading,modifier=Modifier.fillMaxWidth().testTag("reset_original")) {Text(stringResource(R.string.reset_original))}
-        Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+        if(showActions) Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick=model::cancelEdit,enabled=!model.loading,modifier=Modifier.weight(1f).testTag("editor_cancel")) {
                 Text(stringResource(if(model.applied==null) R.string.discard_photo else R.string.cancel))
             }

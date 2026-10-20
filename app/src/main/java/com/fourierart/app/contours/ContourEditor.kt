@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -137,7 +138,7 @@ fun ContourEditor(model: PhotoSessionModel) {
             }
         }
         if(model.loading) LinearProgressIndicator(Modifier.fillMaxWidth())
-        Column(Modifier.fillMaxWidth().heightIn(max=230.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+        Column(Modifier.fillMaxWidth().heightIn(max=minOf(230f,LocalConfiguration.current.screenHeightDp*.32f).dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(4.dp)) {
             Row(horizontalArrangement=Arrangement.spacedBy(6.dp)) {
                 for(preset in ContourPreset.entries) OutlinedButton(onClick={model.setContourPreset(preset)},enabled=!model.loading && history.current.preset!=preset,
                     modifier=Modifier.weight(1f).testTag("preset_${preset.name.lowercase()}")) {

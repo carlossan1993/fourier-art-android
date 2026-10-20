@@ -33,16 +33,19 @@ class FourierEngineAndroidTest {
             ContourStroke((0 until 240).map {i ->val t=2*PI*i/240;val r=50+8*cos(9*t);Point2(60+r*cos(t),60+r*sin(t))},true),
             ContourStroke(listOf(Point2(150.0,25.0),Point2(175.0,55.0),Point2(150.0,90.0)),false)))
         compose.runOnIdle {compose.activity.photoSession.apply {this.drawing=drawing;components=10;showComplete=true}}
+        compose.onNodeWithTag("resume_animation").performScrollTo().performClick()
         ready()
         val device=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         compose.onNodeWithTag("fourier_ready").performScrollTo()
         device.takeScreenshot(File(folder(),"stage4-components-10.png"))
+        compose.onNodeWithTag("open_parameters").performScrollTo().performClick()
         compose.onNodeWithTag("fourier_components").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) {it(6f)}
         ready()
         compose.runOnIdle {assertSame(drawing,compose.activity.photoSession.drawing);assertEquals(800,compose.activity.photoSession.components)}
         compose.onNodeWithTag("effective_components").assertExists()
         compose.onNodeWithTag("fourier_ready").performScrollTo()
         device.takeScreenshot(File(folder(),"stage4-components-800.png"))
+        compose.onNodeWithTag("nav_back").performClick()
         compose.onNodeWithTag("fourier_complete").performScrollTo().performClick();ready()
         assertFalse(compose.activity.photoSession.showComplete)
         compose.runOnIdle {compose.activity.photoSession.sample(false)}

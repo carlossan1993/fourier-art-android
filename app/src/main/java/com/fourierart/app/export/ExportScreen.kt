@@ -20,7 +20,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.fourierart.app.ui.*
 import com.fourierart.app.R
 import com.fourierart.app.core.*
 import kotlinx.coroutines.Dispatchers
@@ -75,8 +78,11 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
     BackHandler { close() }
     Column(Modifier.fillMaxSize().safeDrawingPadding().padding(12.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment=Alignment.CenterVertically) {
-            Text(stringResource(R.string.export_title),style=MaterialTheme.typography.titleLarge,modifier=Modifier.weight(1f))
-            OutlinedButton(onClick={close()},modifier=Modifier.testTag("export_close")) { Text(stringResource(R.string.close_player)) }
+            OutlinedButton(onClick={close()},modifier=Modifier.heightIn(min=48.dp).testTag("export_close")) {LineIcon(Glyph.BACK);Spacer(Modifier.width(6.dp));Text(stringResource(R.string.nav_back))}
+            Column(Modifier.weight(1f).padding(start=12.dp)) {
+                Text(stringResource(R.string.workflow_step,4),color=Aqua,style=MaterialTheme.typography.labelSmall)
+                Text(stringResource(R.string.export_title),style=MaterialTheme.typography.titleLarge)
+            }
         }
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp),horizontalAlignment=Alignment.CenterHorizontally) {
             val maxHeight = (LocalConfiguration.current.screenHeightDp * .40f).dp
@@ -88,32 +94,37 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
             Text(stringResource(R.string.export_dimensions,spec.width,spec.height),style=MaterialTheme.typography.bodySmall)
             if (spec.format != ExportFormat.PNG) {
                 Text(stringResource(R.string.export_preview_position),style=MaterialTheme.typography.bodySmall)
-                Slider(previewProgress,{previewProgress=it},enabled=!working,modifier=Modifier.testTag("export_preview_progress"))
+                val previewLabel=stringResource(R.string.export_preview_position)
+                Slider(previewProgress,{previewProgress=it},enabled=!working,modifier=Modifier.testTag("export_preview_progress").semantics{contentDescription=previewLabel})
             }
+            Text(stringResource(R.string.export_format_label),style=MaterialTheme.typography.titleSmall,modifier=Modifier.fillMaxWidth())
             Row(horizontalArrangement=Arrangement.spacedBy(6.dp)) {
-                for (format in ExportFormat.entries) OutlinedButton({model.configure(spec.copy(format=format))},enabled=!working && format!=spec.format,
-                    modifier=Modifier.weight(1f).testTag("format_${format.name.lowercase()}")) { Text(format.name) }
+                for (format in ExportFormat.entries) ChoiceButton(format.name,format==spec.format,{model.configure(spec.copy(format=format))},
+                    Modifier.weight(1f).testTag("format_${format.name.lowercase()}"),!working)
             }
+            Text(stringResource(R.string.export_format_help),color=Muted,style=MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.export_frame_label),style=MaterialTheme.typography.titleSmall,modifier=Modifier.fillMaxWidth())
             Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                for (frame in ExportFrame.entries) OutlinedButton({model.configure(spec.copy(frame=frame))},enabled=!working && frame!=spec.frame,
-                    modifier=Modifier.weight(1f).testTag("frame_${frame.name.lowercase()}")) { Text(if(frame==ExportFrame.SQUARE) "1:1" else "9:16") }
+                for (frame in ExportFrame.entries) ChoiceButton(if(frame==ExportFrame.SQUARE) "1:1" else "9:16",frame==spec.frame,{model.configure(spec.copy(frame=frame))},
+                    Modifier.weight(1f).testTag("frame_${frame.name.lowercase()}"),!working)
             }
             if (spec.format == ExportFormat.PNG) {
+                Text(stringResource(R.string.export_png_label),style=MaterialTheme.typography.titleSmall,modifier=Modifier.fillMaxWidth())
                 Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                    for (size in listOf(720,1080)) OutlinedButton({model.configure(spec.copy(pngSize=size))},enabled=!working && spec.pngSize!=size,
-                        modifier=Modifier.weight(1f)) { Text("${size} px") }
+                    for (size in listOf(720,1080)) ChoiceButton("${size} px",spec.pngSize==size,{model.configure(spec.copy(pngSize=size))},Modifier.weight(1f),!working)
                 }
             } else {
+                Text(stringResource(R.string.export_duration_label),style=MaterialTheme.typography.titleSmall,modifier=Modifier.fillMaxWidth())
                 Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                    for (seconds in listOf(6,10)) OutlinedButton({model.configure(spec.copy(seconds=seconds))},enabled=!working && spec.seconds!=seconds,
-                        modifier=Modifier.weight(1f).testTag("duration_$seconds")) { Text(stringResource(R.string.export_seconds,seconds)) }
+                    for (seconds in listOf(6,10)) ChoiceButton(stringResource(R.string.export_seconds,seconds),spec.seconds==seconds,{model.configure(spec.copy(seconds=seconds))},
+                        Modifier.weight(1f).testTag("duration_$seconds"),!working)
                 }
                 Text(stringResource(R.string.export_timing),style=MaterialTheme.typography.bodySmall)
             }
             OutlinedButton(onClick=model::fit,enabled=!working && snapshot.viewport!=PreviewViewport(),modifier=Modifier.fillMaxWidth()) { Text(stringResource(R.string.fit_drawing)) }
             Text(stringResource(R.string.export_style),style=MaterialTheme.typography.bodySmall)
             Button(onClick=model::start,enabled=!working,modifier=Modifier.fillMaxWidth().testTag("export_start")) { Text(stringResource(R.string.export_create)) }
-            if (model.notice!=0) Text(stringResource(model.notice),modifier=Modifier.testTag("export_notice"))
+            if (model.notice!=0) StatusMessage(stringResource(model.notice),modifier=Modifier.testTag("export_notice"))
             val completed = model.completed
             val output = model.completedSpec
             if (completed!=null && output!=null) {
