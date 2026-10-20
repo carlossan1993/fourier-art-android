@@ -42,7 +42,12 @@ El 20/10/2026 el propietario pidió continuar aquí en Work por disponibilidad d
 ## Etapa 5 — Animación y controles (Work)
 El propietario pidió continuar aquí. 0.9.0 añade reproducción, pausa, reinicio, avance manual, cuatro velocidades, epiciclos opcionales, colores/fondo, vista ampliada y zoom/encuadre. Reloj detenido al salir de la app o de la vista. Seguimiento: #13 y [alcance](ETAPA_5_ANIMACION.md).
 
-**Estado: implementación en validación.** Se entrega APK para comprobar controles y fluidez en teléfono; los emuladores no acreditan rendimiento físico universal. Exportaciones corresponden a Etapa 6.
+**Estado: 0.9.0 probada y aceptada por el propietario el 20/10/2026; PR #14 integrado.** 83 pruebas JVM, 17 API 29 y 12 API 35 correctas; los emuladores no acreditan rendimiento físico universal.
+
+## Etapa 6 — Exportación local (Work)
+0.10.0 añade PNG, GIF y MP4, vista previa exacta de encuadre 1:1/9:16, duración, progreso/cancelación y guardado/compartir nativos. Seguimiento: #15 y [alcance](ETAPA_6_EXPORTACION.md).
+
+**Estado: implementación en validación.** Pendiente CI, archivos reproducibles y aceptación física del APK.
 
 ## Distribución de herramientas aprobada
 

@@ -10,7 +10,7 @@
     <string name="language_label">Language</string>
     <string name="version_label">Development version 0.1.0 · Stage 0</string>
 
-    <string name="proof_subtitle">Stage 5 · Animation and controls</string>
+    <string name="proof_subtitle">Stage 6 · Export</string>
     <string name="proof_choose">Test a sample or import an image</string>
     <string name="circle">Circle</string>
     <string name="star">Star</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Components per stroke (maximum): %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.9.0 · Stage 5</string>
+    <string name="proof_version">Experimental version 0.10.0 · Stage 5</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
@@ -124,4 +124,26 @@
     <string name="player_gesture_help">Pinch to zoom and drag to move the drawing. Reset framing centers it again.</string>
     <string name="animation_progress">Progress: %1$d %%</string>
     <string name="animation_canvas_description">Fourier animation. Use the controls to pause, change speed and review the drawing.</string>
+    <string name="export_title">Export</string>
+    <string name="export_preview">Export framing preview</string>
+    <string name="export_dimensions">%1$d × %2$d px</string>
+    <string name="export_preview_position">Preview: drawing position</string>
+    <string name="export_seconds">%1$d seconds</string>
+    <string name="export_timing">Draws once within the chosen duration and holds the result at the end. This duration replaces the player speed. MP4 has no audio.</string>
+    <string name="export_style">Uses the player’s strokes, components, colour, background and epicycles. The frame shown here is exported. PNG contains the completed drawing.</string>
+    <string name="export_create">Create file</string>
+    <string name="export_rendering">Creating file… %1$d%%</string>
+    <string name="export_saving">Saving… %1$d%%</string>
+    <string name="export_cancel">Cancel</string>
+    <string name="export_ready">File ready to save or share.</string>
+    <string name="export_cancelled">Operation cancelled.</string>
+    <string name="export_failed">Could not create the file. Check available storage, or try PNG or GIF if the device cannot encode MP4.</string>
+    <string name="export_memory">Not enough memory. Try a smaller resolution or close other apps.</string>
+    <string name="export_saved">File saved to the chosen location.</string>
+    <string name="export_save_failed">Could not save. Check storage and choose an available location.</string>
+    <string name="export_share_failed">Could not open the share menu. You can save the file.</string>
+    <string name="export_result">%1$s · %2$d × %3$d · %4$s MB</string>
+    <string name="export_save">Save</string>
+    <string name="export_share">Share</string>
+    <string name="export_cache_notice">Save the result to keep it. Temporary files may be removed after 24 hours.</string>
 </resources>

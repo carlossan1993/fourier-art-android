@@ -78,8 +78,9 @@ private val background = Color(0xFF0D1929)
 private val harmonicOptions = listOf(10, 20, 50, 100, 200, 400, 800)
 
 @Composable
-fun FourierExperimentScreen(model: PhotoSessionModel) {
+fun FourierExperimentScreen(model: PhotoSessionModel, exports: com.fourierart.app.export.ExportModel) {
     val context = LocalContext.current
+    var exportOpen by rememberSaveable { mutableStateOf(false) }
     var playerExpanded by rememberSaveable { mutableStateOf(false) }
     var cameraOpen by rememberSaveable { mutableStateOf(false) }
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -99,6 +100,11 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
 
     if (correcting) {
         ContourEditor(this@with)
+        return@with
+    }
+
+    if (exportOpen && exports.snapshot != null) {
+        com.fourierart.app.export.ExportScreen(exports, onClose = { exportOpen = false })
         return@with
     }
 
@@ -272,6 +278,11 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                     style = MaterialTheme.typography.titleMedium
                 )
                 if (drawing != null) {
+                    Button(onClick = {
+                        checkpointAnimation()
+                        exports.open(com.fourierart.app.core.ExportSnapshot(drawing!!, components, animationStyle, animationViewport))
+                        exportOpen = true
+                    }, enabled = !loading, modifier = Modifier.fillMaxWidth().testTag("open_export")) { Text(stringResource(R.string.export_title)) }
                     AnimationPlayer(this@with, onExpand = { playerExpanded = true })
                 } else {
                     Text(stringResource(R.string.no_drawing), Modifier.padding(16.dp))
