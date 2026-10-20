@@ -32,7 +32,12 @@ El 19/10/2026 el propietario pidió continuar esta etapa en Work por su disponib
 ## Etapa 3 — Contornos robustos (Work)
 0.7.0 incorpora vista previa editable, Silueta/Detalles, limpieza, conservación de una zona, borrador de segmentos, dibujo correctivo y deshacer/rehacer. La detección aceptada sigue siendo el valor predeterminado. Seguimiento: #9 y [alcance](ETAPA_3_CONTORNOS.md).
 
-**Estado: implementación en validación.** No se declara superado el banco formal de reconocibilidad >=24/30 de #3. La edición permite corregir trazos; no acredita por sí sola una mejora de detección automática.
+**Estado: 0.7.0 probada y aceptada por el propietario el 20/10/2026; PR #10 integrado.** No se declara superado el banco formal de reconocibilidad >=24/30 de #3. La edición permite corregir trazos; no acredita por sí sola una mejora de detección automática.
+
+## Etapa 4 — Motor Fourier definitivo (Work por elección del propietario)
+El 20/10/2026 el propietario pidió continuar aquí en Work por disponibilidad de consumo. 0.8.0 consolida FFT, selección de componentes, simetría de trazos abiertos, error espectral, densidad de render y secuencia multitrazo determinista. Seguimiento: #11 y [alcance y validación](ETAPA_4_FOURIER.md).
+
+**Estado: implementación en validación.** Se conserva la detección y la corrección de contornos aceptadas; la precisión matemática no acredita reconocibilidad fotográfica.
 
 ## Distribución de herramientas aprobada
 

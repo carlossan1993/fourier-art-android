@@ -66,6 +66,7 @@ import androidx.core.os.LocaleListCompat
 import com.fourierart.app.core.LineStyle
 import com.fourierart.app.core.DetailLevel
 import com.fourierart.app.core.FourierCurve
+import com.fourierart.app.core.DrawingTimeline
 import com.fourierart.app.core.ContourDrawing
 import com.fourierart.app.core.PhotoContours
 import com.fourierart.app.core.Point2
@@ -271,18 +272,24 @@ fun FourierExperimentScreen(model: PhotoSessionModel) {
                 )
                 if (drawing != null) {
                     FourierDisplay(drawing!!, components, showComplete, Modifier.fillMaxWidth().height(300.dp))
-                    OutlinedButton(onClick = { showComplete = !showComplete; settingsChanged(false) }, modifier = Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = { showComplete = !showComplete; settingsChanged(false) }, modifier = Modifier.fillMaxWidth().testTag("fourier_complete")) {
                         Text(stringResource(if (showComplete) R.string.show_animation else R.string.show_complete))
                     }
                 } else {
                     Text(stringResource(R.string.no_drawing), Modifier.padding(16.dp))
                 }
                 Text(stringResource(R.string.components_label, components))
+                drawing?.let { current ->
+                    val counts = current.strokes.map { it.curve.effectiveComponents(components) }
+                    Text(stringResource(R.string.effective_components, current.strokes.size, counts.min(), counts.max()),
+                        style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("effective_components"))
+                }
                 Slider(
                     value = harmonicOptions.indexOf(components).coerceAtLeast(0).toFloat(),
                     onValueChange = {
                         components = harmonicOptions[it.roundToInt().coerceIn(0, harmonicOptions.lastIndex)]; settingsChanged(false)
                     },
+                    modifier = Modifier.testTag("fourier_components"),
                     valueRange = 0f..harmonicOptions.lastIndex.toFloat(),
                     steps = harmonicOptions.size - 2
                 )
@@ -360,41 +367,35 @@ private fun FourierDisplay(drawing: ContourDrawing, components: Int, showComplet
         val progress = if (showComplete) 1f else animatedProgress.coerceAtMost(1f)
         var trails by remember(drawing, components) { mutableStateOf<List<List<Point2>>>(emptyList()) }
         LaunchedEffect(drawing, components) {
-            trails = withContext(Dispatchers.Default) { drawing.strokes.map { it.trace(components, 640) } }
+            trails = withContext(Dispatchers.Default) { drawing.strokes.map { it.trace(components) } }
         }
-        val weights = remember(drawing) {
-            drawing.strokes.map { stroke ->
-                stroke.curve.points.zipWithNext().sumOf { (a, b) -> kotlin.math.hypot(b.x - a.x, b.y - a.y) }
-                    .times(stroke.visibleFraction).coerceAtLeast(0.01)
-            }
-        }
-        val total = weights.sum()
-        Canvas(modifier = modifier.clipToBounds()) {
+        val timeline = remember(drawing) { DrawingTimeline(drawing) }
+        Canvas(modifier = modifier.clipToBounds().testTag(if (trails.isEmpty()) "fourier_preparing" else "fourier_ready")) {
             drawRect(background)
+            if (trails.size != drawing.strokes.size) return@Canvas
             val scale = min(size.width, size.height) * 0.43f
             val origin = Offset(size.width / 2f, size.height / 2f)
             fun xy(p: Point2) = Offset(origin.x + p.x.toFloat() * scale, origin.y + p.y.toFloat() * scale)
-            var elapsed = 0.0
-            var active = drawing.strokes.lastIndex
-            var local = 1.0
+            val frame = timeline.frame(progress.toDouble())
             for (i in trails.indices) {
-                val part = ((progress * total - elapsed) / weights[i]).coerceIn(0.0, 1.0)
-                if (part < 1 && progress * total >= elapsed) { active = i; local = part }
-                elapsed += weights[i]
+                val part = if (i < frame.completed) 1.0 else if (i == frame.active) frame.localProgress else 0.0
                 if (part <= 0) continue
                 val trail = trails[i]
-                val count = (part * (trail.size - 1)).toInt().coerceIn(0, trail.lastIndex)
+                val count = (part * trail.lastIndex).toInt().coerceIn(0, trail.lastIndex)
                 val path = Path().apply {
                     moveTo(xy(trail[0]).x, xy(trail[0]).y)
                     for (j in 1..count) { val p = xy(trail[j]); lineTo(p.x, p.y) }
+                    // The visible line and epicycle tip evaluate the same time, including between samples.
+                    if (part < 1.0) { val tip = xy(drawing.strokes[i].position(part, components)); lineTo(tip.x, tip.y) }
                 }
                 drawPath(path, Color.White, style = Stroke((if (drawing.strokes.size > 200) 1.2.dp else 1.5.dp).toPx(), cap = StrokeCap.Round))
             }
-            if (showComplete) return@Canvas
+            val active = frame.active ?: return@Canvas
+            val local = frame.localProgress
             val stroke = drawing.strokes[active]
             val t = 2 * PI * local * stroke.visibleFraction
             var pos = Point2(0.0, 0.0)
-            for (h in stroke.curve.harmonics.take(components)) {
+            for (h in stroke.curve.harmonics.take(stroke.curve.effectiveComponents(components)).flatMap { it.rotations() }) {
                 val end = h.at(t)
                 val dest = Point2(pos.x + end.x, pos.y + end.y)
                 // DC positions the chain; it is an offset, not a rotating circle.
