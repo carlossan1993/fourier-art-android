@@ -61,7 +61,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Test real portrait on Android
+      - name: Test motor and photo flow on Android
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
@@ -69,6 +69,7 @@ jobs:
           arch: x86_64
           emulator-boot-timeout: 180
           disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back emulated -camera-front emulated
           script: |
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk

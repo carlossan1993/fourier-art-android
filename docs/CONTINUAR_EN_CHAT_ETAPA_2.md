@@ -1,4 +1,6 @@
-# FOURIER ART — Continuación en Chat: Etapa 2
+# FOURIER ART — Alcance inicial de Etapa 2
+
+**Actualización 19/10/2026:** el propietario decidió continuar esta etapa en Work. La implementación 0.6.0 y su estado se siguen en `ETAPA_2_CAPTURA.md` y en issue #6. Los apartados siguientes describen el punto de partida 0.5.0, no el estado final de la captura.
 
 ## Decisión del propietario
 

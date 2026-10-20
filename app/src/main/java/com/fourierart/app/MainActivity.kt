@@ -1,6 +1,8 @@
 package com.fourierart.app
 
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
+import com.fourierart.app.photo.PhotoSessionModel
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 class MainActivity : AppCompatActivity() {
+    val photoSession: PhotoSessionModel by lazy { ViewModelProvider(this)[PhotoSessionModel::class.java] }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -25,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 )
             ) {
                 Surface(Modifier.fillMaxSize()) {
-                    FourierExperimentScreen()
+                    FourierExperimentScreen(photoSession)
                 }
             }
         }

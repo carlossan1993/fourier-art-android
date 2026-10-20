@@ -6,11 +6,11 @@
     <string name="welcome_description">Pronto podrás transformar tus fotos en trazos dibujados por círculos en movimiento.</string>
     <string name="choose_photo">Elegir foto</string>
     <string name="take_photo">Tomar foto</string>
-    <string name="stage_notice">La importación de imágenes y la cámara estarán disponibles en una etapa posterior del desarrollo.</string>
+    <string name="stage_notice">Elige o captura una foto, prepara su encuadre y revisa los contornos.</string>
     <string name="language_label">Idioma</string>
     <string name="version_label">Versión de desarrollo 0.1.0 · Etapa 0</string>
 
-    <string name="proof_subtitle">Etapa 1 · Prueba de concepto matemática</string>
+    <string name="proof_subtitle">Etapa 2 · Captura y preparación</string>
     <string name="proof_choose">Prueba una figura o importa una imagen</string>
     <string name="circle">Círculo</string>
     <string name="star">Estrella</string>
@@ -25,7 +25,7 @@
     <string name="proof_animation">Reconstrucción de Fourier con epiciclos</string>
     <string name="components_label">Componentes de Fourier: %1$d</string>
     <string name="proof_explanation">Cada trazo tiene sus propios epiciclos. El lápiz se levanta entre rasgos separados. Más componentes mejoran la reconstrucción del trazo detectado.</string>
-    <string name="proof_version">Versión experimental 0.5.0 · Etapa 1</string>
+    <string name="proof_version">Versión experimental 0.6.0 · Etapa 2</string>
     <string name="outcome_contour_error">Imagen importada, pero falló el procesamiento del contorno. Prueba con otra imagen.</string>
     <string name="processing_profile">Perfil de procesamiento</string>
     <string name="profile_auto">Auto</string>
@@ -51,4 +51,25 @@
     <string name="style_structure">Estructura</string>
     <string name="style_detail">Textura</string>
     <string name="style_help">Estructura busca las formas principales y reduce textura. Textura conserva más líneas finas. Pulsa Reintentar para aplicar.</string>
+    <string name="prepare_title">Prepara tu foto</string>
+    <string name="crop_description">Recorte de la foto; ajusta las esquinas o los controles horizontal y vertical.</string>
+    <string name="crop_help">Arrastra las esquinas para recortar o el centro para mover el recorte. También puedes usar los controles de abajo.</string>
+    <string name="rotate_left">Girar izquierda</string>
+    <string name="rotate_right">Girar derecha</string>
+    <string name="crop_horizontal">Horizontal: %1$d–%2$d %%</string>
+    <string name="crop_vertical">Vertical: %1$d–%2$d %%</string>
+    <string name="reset_original">Volver al original</string>
+    <string name="discard_photo">Descartar foto</string>
+    <string name="cancel">Cancelar</string>
+    <string name="apply_photo">Aplicar y procesar</string>
+    <string name="edit_photo">Editar foto</string>
+    <string name="camera_title">Tomar foto</string>
+    <string name="camera_prepare_hint">Después podrás girar y recortar la foto antes de procesarla.</string>
+    <string name="camera_shutter">Capturar</string>
+    <string name="camera_switch">Cambiar cámara</string>
+    <string name="camera_denied">No se concedió acceso a la cámara. Puedes usar Elegir foto o habilitar el permiso en los ajustes del teléfono.</string>
+    <string name="camera_error">No se pudo abrir o capturar con la cámara. Reintenta o usa Elegir foto.</string>
+    <string name="photo_memory_error">La foto requiere demasiada memoria. Prueba con una imagen de menor tamaño.</string>
+    <string name="photo_save_error">No se pudo conservar la foto de trabajo. Comprueba el espacio disponible y vuelve a intentar.</string>
+    <string name="working_photo_notice">Esta foto se conserva como trabajo local hasta que la reemplaces o descartes.</string>
 </resources>

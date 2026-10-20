@@ -22,12 +22,12 @@ Documento de referencia: **FOURIER_ART_Documento_Oficial_y_Hoja_de_Ruta_v1.pdf**
 
 **Decisión G1 de continuidad:** avanzar a Etapa 2 con la versión elegida y limitaciones conocidas. El banco formal de 30 imágenes (meta >=24 reconocibles) **no se ha completado ni se declara superado**; sigue abierto en issue #3 para evaluación/regresión. No se equipara la aceptación de una base con calidad universal. Mejoras adicionales de fidelidad aparcadas por ahora. Ver [motor 0.5.0](MOTOR_0.5.0.md).
 
-## Etapa 2 — Captura e importación (Chat)
-**Siguiente etapa; todavía sin implementar ni validar por completo.** Objetivo: [issue #6](https://github.com/carlossan1993/fourier-art-android/issues/6).
+## Etapa 2 — Captura e importación (Work por elección del propietario)
+El 19/10/2026 el propietario pidió continuar esta etapa en Work por su disponibilidad de consumo. Objetivo: [issue #6](https://github.com/carlossan1993/fourier-art-android/issues/6).
 
-Photo Picker y orientación EXIF ya existen. Faltan cámara, permiso al usarla, rotación manual, recorte y robustez del flujo/estado. Se conserva el motor 0.5.0. Salida según el plan: captura/selección sin fallos y preparación correcta, probadas en dos dispositivos, además de APK y pruebas relevantes.
+0.6.0 añade CameraX, permiso al usarla, editor de rotación/recorte, conservación del original y recuperación del trabajo. Photo Picker y EXIF se mantienen; `core/` conserva el motor 0.5.0. Ver [implementación y pruebas](ETAPA_2_CAPTURA.md).
 
-El punto de continuación está en [CONTINUAR_EN_CHAT_ETAPA_2.md](CONTINUAR_EN_CHAT_ETAPA_2.md).
+**Estado: implementación en validación.** Falta probar captura/selección y preparación en dos dispositivos físicos conforme al plan. No cerrar la etapa solo por compilar o usar cámara emulada. El documento de continuación anterior queda como referencia del alcance inicial.
 
 ## Distribución de herramientas aprobada
 

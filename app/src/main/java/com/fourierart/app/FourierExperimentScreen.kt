@@ -1,11 +1,14 @@
 package com.fourierart.app
 
-import android.content.Context
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
-import androidx.exifinterface.media.ExifInterface
-import android.net.Uri
+import androidx.core.content.ContextCompat
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.testTag
+import com.fourierart.app.photo.PhotoSessionModel
+import com.fourierart.app.photo.CameraCapture
+import com.fourierart.app.photo.PhotoEditor
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -77,57 +80,22 @@ private val background = Color(0xFF0D1929)
 private val harmonicOptions = listOf(10, 20, 50, 100, 200, 400, 800)
 
 @Composable
-fun FourierExperimentScreen() {
+fun FourierExperimentScreen(model: PhotoSessionModel) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    var drawing by remember { mutableStateOf<ContourDrawing?>(ContourDrawing.sample(FourierCurve.star())) }
-    var showComplete by remember(drawing) { mutableStateOf(false) }
-    var mode by remember { mutableStateOf(PhotoContours.Mode.AUTO) }
-    var analysis by remember { mutableStateOf<PhotoContours.Analysis?>(null) }
-    var analyzedMode by remember { mutableStateOf<PhotoContours.Mode?>(null) }
-    var outcome by remember { mutableStateOf(PhotoContours.Kind.NO_SUBJECT) }
-    var image by remember { mutableStateOf<Bitmap?>(null) }
-    var components by remember { mutableIntStateOf(400) }
-    var lineStyle by remember { mutableStateOf(LineStyle.STRUCTURE) }
-    var detail by remember { mutableStateOf(DetailLevel.BALANCED) }
-    var sensitivity by remember { mutableIntStateOf(50) }
-    var loading by remember { mutableStateOf(false) }
-    // 0 = sample; 1 = detected strokes; 2 = no contour; 3 = read failure; 4 = contour error; 5 = profile changed
-    var result by remember { mutableIntStateOf(0) }
-
-    suspend fun process(bitmap: Bitmap) {
-        val processed = withContext(Dispatchers.Default) {
-            val cached = analysis?.takeIf { analyzedMode == mode && !it.modelUnavailable } ?: PhotoContours.analyze(bitmap, mode)
-            Pair(cached, PhotoContours.extract(cached, mode, sensitivity, detail, lineStyle))
-        }
-        analysis = processed.first
-        analyzedMode = mode
-        drawing = processed.second.drawing
-        outcome = processed.second.kind
-        result = if (drawing != null) 1 else 2
+    var cameraOpen by rememberSaveable { mutableStateOf(false) }
+    val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) cameraOpen = true else model.notice = R.string.camera_denied
     }
-
-    val picker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia()
-    ) { uri ->
-        if (uri != null) scope.launch {
-            loading = true
-            var errorPhase = 3
-            try {
-                val bitmap = withContext(Dispatchers.IO) { decodePhoto(context, uri) }
-                image = bitmap
-                analysis = null
-                analyzedMode = null
-                drawing = null
-                errorPhase = 4
-                process(bitmap)
-            } catch (_: Exception) {
-                drawing = null
-                result = errorPhase
-            } finally {
-                loading = false
-            }
-        }
+    with(model) {
+    val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) importPhoto(uri)
+    }
+    if (cameraOpen) {
+        CameraCapture(captures,
+            onCaptured = { file -> cameraOpen = false; importPhoto(android.net.Uri.fromFile(file), file) },
+            onClose = { cameraOpen = false },
+            onError = { cameraOpen = false; notice = R.string.camera_error })
+        return@with
     }
 
     val currentLanguage = context.resources.configuration.locales[0].language
@@ -161,34 +129,50 @@ fun FourierExperimentScreen() {
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedButton(
-                        onClick = { drawing = ContourDrawing.sample(FourierCurve.circle()); image = null; analysis = null; result = 0 },
+                        onClick = { sample(true) },
                         enabled = !loading,
                         modifier = Modifier.weight(1f)
                     ) { Text(stringResource(R.string.circle)) }
                     OutlinedButton(
-                        onClick = { drawing = ContourDrawing.sample(FourierCurve.star()); image = null; analysis = null; result = 0 },
+                        onClick = { sample(false) },
                         enabled = !loading,
                         modifier = Modifier.weight(1f)
                     ) { Text(stringResource(R.string.star)) }
                 }
-                Button(
-                    onClick = {
-                        picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    },
-                    enabled = !loading,
-                    modifier = Modifier.fillMaxWidth()
-                ) { Text(stringResource(R.string.choose_photo)) }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                        enabled = !loading,
+                        modifier = Modifier.weight(1f).testTag("choose_photo")
+                    ) { Text(stringResource(R.string.choose_photo)) }
+                    Button(
+                        onClick = {
+                            if (!context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) notice = R.string.camera_error
+                            else if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) cameraOpen = true
+                            else permission.launch(Manifest.permission.CAMERA)
+                        },
+                        enabled = !loading,
+                        modifier = Modifier.weight(1f).testTag("take_photo")
+                    ) { Text(stringResource(R.string.take_photo)) }
+                }
+                if (editing) PhotoEditor(this@with)
                 Text(
                     stringResource(R.string.photo_warning),
                     style = MaterialTheme.typography.bodySmall
                 )
-                if (image != null) {
+                if (!editing && image != null) {
                     ContourPreview(image!!, drawing, Modifier.fillMaxWidth().height(220.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(onClick = { editPhoto() }, enabled = !loading, modifier = Modifier.weight(1f).testTag("edit_photo")) { Text(stringResource(R.string.edit_photo)) }
+                        OutlinedButton(onClick = { sample(false) }, enabled = !loading, modifier = Modifier.weight(1f).testTag("discard_photo")) { Text(stringResource(R.string.discard_photo)) }
+                    }
+                    Text(stringResource(R.string.working_photo_notice), style = MaterialTheme.typography.bodySmall)
+
                     Text(stringResource(R.string.processing_profile))
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         for (profile in PhotoContours.Mode.entries) {
                             OutlinedButton(
-                                onClick = { mode = profile; drawing = null; result = 5 },
+                                onClick = { mode = profile; settingsChanged() },
                                 enabled = !loading && mode != profile,
                                 modifier = Modifier.weight(1f)
                             ) { Text(stringResource(when (profile) {
@@ -202,7 +186,7 @@ fun FourierExperimentScreen() {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         for (style in LineStyle.entries) {
                             OutlinedButton(
-                                onClick = { lineStyle = style; drawing = null; result = 5 },
+                                onClick = { lineStyle = style; settingsChanged() },
                                 enabled = !loading && lineStyle != style,
                                 modifier = Modifier.weight(1f)
                             ) { Text(stringResource(if (style == LineStyle.STRUCTURE) R.string.style_structure else R.string.style_detail)) }
@@ -213,7 +197,7 @@ fun FourierExperimentScreen() {
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         for (level in DetailLevel.entries) {
                             OutlinedButton(
-                                onClick = { detail = level; drawing = null; result = 5 },
+                                onClick = { detail = level; settingsChanged() },
                                 enabled = !loading && detail != level,
                                 modifier = Modifier.weight(1f)
                             ) { Text(stringResource(when (level) {
@@ -227,7 +211,7 @@ fun FourierExperimentScreen() {
                     Text(stringResource(R.string.sensitivity, sensitivity))
                     Slider(
                         value = sensitivity.toFloat(),
-                        onValueChange = { sensitivity = it.roundToInt() },
+                        onValueChange = { sensitivity = it.roundToInt(); settingsChanged() },
                         enabled = !loading,
                         valueRange = 0f..100f,
                         steps = 9
@@ -236,30 +220,18 @@ fun FourierExperimentScreen() {
                         Text(stringResource(R.string.face_sensitivity), style = MaterialTheme.typography.bodySmall)
                     }
                     OutlinedButton(
-                        onClick = {
-                            val bitmap = image ?: return@OutlinedButton
-                            scope.launch {
-                                loading = true
-                                try {
-                                    process(bitmap)
-                                } catch (_: Exception) {
-                                    drawing = null
-                                    result = 4
-                                } finally {
-                                    loading = false
-                                }
-                            }
-                        },
+                        onClick = { reprocess() },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = !loading
                     ) { Text(stringResource(R.string.reprocess)) }
                 }
-                if (loading) CircularProgressIndicator()
+                if (loading) CircularProgressIndicator(Modifier.testTag("photo_loading"))
+                if (notice != 0) Text(stringResource(notice), color = Color(0xFFFFD18A), modifier = Modifier.testTag("photo_notice"))
                 if (result == 1 && (analysis?.detectedFaceCount ?: 0) > 0) {
                     Text(stringResource(R.string.face_count, analysis!!.faces.size, analysis!!.detectedFaceCount),
                         style = MaterialTheme.typography.bodySmall)
                 }
-                when (result) {
+                if (!editing) when (result) {
                     1 -> Text(stringResource(when (outcome) {
                         PhotoContours.Kind.FACE -> R.string.outcome_face
                         PhotoContours.Kind.FACE_PARTIAL -> R.string.outcome_face_partial
@@ -276,7 +248,7 @@ fun FourierExperimentScreen() {
             }
         }
 
-        Card(Modifier.fillMaxWidth()) {
+        if (!editing) Card(Modifier.fillMaxWidth()) {
             Column(
                 Modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -287,7 +259,7 @@ fun FourierExperimentScreen() {
                 )
                 if (drawing != null) {
                     FourierDisplay(drawing!!, components, showComplete, Modifier.fillMaxWidth().height(300.dp))
-                    OutlinedButton(onClick = { showComplete = !showComplete }, modifier = Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = { showComplete = !showComplete; settingsChanged(false) }, modifier = Modifier.fillMaxWidth()) {
                         Text(stringResource(if (showComplete) R.string.show_animation else R.string.show_complete))
                     }
                 } else {
@@ -297,7 +269,7 @@ fun FourierExperimentScreen() {
                 Slider(
                     value = harmonicOptions.indexOf(components).coerceAtLeast(0).toFloat(),
                     onValueChange = {
-                        components = harmonicOptions[it.roundToInt().coerceIn(0, harmonicOptions.lastIndex)]
+                        components = harmonicOptions[it.roundToInt().coerceIn(0, harmonicOptions.lastIndex)]; settingsChanged(false)
                     },
                     valueRange = 0f..harmonicOptions.lastIndex.toFloat(),
                     steps = harmonicOptions.size - 2
@@ -329,6 +301,7 @@ fun FourierExperimentScreen() {
             color = Color.LightGray
         )
         Spacer(Modifier.height(8.dp))
+    }
     }
 }
 
@@ -423,53 +396,4 @@ private fun FourierDisplay(drawing: ContourDrawing, components: Int, showComplet
             drawCircle(accent, 3.dp.toPx(), xy(pos))
         }
     }
-}
-
-private fun decodePhoto(context: Context, uri: Uri): Bitmap {
-    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-    // BitmapFactory returns null deliberately with inJustDecodeBounds=true.
-    // Check the stream itself and then use outWidth/outHeight instead.
-    val boundsStream = context.contentResolver.openInputStream(uri)
-        ?: throw IllegalArgumentException("Image stream unavailable")
-    boundsStream.use { BitmapFactory.decodeStream(it, null, bounds) }
-    if (bounds.outWidth < 1 || bounds.outHeight < 1) throw IllegalArgumentException("Invalid image")
-    var downsample = 1
-    while (max(bounds.outWidth, bounds.outHeight) / downsample > 1800) downsample *= 2
-    val options = BitmapFactory.Options().apply { inSampleSize = downsample }
-    val bitmap = context.contentResolver.openInputStream(uri)?.use {
-        BitmapFactory.decodeStream(it, null, options)
-    } ?: throw IllegalArgumentException("Image decoding failed")
-
-    // BitmapFactory does not honor JPEG EXIF orientation. The gallery often does,
-    // which previously made a portrait appear rotated after Fourier processing.
-    val orientation = try {
-        context.contentResolver.openInputStream(uri)?.use {
-            ExifInterface(it).getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_NORMAL
-            )
-        } ?: ExifInterface.ORIENTATION_NORMAL
-    } catch (_: Exception) {
-        ExifInterface.ORIENTATION_NORMAL
-    }
-    val matrix = Matrix()
-    when (orientation) {
-        ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.setScale(-1f, 1f)
-        ExifInterface.ORIENTATION_ROTATE_180 -> matrix.setRotate(180f)
-        ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.setScale(1f, -1f)
-        ExifInterface.ORIENTATION_TRANSPOSE -> {
-            matrix.setRotate(90f)
-            matrix.postScale(-1f, 1f)
-        }
-        ExifInterface.ORIENTATION_ROTATE_90 -> matrix.setRotate(90f)
-        ExifInterface.ORIENTATION_TRANSVERSE -> {
-            matrix.setRotate(-90f)
-            matrix.postScale(-1f, 1f)
-        }
-        ExifInterface.ORIENTATION_ROTATE_270 -> matrix.setRotate(-90f)
-        else -> return bitmap
-    }
-    val rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-    if (rotated !== bitmap) bitmap.recycle()
-    return rotated
 }
