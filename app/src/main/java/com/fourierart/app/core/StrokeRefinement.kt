@@ -139,4 +139,35 @@ object StrokeRefinement {
         if (!stroke.closed) result.add(p.last())
         return ContourStroke(result, stroke.closed)
     }
+
+    /** Remove pixel stair steps within a bounded geometric error, including closed contours. */
+    fun simplify(stroke: ContourStroke, tolerance: Double): ContourStroke {
+        fun reduce(points: List<Point2>): List<Point2> {
+            if (points.size < 3) return points
+            val keep = BooleanArray(points.size); keep[0] = true; keep[points.lastIndex] = true
+            val stack = java.util.ArrayDeque<Pair<Int, Int>>()
+            stack.add(0 to points.lastIndex)
+            while (stack.isNotEmpty()) {
+                val (start, end) = stack.removeLast()
+                val a = points[start]; val b = points[end]
+                val dx = b.x-a.x; val dy = b.y-a.y; val length = dx*dx+dy*dy
+                var farthest = -1; var error = tolerance*tolerance
+                for (i in start+1 until end) {
+                    val p = points[i]
+                    val t = if (length > 0) (((p.x-a.x)*dx+(p.y-a.y)*dy)/length).coerceIn(0.0,1.0) else 0.0
+                    val ex = p.x-a.x-t*dx; val ey = p.y-a.y-t*dy; val d = ex*ex+ey*ey
+                    if (d > error) { error = d; farthest = i }
+                }
+                if (farthest >= 0) { keep[farthest] = true; stack.add(start to farthest); stack.add(farthest to end) }
+            }
+            return points.filterIndexed { i, _ -> keep[i] }
+        }
+        if (stroke.points.size < 5 || tolerance <= 0) return stroke
+        val p = stroke.points
+        val result = if (stroke.closed) {
+            val middle = p.indices.maxBy { distance(p.first(), p[it]) }
+            reduce(p.take(middle+1)).dropLast(1) + reduce(p.drop(middle)+p.first()).dropLast(1)
+        } else reduce(p)
+        return if (result.size >= (if (stroke.closed) 3 else 2)) ContourStroke(result, stroke.closed) else stroke
+    }
 }

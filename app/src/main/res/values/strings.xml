@@ -25,7 +25,7 @@
     <string name="proof_animation">Fourier reconstruction with epicircles</string>
     <string name="components_label">Fourier components: %1$d</string>
     <string name="proof_explanation">Each stroke has its own epicircles. The pen lifts between separate features. More components refine the detected strokes.</string>
-    <string name="proof_version">Experimental version 0.4.0 · Stage 1</string>
+    <string name="proof_version">Experimental version 0.5.0 · Stage 1</string>
     <string name="outcome_contour_error">Image imported, but contour processing failed. Try a different image.</string>
     <string name="processing_profile">Processing profile</string>
     <string name="profile_auto">Auto</string>
@@ -47,4 +47,8 @@
     <string name="detail_fine">Fine</string>
     <string name="detail_help">Simple keeps fewer lines; Fine includes more detail and may add texture. Tap retry to apply.</string>
     <string name="face_count">Faces with contours: %1$d of %2$d detected.</string>
+    <string name="line_style">Line style</string>
+    <string name="style_structure">Structure</string>
+    <string name="style_detail">Texture</string>
+    <string name="style_help">Structure seeks main shapes and reduces texture. Texture keeps more fine lines. Tap retry to apply.</string>
 </resources>

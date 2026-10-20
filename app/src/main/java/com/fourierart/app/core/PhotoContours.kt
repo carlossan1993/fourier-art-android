@@ -57,7 +57,7 @@ object PhotoContours {
         } finally { if (bitmap !== input) bitmap.recycle() }
     }
 
-    fun extract(a: Analysis, mode: Mode, sensitivity: Int, detail: DetailLevel = DetailLevel.BALANCED): Result {
+    fun extract(a: Analysis, mode: Mode, sensitivity: Int, detail: DetailLevel = DetailLevel.BALANCED, style: LineStyle = LineStyle.STRUCTURE): Result {
         val width = a.width; val height = a.height; val pixels = a.pixels
         var mask = if (a.plainBackground) RasterContours.plainBackgroundMask(pixels, width, height, sensitivity) else null
         if (mask == null && a.confidence != null) {
@@ -83,11 +83,14 @@ object PhotoContours {
                 regions.any { x in it[0]..it[2] && y in it[1]..it[3] }
             }
         } else null
-        val edges = RasterContours.edges(pixels, width, height, sensitivity, allowed)
-        val raw = RasterContours.lineStrokes(edges, width, height, max(3.0, max(width, height) * 0.004))
+        val candidates = if (style == LineStyle.STRUCTURE) {
+            StructuralContours.extract(pixels, width, height, sensitivity, allowed, detail)
+        } else {
+            val edges = RasterContours.edges(pixels, width, height, sensitivity, allowed)
+            val raw = RasterContours.lineStrokes(edges, width, height, max(3.0, max(width, height) * 0.004))
+            StrokeRefinement.select(raw, width, height, 1600)
+        }
         val structural = RasterContours.edges(pixels, width, height, sensitivity, allowed, blurPasses = 3)
-        // Preserve a larger candidate pool; cleanup and final ranking use observed contrast/structure.
-        val candidates = StrokeRefinement.select(raw, width, height, 1600)
         val strokes: List<ContourStroke>
         val kind: Kind
         if (a.faces.isNotEmpty()) {
@@ -95,9 +98,11 @@ object PhotoContours {
                 structural, detail.budget)
             kind = if (a.faces.size == a.detectedFaceCount && a.faces.all { it.complete }) Kind.FACE else Kind.FACE_PARTIAL
         } else {
-            val joined = StrokeRefinement.join(candidates, max(1.5, max(width, height) * 0.004))
-            val selected = DetailSelector.select(joined, pixels, width, height, structural, detail.budget)
-            strokes = outline.map { StrokeRefinement.smooth(it) } + selected.map { StrokeRefinement.smooth(it) }
+            val selected = if (style == LineStyle.STRUCTURE) candidates else {
+                val joined = StrokeRefinement.join(candidates, max(1.5, max(width, height) * 0.004))
+                DetailSelector.select(joined, pixels, width, height, structural, detail.budget).map { StrokeRefinement.smooth(it) }
+            }
+            strokes = outline.map { StrokeRefinement.smooth(it) } + selected
             kind = if (mode == Mode.DRAWING) Kind.DRAWING else Kind.SUBJECT
         }
         return if (strokes.isEmpty()) Result(null, Kind.NO_SUBJECT) else Result(ContourDrawing.fromStrokes(strokes), kind)

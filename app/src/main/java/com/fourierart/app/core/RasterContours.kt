@@ -196,7 +196,8 @@ object RasterContours {
     }
 
     /** Every graph edge is used once; branches lift the pen instead of joining unrelated features. */
-    fun lineStrokes(edges: BooleanArray, width: Int, height: Int, minLength: Double): List<ContourStroke> {
+    fun lineStrokes(edges: BooleanArray, width: Int, height: Int, minLength: Double,
+        continueJunctions: Boolean = false): List<ContourStroke> {
         require(edges.size == width * height)
         fun neighbors(i: Int): List<Int> {
             val x = i % width; val y = i / width
@@ -222,8 +223,18 @@ object RasterContours {
                 path.add(current)
                 if (current == start) break
                 val ns = adjacency[current].orEmpty()
-                if (ns.size != 2) break
-                val dest = ns.firstOrNull { it != previous && key(current, it) !in used } ?: break
+                if (ns.size != 2 && !continueJunctions) break
+                val choices = ns.filter { it != previous && key(current, it) !in used }
+                val anchor = path[max(0, path.lastIndex - 3)]
+                val ux = (current % width - anchor % width).toDouble()
+                val uy = (current / width - anchor / width).toDouble()
+                fun alignment(j: Int): Double {
+                    val vx = (j % width - current % width).toDouble()
+                    val vy = (j / width - current / width).toDouble()
+                    return (ux * vx + uy * vy) / max(1e-9, hypot(ux, uy) * hypot(vx, vy))
+                }
+                val dest = if (ns.size == 2) choices.firstOrNull() else choices.maxByOrNull { alignment(it) }
+                if (dest == null || (ns.size != 2 && alignment(dest) < 0.65)) break
                 used.add(key(current, dest)); previous = current; current = dest
             }
             val closed = path.first() == path.last()
@@ -231,6 +242,8 @@ object RasterContours {
             val stroke = ContourStroke(points, closed)
             if (stroke.length >= minLength && points.size >= 3) strokes.add(stroke)
         }
+        if (continueJunctions) for ((i, ns) in adjacency) if (ns.size == 1)
+            for (j in ns) if (key(i, j) !in used) walk(i, j)
         for ((i, ns) in adjacency) if (ns.size != 2) for (j in ns) if (key(i, j) !in used) walk(i, j)
         for ((i, ns) in adjacency) for (j in ns) if (key(i, j) !in used) walk(i, j)
         return strokes.sortedByDescending { it.length }

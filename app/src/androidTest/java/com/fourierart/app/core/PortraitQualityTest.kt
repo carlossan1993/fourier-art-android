@@ -42,7 +42,7 @@ class PortraitQualityTest {
             assertTrue("No context beyond the protected facial features", drawing.sourceStrokes.size > 12)
             assertTrue(drawing.strokes.flatMap { it.trace(200) }.all { it.x.isFinite() && it.y.isFinite() })
             val folder = File(instrumentation.targetContext.getExternalFilesDir(null), "quality").apply { mkdirs() }
-            val variants = DetailLevel.entries.map { level ->
+            val variants = listOf("Texture 0.4" to PhotoContours.extract(analysis,PhotoContours.Mode.DRAWING,65,DetailLevel.FINE,LineStyle.DETAIL).drawing!!) + DetailLevel.entries.map { level ->
                 val start = System.nanoTime()
                 val variant = PhotoContours.extract(analysis, PhotoContours.Mode.DRAWING, 65, level).drawing!!
                 File(folder,"metrics.txt").appendText("portrait-$level strokes=${variant.strokes.size} extractMs=${(System.nanoTime()-start)/1_000_000}\n")
@@ -79,14 +79,16 @@ class PortraitQualityTest {
         val bitmap=instrumentation.context.assets.open("cat.png").use { BitmapFactory.decodeStream(it) }!!
         try {
             val a=PhotoContours.analyze(bitmap,PhotoContours.Mode.DRAWING)
-            val variants=DetailLevel.entries.map { level ->
+            val variants=listOf("Texture 0.4" to PhotoContours.extract(a,PhotoContours.Mode.DRAWING,65,DetailLevel.FINE,LineStyle.DETAIL).drawing!!) + DetailLevel.entries.map { level ->
                 val start=System.nanoTime()
                 val d=PhotoContours.extract(a,PhotoContours.Mode.DRAWING,65,level).drawing!!
                 val folder=File(instrumentation.targetContext.getExternalFilesDir(null),"quality").apply { mkdirs() }
                 File(folder,"metrics.txt").appendText("cat-$level strokes=${d.strokes.size} extractMs=${(System.nanoTime()-start)/1_000_000}\n")
                 level.name to d
             }
-            assertTrue("Fine detail is still truncated around 100",variants.last().second.strokes.size>200)
+            assertEquals("Accepted texture path changed its budget",400,variants.first().second.strokes.size)
+            assertTrue("Structural path invented extra traces",variants.last().second.strokes.size<=400)
+            assertTrue("Structural fine level lost all detail",variants.last().second.strokes.size>=variants[1].second.strokes.size)
             val folder=File(instrumentation.targetContext.getExternalFilesDir(null),"quality")
             comparison(folder,"cat-detail",bitmap,a,variants)
         } finally {bitmap.recycle()}
@@ -103,6 +105,25 @@ class PortraitQualityTest {
             val d=PhotoContours.extract(a,PhotoContours.Mode.SUBJECT,50).drawing!!
             assertTrue(d.sourceStrokes.any { it.closed && it.points.all { p -> p.x<200 } })
             assertTrue(d.sourceStrokes.any { it.closed && it.points.all { p -> p.x>200 } })
+        } finally {bitmap.recycle()}
+    }
+
+    @Test fun dogReferenceProducesFiniteColorContoursAndStyleComparison() {
+        val instrumentation=InstrumentationRegistry.getInstrumentation()
+        val bitmap=instrumentation.context.assets.open("dog.jpg").use { BitmapFactory.decodeStream(it) }!!
+        try {
+            val a=PhotoContours.analyze(bitmap,PhotoContours.Mode.DRAWING)
+            val folder=File(instrumentation.targetContext.getExternalFilesDir(null),"quality").apply { mkdirs() }
+            val variants=LineStyle.entries.map { style ->
+                val start=System.nanoTime()
+                val result=PhotoContours.extract(a,PhotoContours.Mode.DRAWING,80,DetailLevel.BALANCED,style)
+                val d=result.drawing!!
+                assertTrue(d.strokes.isNotEmpty())
+                assertTrue(d.strokes.flatMap { it.trace(400) }.all { it.x.isFinite() && it.y.isFinite() })
+                File(folder,"metrics.txt").appendText("dog-$style strokes=${d.strokes.size} extractMs=${(System.nanoTime()-start)/1_000_000}\n")
+                style.name to d
+            }
+            comparison(folder,"dog-styles",bitmap,a,variants)
         } finally {bitmap.recycle()}
     }
 

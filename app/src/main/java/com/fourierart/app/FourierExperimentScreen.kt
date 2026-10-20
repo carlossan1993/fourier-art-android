@@ -58,6 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
+import com.fourierart.app.core.LineStyle
 import com.fourierart.app.core.DetailLevel
 import com.fourierart.app.core.FourierCurve
 import com.fourierart.app.core.ContourDrawing
@@ -87,6 +88,7 @@ fun FourierExperimentScreen() {
     var outcome by remember { mutableStateOf(PhotoContours.Kind.NO_SUBJECT) }
     var image by remember { mutableStateOf<Bitmap?>(null) }
     var components by remember { mutableIntStateOf(400) }
+    var lineStyle by remember { mutableStateOf(LineStyle.STRUCTURE) }
     var detail by remember { mutableStateOf(DetailLevel.BALANCED) }
     var sensitivity by remember { mutableIntStateOf(50) }
     var loading by remember { mutableStateOf(false) }
@@ -96,7 +98,7 @@ fun FourierExperimentScreen() {
     suspend fun process(bitmap: Bitmap) {
         val processed = withContext(Dispatchers.Default) {
             val cached = analysis?.takeIf { analyzedMode == mode && !it.modelUnavailable } ?: PhotoContours.analyze(bitmap, mode)
-            Pair(cached, PhotoContours.extract(cached, mode, sensitivity, detail))
+            Pair(cached, PhotoContours.extract(cached, mode, sensitivity, detail, lineStyle))
         }
         analysis = processed.first
         analyzedMode = mode
@@ -196,6 +198,17 @@ fun FourierExperimentScreen() {
                             })) }
                         }
                     }
+                    Text(stringResource(R.string.line_style))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        for (style in LineStyle.entries) {
+                            OutlinedButton(
+                                onClick = { lineStyle = style; drawing = null; result = 5 },
+                                enabled = !loading && lineStyle != style,
+                                modifier = Modifier.weight(1f)
+                            ) { Text(stringResource(if (style == LineStyle.STRUCTURE) R.string.style_structure else R.string.style_detail)) }
+                        }
+                    }
+                    Text(stringResource(R.string.style_help), style = MaterialTheme.typography.bodySmall)
                     Text(stringResource(R.string.detail_label))
                     Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         for (level in DetailLevel.entries) {
@@ -390,7 +403,7 @@ private fun FourierDisplay(drawing: ContourDrawing, components: Int, showComplet
                     moveTo(xy(trail[0]).x, xy(trail[0]).y)
                     for (j in 1..count) { val p = xy(trail[j]); lineTo(p.x, p.y) }
                 }
-                drawPath(path, Color.White, style = Stroke(1.8.dp.toPx(), cap = StrokeCap.Round))
+                drawPath(path, Color.White, style = Stroke((if (drawing.strokes.size > 200) 1.2.dp else 1.5.dp).toPx(), cap = StrokeCap.Round))
             }
             if (showComplete) return@Canvas
             val stroke = drawing.strokes[active]
