@@ -1,6 +1,6 @@
 # Etapa 7 · Experiencia final V1 (0.11.0)
 
-Carlos eligió continuar aquí en Work el 20/10/2026. Base: 0.10.0 del PR #16. Como no hay confirmación explícita de su prueba física, esta etapa se prepara en una rama y PR dependientes de ese PR, sin declarar aceptada físicamente la exportación. Seguimiento #17.
+Carlos eligió continuar aquí en Work el 20/10/2026. Confirmó que 0.10.0 funcionó bien en teléfono y autorizó integrar el PR #16; quedó integrado en main mediante `2526d84d7446449bbfc17e4333e33fc222685413`. El PR #18 ahora apunta a main. Seguimiento #17. La versión 0.11.0 está preparada para su propia prueba física.
 
 ## Recorrido
 
@@ -23,6 +23,18 @@ Controles de al menos 48 dp, opciones seleccionadas con estado semántico y cont
 
 ## Validación
 
-Pendiente de completar CI y revisión visual: 86 JVM de regresión, flujos existentes adaptados a la nueva navegación, pruebas nuevas de guía/idioma/recreación, recorrido foto → exportación, estado vacío, borrador reanudable y letra grande/horizontal. Ejecutar API 29 y 35, revisar capturas y decodificar externamente los PNG/GIF/MP4 de regresión. Después entregar APK para prueba del propietario.
+[CI correcta y evidencias](https://github.com/carlossan1993/fourier-art-android/actions/runs/39494959745), código `26444117a0548c49e1d9ce7e7d1e4ec94d09b327`:
 
-La aceptación física de #15, el banco de reconocibilidad #3 y la matriz de dos teléfonos #6 siguen pendientes. La Etapa 8 posterior cubre pruebas y estabilización de forma más amplia.
+- Compilación de app y APK de pruebas, y suite JVM correctas.
+- **24 pruebas en Android 10/API 29 y 19 en Android 15/API 35 correctas.**
+- Guía, ajustes ES/EN, navegación conservada al recrear la actividad, borrador reanudable, foto → animación → PNG conservando el dibujo y resultado vacío corregible.
+- Letra al 150% verificada en la densidad de un TextLayoutResult real, con navegación, parámetros y acción de exportación accesibles.
+- Orientación horizontal real y recreación conservando la sesión de exportación, comprobadas en una prueba independiente de la configuración de letra. No se afirma que se haya probado la combinación de ambas condiciones simultáneamente.
+- Regresiones de cámara, permisos, cancelación, preparación, editor de contornos, Fourier, reproductor, PNG/GIF/MP4, guardado nativo y compartir.
+- Capturas y métricas generadas en el artefacto de evidencias; queda la revisión visual y aceptación de Carlos en teléfono.
+
+La prueba anterior que combinaba reemplazo de contenido para la escala de letra, giro real y Atrás del sistema falló en API 35; otro intento quedó bloqueado. Se separaron las dos condiciones, se restauró el contenido al terminar la prueba de letra y se añadieron límite de 480 segundos y registros de diagnóstico a cada batería. No se modificaron el motor ni los codificadores para resolver estos problemas de validación.
+
+[APK 0.11.0](https://github.com/carlossan1993/fourier-art-android/actions/runs/39494959745/artifacts/12298245955): descargar el ZIP y extraer `app-debug.apk`. Disponible hasta 27/10/2026 según Actions. La actualización documental posterior no cambia el código de ese APK.
+
+La prueba física de **0.11.0** está pendiente; la aceptación de **0.10.0** queda registrada por separado. El banco de reconocibilidad #3 y la matriz de dos teléfonos #6 siguen pendientes. La Etapa 8 posterior cubre pruebas y estabilización de forma más amplia.
