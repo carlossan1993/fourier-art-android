@@ -36,7 +36,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-private enum class Page { HOME, PREPARE, REVIEW, PARAMETERS, PLAYER, GUIDE, SETTINGS }
+private enum class Page { HOME, PREPARE, REVIEW, PARAMETERS, PLAYER, GUIDE, SETTINGS, PRIVACY }
 private val accent=Aqua
 
 @Composable
@@ -56,7 +56,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel, exports: ExportModel) {
         if(!model.loading && observedWork!=workKey) {
             observedWork=workKey
             page=when {
-                page==Page.SETTINGS || page==Page.GUIDE -> page
+                page==Page.SETTINGS || page==Page.GUIDE || page==Page.PRIVACY -> page
                 model.editing && model.source!=null -> Page.PREPARE
                 model.image!=null -> Page.REVIEW
                 page==Page.REVIEW || page==Page.PREPARE -> Page.HOME
@@ -93,7 +93,7 @@ fun FourierExperimentScreen(model: PhotoSessionModel, exports: ExportModel) {
     }
     BackHandler(enabled=page!=Page.HOME) {
         model.checkpointAnimation()
-        page=when(page) {Page.PARAMETERS -> Page.PLAYER;Page.PLAYER -> if(model.image!=null)Page.REVIEW else Page.HOME;Page.GUIDE -> guideReturn;else -> Page.HOME}
+        page=when(page) {Page.PARAMETERS -> Page.PLAYER;Page.PLAYER -> if(model.image!=null)Page.REVIEW else Page.HOME;Page.GUIDE -> guideReturn;Page.PRIVACY -> Page.SETTINGS;else -> Page.HOME}
     }
     when(page) {
         Page.HOME -> HomeScreen(model,onChoose={choose()},onCamera={camera()},onResume={page=if(model.editing)Page.PREPARE else Page.REVIEW},
@@ -137,7 +137,8 @@ fun FourierExperimentScreen(model: PhotoSessionModel, exports: ExportModel) {
             }
         }
         Page.GUIDE -> GuideScreen(onBack={page=guideReturn})
-        Page.SETTINGS -> SettingsScreen(model,onBack={home()},onDiscard={confirmDiscard=true})
+        Page.SETTINGS -> SettingsScreen(model,onBack={home()},onDiscard={confirmDiscard=true},onPrivacy={page=Page.PRIVACY})
+        Page.PRIVACY -> PrivacyScreen(onBack={page=Page.SETTINGS})
     }
     if(pendingSample>=0) AlertDialog(onDismissRequest={pendingSample=-1},title={Text(stringResource(R.string.replace_title))},
         text={Text(stringResource(R.string.replace_sample_help))},confirmButton={TextButton(onClick={val circle=pendingSample==1;pendingSample=-1;model.sample(circle);page=Page.PLAYER}) {Text(stringResource(R.string.replace_confirm))}},

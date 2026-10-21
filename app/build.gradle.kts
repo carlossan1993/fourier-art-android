@@ -4,6 +4,20 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// Upload credentials stay outside the repository. Never fall back to the debug key.
+val uploadStore = providers.environmentVariable("FOURIER_UPLOAD_STORE_FILE").orNull
+val uploadStorePassword = providers.environmentVariable("FOURIER_UPLOAD_STORE_PASSWORD").orNull
+val uploadAlias = providers.environmentVariable("FOURIER_UPLOAD_KEY_ALIAS").orNull
+val uploadKeyPassword = providers.environmentVariable("FOURIER_UPLOAD_KEY_PASSWORD").orNull
+val uploadValues = listOf(uploadStore, uploadStorePassword, uploadAlias, uploadKeyPassword)
+val uploadReady = uploadValues.all { !it.isNullOrBlank() }
+require(uploadReady || uploadValues.all { it.isNullOrBlank() }) {
+    "Provide all four FOURIER_UPLOAD_* variables, or none for an unsigned validation build."
+}
+require(providers.gradleProperty("requireReleaseSigning").orNull != "true" || uploadReady) {
+    "Release signing is required. Configure the four FOURIER_UPLOAD_* variables."
+}
+
 android {
     namespace = "com.fourierart.app"
     compileSdk = 36
@@ -13,13 +27,23 @@ android {
         minSdk = 24
         targetSdk = 36
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        versionCode = 15
-        versionName = "0.12.0"
+        versionCode = 16
+        versionName = "0.13.0"
+    }
+
+    signingConfigs {
+        if (uploadReady) create("upload") {
+            storeFile = file(uploadStore!!)
+            storePassword = uploadStorePassword
+            keyAlias = uploadAlias
+            keyPassword = uploadKeyPassword
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            if (uploadReady) signingConfig = signingConfigs.getByName("upload")
         }
     }
 
