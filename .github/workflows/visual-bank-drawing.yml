@@ -1,13 +1,6 @@
 name: Drawing visual diagnostic
 
 on:
-  push:
-    branches: ["quality/**"]
-    paths:
-      - "quality-bank/inputs/**"
-      - "quality-bank/manifest.json"
-      - "app/src/androidTest/java/com/fourierart/app/core/VisualBankDrawingTest.kt"
-      - ".github/workflows/visual-bank-drawing.yml"
   workflow_dispatch:
 
 permissions:

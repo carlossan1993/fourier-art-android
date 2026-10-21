@@ -1,31 +1,31 @@
 id,categoria,imagen_referencia_privada_o_licencia,apk,perfil,trazado,detalle,sensibilidad,componentes_maximos,puntuacion_0_1_2,acciones_correctivas,segundos_edicion,evaluador,observaciones
-rostro_01,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_02,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_03,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_04,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_05,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_06,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_07,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_08,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_09,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-rostro_10,rostro,,,AUTO,STRUCTURE,BALANCED,50,400,,,,,
-mascota_01,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_02,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_03,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_04,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_05,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_06,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_07,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_08,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_09,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-mascota_10,mascota,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_01,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_02,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_03,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_04,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_05,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_06,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_07,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_08,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_09,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
-objeto_10,objeto,,,SUBJECT,STRUCTURE,BALANCED,50,400,,,,,
+P01,personas,https://commons.wikimedia.org/wiki/File:Charles_Bolden_astronaut_photo.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Ojos, nariz, boca sonriente y contorno facial conservados; queda un trazo aislado en la frente. El entorno y casco no se conservan en este modo de respaldo facial. Ejecución 39544852641; sin correcciones manuales."
+P02,personas,https://commons.wikimedia.org/wiki/File:Official_portrait_of_astronaut_Linda_M._Godwin.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Rostro, ambos ojos, nariz, boca y volumen del cabello distinguibles. Líneas espurias en el pelo. Ejecución 39544852641; sin correcciones manuales."
+P03,personas,https://commons.wikimedia.org/wiki/File:Susan_J._Helms_-_Official_portrait_of_astronaut_candidate.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Rostro ligeramente girado, dos ojos, nariz y sonrisa conservados. Cabello simplificado y líneas de fondo residuales. Ejecución 39544852641; sin correcciones manuales."
+P04,personas,https://commons.wikimedia.org/wiki/File:Janice_Voss.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Forma del rostro, dos ojos, nariz y boca visibles. Cabello con islas y trazos sobrantes. Ejecución 39544852641; sin correcciones manuales."
+P05,personas,https://commons.wikimedia.org/wiki/File:Marsha_Ivins.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Ojos, boca y cabello largo reconocibles; nariz simplificada y parcialmente fragmentada. Ejecución 39544852641; sin correcciones manuales."
+P06,personas,https://commons.wikimedia.org/wiki/File:Samantha_Cristoforetti_official_portrait_in_an_EMU_spacesuit.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,Rostro y rasgos principales conservados; contorno exterior del pelo/traje fragmentado. Ejecución 39544852641; sin correcciones manuales.
+P07,personas,https://commons.wikimedia.org/wiki/File:Jim_Lovell_official_1964_portrait.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Rostro, ojos, nariz y boca identificables; artefacto aislado sobre la cabeza. Ejecución 39544852641; sin correcciones manuales."
+P08,personas,https://commons.wikimedia.org/wiki/File:The_official_portrait_of_the_Expedition_73_crew_(iss073-s-002).jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Se conservan las siete caras y su posición, con ojos, nariz y boca; los cuerpos y el entorno quedan muy simplificados. Ejecución 39544852641; sin correcciones manuales."
+P09,personas,"https://commons.wikimedia.org/wiki/File:Mark_and_Scott_Kelly_at_the_Johnson_Space_Center,_Houston_Texas_-_profile.jpg; Public domain",0.12.0,AUTO,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Se ven dos cabezas enfrentadas, pero los contornos de perfil y nariz se deforman y aparecen trazos entre frentes. Requiere revisión ampliada. Ejecución 39544852641; sin correcciones manuales."
+P10,personas,https://commons.wikimedia.org/wiki/File:Tracy_Caldwell_Dyson_in_Cupola_ISS.jpg; Public domain,0.12.0,AUTO,STRUCTURE,BALANCED,50,400,0,0,0,Codex; revisión visual por IA,"Cara visible localizada, pero el cuerpo en sombra casi desaparece y la escena queda fragmentada; las ventanas dominan el resultado. Ejecución 39544852641; sin correcciones manuales."
+M01,mascotas,"https://commons.wikimedia.org/wiki/File:Boxer_(dog)_,_Iran_08.jpg; CC0",0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M02,mascotas,https://commons.wikimedia.org/wiki/File:Dog_at_N%C3%B8rre_Vorup%C3%B8r_Strand.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M03,mascotas,https://commons.wikimedia.org/wiki/File:Dog_in_a_muzzle.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M04,mascotas,https://commons.wikimedia.org/wiki/File:Mixed-breed_dogs_in_Serles.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M05,mascotas,https://commons.wikimedia.org/wiki/File:Panting-dog-No.3.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M06,mascotas,https://commons.wikimedia.org/wiki/File:Closeup_photo_of_a_cat.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M07,mascotas,https://commons.wikimedia.org/wiki/File:Cat_-_Moomin.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M08,mascotas,https://commons.wikimedia.org/wiki/File:Cat_in_towel.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M09,mascotas,https://commons.wikimedia.org/wiki/File:Cat-on-couch.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+M10,mascotas,https://commons.wikimedia.org/wiki/File:Cat_in_backyard.jpg; Public domain,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+O01,objetos,https://commons.wikimedia.org/wiki/File:Coffee_cup_seen_from_above.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+O02,objetos,https://commons.wikimedia.org/wiki/File:Leonardo%27s_bicycle.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+O03,objetos,https://commons.wikimedia.org/wiki/File:Large_photographic_lens_with_a_camera.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+O04,objetos,https://commons.wikimedia.org/wiki/File:Arm_Chair_MET_cds164235.jpg; CC0,0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Silla distinguible por respaldo, brazos y asiento; se pierden tallas pequeñas y aparecen trazos de textura. Ejecución 39544852641; sin correcciones manuales."
+O05,objetos,"https://commons.wikimedia.org/wiki/File:Consumer%27s_Rest_chair,_V%26A_Museum_01.jpg; CC0",0.12.0,SUBJECT,STRUCTURE,BALANCED,50,400,,0,0,Codex; revisión visual por IA,NO EVALUABLE: modelo de sujeto no disponible en este emulador; no se puntúa como fallo visual. Ejecución 39544852641; sin correcciones manuales.
+O06,objetos,https://commons.wikimedia.org/wiki/File:Honey_Bee_Line_Drawing.jpg; CC0,0.12.0,DRAWING,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Insecto distinguible con antenas, patas, dos alas y abdomen segmentado; duplicación de bordes finos. Ejecución 39544852641; sin correcciones manuales."
+O07,objetos,https://commons.wikimedia.org/wiki/File:A_line_drawing_of_a_lion_with_wings_(public_domain).jpg; CC0,0.12.0,DRAWING,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Animal alado con melena, cola y patas conservadas; rasgos de la cara simplificados y deformados. Ejecución 39544852641; sin correcciones manuales."
+O08,objetos,https://commons.wikimedia.org/wiki/File:Bouquet_(flowers).jpg; CC0,0.12.0,DRAWING,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Ramo distinguible por flores, hojas y tallos atados; pétalos interiores fragmentados. Ejecución 39544852641; sin correcciones manuales."
+O09,objetos,https://commons.wikimedia.org/wiki/File:Bicycle_(453586)_-_The_Noun_Project.svg; CC0,0.12.0,DRAWING,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Bicicleta distinguible por ruedas, cuadro, sillín, manillar y transmisión; se duplican algunos radios. Ejecución 39544852641; sin correcciones manuales."
+O10,objetos,https://commons.wikimedia.org/wiki/File:Camera_by_donchico.svg; CC0,0.12.0,DRAWING,STRUCTURE,BALANCED,50,400,2,0,0,Codex; revisión visual por IA,"Cámara distinguible por cuerpo, objetivo circular y controles. Bordes abiertos junto al encuadre original. Ejecución 39544852641; sin correcciones manuales."

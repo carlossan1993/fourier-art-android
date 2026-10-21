@@ -1,0 +1,8 @@
+
+com.fourierart.app.core.VisualBankDrawingTest:.
+
+Time: 62.663
+
+OK (1 test)
+
+

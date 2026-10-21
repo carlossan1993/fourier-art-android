@@ -50,16 +50,19 @@ class VisualBankTest {
             } while (!available && System.nanoTime() < deadline)
             environment.put("subjectModuleAvailable", available)
             if (available) {
-                // Exercise the optional graph before releasing this preparatory client.
-                // Closing a graph that has never received input can itself fail in MediaPipe.
+                // Verify inference as well as installation before releasing the preparatory client.
+                environment.put("warmupAttempted", true)
                 val warm = assets.open("visual-bank/P01.jpg").use { BitmapFactory.decodeStream(it) }!!
                 try {
                     val result = Tasks.await(segmenter.process(InputImage.fromBitmap(warm, 0)), 60, TimeUnit.SECONDS)
                     environment.put("warmupMaskSize", result.foregroundConfidenceMask?.limit() ?: 0)
+                    environment.put("warmupSucceeded", result.foregroundConfidenceMask != null)
                 } finally { warm.recycle() }
             }
         } catch (e: Exception) {
-            environment.put("subjectModuleAvailable", false).put("moduleError", e.toString())
+            if (!environment.has("subjectModuleAvailable")) environment.put("subjectModuleAvailable", false)
+            if (environment.optBoolean("warmupAttempted")) environment.put("warmupSucceeded", false)
+            environment.put("moduleError", e.toString())
         } finally { segmenter.close() }
         File(folder, "environment.json").writeText(environment.toString(2))
         val results = JSONArray()

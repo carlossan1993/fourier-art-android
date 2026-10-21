@@ -1,0 +1,26 @@
+{
+  "diagnostic_run": 39546562978,
+  "production_commit": "5d2f3c8f4679d637a6a17642e41a49e43540ab36",
+  "manifest_sha256": "1a60f1d20c4e17cf62e951b9ff18da1ecab17f0b29713157d1ab0dc93c65ecfe",
+  "settings": {
+    "sensitivity": 50,
+    "detail": "BALANCED",
+    "style": "STRUCTURE",
+    "components": 400
+  },
+  "profile": "DRAWING for every image; not the fixed primary profiles",
+  "processed": 30,
+  "outputs": 30,
+  "recognizable_without_corrections": 21,
+  "recognizable_with_corrections": 0,
+  "insufficient": 9,
+  "recognizable_by_category": {
+    "personas": 9,
+    "mascotas": 2,
+    "objetos": 10
+  },
+  "median_total_ms": 1993.5,
+  "max_total_ms": 4993,
+  "formal_24_of_30_gate": "not accredited by this diagnostic; primary subject evaluation blocked by emulator model execution",
+  "reviewer": "Codex; visual AI review, not independent human panel"
+}

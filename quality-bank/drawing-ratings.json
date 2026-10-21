@@ -1,0 +1,277 @@
+{
+  "run": 39546562978,
+  "profile": "DRAWING for all 30; separate diagnostic; primary profiles not replaced",
+  "manual_corrections": "none attempted; no score 1 awarded",
+  "ratings": [
+    {
+      "id": "P01",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Rostro con ambos ojos, nariz y sonrisa; postura, uniforme y casco distinguibles. Ruido en insignias y fondo."
+    },
+    {
+      "id": "P02",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Forma del rostro, ojos, nariz, boca y cabello reconocibles; se conserva la postura frente a la maqueta. Detalle fino del pelo perdido."
+    },
+    {
+      "id": "P03",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Cabeza inclinada, ojos, nariz, sonrisa y pelo corto distinguibles; manos y uniforme simplificados."
+    },
+    {
+      "id": "P04",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Contorno facial, ojos, nariz, boca y cabello conservados. Líneas sobrantes en insignias y fondo."
+    },
+    {
+      "id": "P05",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Rostro, sonrisa y cabello largo reconocibles; nariz fragmentada y textura del cabello simplificada."
+    },
+    {
+      "id": "P06",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Astronauta, casco y disposición de ojos, nariz y boca distinguibles; cabello y parte del traje pierden contorno."
+    },
+    {
+      "id": "P07",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Persona sentada con maqueta, rostro y rasgos principales distinguibles; manos y ropa fragmentadas."
+    },
+    {
+      "id": "P08",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Se conservan siete personas, su disposición y los rasgos faciales principales; cuerpos muy simplificados y fondo residual."
+    },
+    {
+      "id": "P09",
+      "category": "personas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Dos personas enfrentadas distinguibles, con un ojo visible, nariz y boca por perfil; nariz y contorno de los perfiles deformados."
+    },
+    {
+      "id": "P10",
+      "category": "personas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Se conserva la cara pequeña, pero el cuerpo en sombra y la postura se pierden; las ventanas dominan una escena fragmentada."
+    },
+    {
+      "id": "M01",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Perro confundido con ramas y suelo; se pierden gran parte del lomo, el contorno corporal y los rasgos de la cara."
+    },
+    {
+      "id": "M02",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Contorno de pelo y cuerpo parcial, pero ojos y hocico no quedan definidos; líneas del suelo compiten con el sujeto."
+    },
+    {
+      "id": "M03",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Bozal parcialmente conservado, pero se pierden orejas y ojos del perro entre las ramas; no basta para reconocer claramente la cabeza."
+    },
+    {
+      "id": "M04",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Animal pequeño con cola y patas parciales; forma de la cabeza, ojos y hocico ambiguos. El paisaje domina."
+    },
+    {
+      "id": "M05",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Se distinguen cabeza y lengua, pero la zona de nariz/hocico queda vacía o deformada y no conserva sus rasgos principales. Revisado también a 1024 px."
+    },
+    {
+      "id": "M06",
+      "category": "mascotas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Gato reconocible con orejas, ambos ojos, nariz y boca en su posición; contorno del cuerpo simplificado y líneas sobrantes."
+    },
+    {
+      "id": "M07",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Oreja y cabeza inclinada parciales, pero nariz y ojos cerrados se mezclan con trazos de pelo; cuerpo casi perdido. Revisado también a 1024 px."
+    },
+    {
+      "id": "M08",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Orejas y toalla presentes, pero cara, ojos y nariz quedan incompletos; el relleno visual de la toalla domina."
+    },
+    {
+      "id": "M09",
+      "category": "mascotas",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Gato tumbado reconocible con dos ojos, nariz, hocico y orejas; pata y cuerpo incompletos. Revisado también a 1024 px."
+    },
+    {
+      "id": "M10",
+      "category": "mascotas",
+      "score": 0,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "El gato del jardín prácticamente desaparece; se conservan escaleras y macetas, sin rasgos suficientes del sujeto."
+    },
+    {
+      "id": "O01",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Taza distinguible por borde circular, asa y abertura; aparece un fragmento de sombra sobrante."
+    },
+    {
+      "id": "O02",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Bicicleta de madera distinguible por ruedas, cuadro, transmisión y soportes; líneas sobrantes del fondo y del cartel."
+    },
+    {
+      "id": "O03",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Equipo fotográfico distinguible por gran objetivo cilíndrico, cámara y trípode; persona y entorno añaden ruido."
+    },
+    {
+      "id": "O04",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Silla distinguible por respaldo, brazos, asiento y base; pequeñas tallas se pierden y aparecen líneas de textura."
+    },
+    {
+      "id": "O05",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Silla de rejilla distinguible por respaldo, brazos y base con ruedas; parte del asiento queda incompleta."
+    },
+    {
+      "id": "O06",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Insecto distinguible por antenas, patas, alas y abdomen segmentado; bordes duplicados."
+    },
+    {
+      "id": "O07",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "León alado distinguible por melena, alas, cuatro patas y cola; cara y pelaje pierden detalle."
+    },
+    {
+      "id": "O08",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Ramo distinguible por flores, hojas y tallos atados; pétalos interiores fragmentados."
+    },
+    {
+      "id": "O09",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Bicicleta distinguible por ruedas, cuadro, sillín, manillar y transmisión; radios duplicados y algunos bordes abiertos."
+    },
+    {
+      "id": "O10",
+      "category": "objetos",
+      "score": 2,
+      "actions": 0,
+      "editing_seconds": 0,
+      "evaluator": "Codex; revisión visual por IA",
+      "note": "Cámara distinguible por cuerpo, objetivo circular y controles; contorno abierto junto al borde original y exceso de anillos."
+    }
+  ]
+}

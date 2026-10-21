@@ -1,5 +1,7 @@
 # Banco visual: fuentes y condiciones
 
+[Informe y resultado real de la evaluación](INFORME.md) · [30 comparaciones Dibujo](GALERIA_DIBUJO.md) · [Banco primario incompleto](GALERIA_PRIMARIA.md)
+
 ## Reproducción y límites
 
 Ejecutar el workflow `Frozen visual bank` de `.github/workflows/visual-bank.yml`. `tools/stage_visual_bank.py` descarga y comprueba cada entrada; `VisualBankTest` prepara el módulo de Google Play services, ejecuta `PhotoContours.analyze` y `extract` sin cambiar producción, y renderiza con `ExportRenderer` a progreso 1.0. El resultado incluye disponibilidad del módulo, tipo de detección, caras, trazos y tiempo. Un resultado vacío también se conserva. La suite normal omite este recolector cuando no se han preparado sus 30 assets.

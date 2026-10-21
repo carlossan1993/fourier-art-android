@@ -1,13 +1,6 @@
 name: Frozen visual bank
 
 on:
-  push:
-    branches: ["quality/**"]
-    paths:
-      - "quality-bank/inputs/**"
-      - "quality-bank/manifest.json"
-      - "app/src/androidTest/java/com/fourierart/app/core/VisualBankTest.kt"
-      - ".github/workflows/visual-bank.yml"
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,8 @@
+
+com.fourierart.app.core.VisualBankTest:.
+
+Time: 345.121
+
+OK (1 test)
+
+

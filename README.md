@@ -4,7 +4,7 @@ Aplicación Android nativa que transformará fotografías en animaciones matemá
 
 **Estado:** 0.11.0 aprobada e integrada en main. Etapa 8: 0.12.0 validada técnicamente en PR #20, pendiente de prueba del propietario y criterios físicos/visuales. Incluye reutilización de curvas y mediciones reproducibles. Motor y contornos conservados.
 
-Estado actual: [Etapa 8: pruebas y estabilización](docs/ETAPA_8_ESTABILIDAD.md). Se continúa en Work por elección del propietario. La matriz física de dos teléfonos y el banco formal de reconocibilidad siguen pendientes.
+Estado actual: [Etapa 8: pruebas y estabilización](docs/ETAPA_8_ESTABILIDAD.md). Se continúa en Work por elección del propietario. La matriz de dos teléfonos fue omitida expresamente por Carlos. El [banco visual](quality-bank/INFORME.md) tiene 30 casos revisados en Dibujo (21 reconocibles); la meta formal de #3 sigue sin acreditar por las limitaciones registradas.
 
 ## Alcance V1
 - Android nativo con **Kotlin** y **Jetpack Compose**.

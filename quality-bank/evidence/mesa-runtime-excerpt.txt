@@ -1,0 +1,5 @@
+2026-10-21T05:00:30.2416468Z INFO         | Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.1.0 (ANGLE 2.1.17841 git hash: 5fa2e61da947))
+2026-10-21T05:01:11.2920546Z GLES: Google (Google Inc. (Mesa)), Android Emulator OpenGL ES Translator (ANGLE (Mesa, Vulkan 1.4.318 (llvmpipe (LLVM 21.0.0 256 bits) (0x00000000)), llvmpipe-25.2.4)), OpenGL ES 3.1 (OpenGL ES 3.1.0 (ANGLE 2.1.17841 git hash: 5fa2e61da947))
+2026-10-21T05:02:09.9710227Z Process crashed while executing collectFrozenBank(com.fourierart.app.core.VisualBankTest):
+2026-10-21T05:02:09.9753148Z Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
+2026-10-21T05:02:10.4555141Z INSTRUMENTATION_RESULT: shortMsg=Process crashed.

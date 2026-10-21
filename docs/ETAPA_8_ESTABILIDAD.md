@@ -23,7 +23,7 @@ Pruebas nuevas:
 Pillow y FFmpeg verifican en el host los doce archivos PNG/GIF/MP4 producidos por API 29/35. `tools/report_stability.py` conserva conteos de pruebas y observaciones en `stage8-summary.json`.
 
 ## Límites
-Las mediciones de una APK debug en emuladores no acreditan FPS, picos máximos de memoria, ausencia universal de fugas o rendimiento en todos los teléfonos. Los datos de memoria son muestras PSS/heap antes y después, no un perfil continuo. El banco visual >=24/30 (#3), la matriz física de dos teléfonos (#6) y la combinación simultánea de letra al 150% con rotación siguen pendientes. No se marca esta etapa cerrada sin registrar los resultados y la aceptación del propietario.
+Las mediciones de una APK debug en emuladores no acreditan FPS, picos máximos de memoria, ausencia universal de fugas o rendimiento en todos los teléfonos. Los datos de memoria son muestras PSS/heap antes y después, no un perfil continuo. La matriz física de dos teléfonos (#6) fue omitida expresamente por Carlos. La meta visual >=24/30 (#3) sigue sin acreditar: el diagnóstico Dibujo dio 21/30 y la medición primaria está bloqueada por el modelo en emulador. La combinación simultánea de letra al 150% con rotación sigue pendiente. No se marca esta etapa cerrada sin registrar los resultados y la aceptación del propietario.
 
 ## Mediciones observadas
 Dibujo sintético de 220 trazos y máximo 400 componentes; 60 fotogramas Canvas software a 360 px. Los números de caché corresponden a veinte pasadas completas, frente a una sola pasada directa; no deben compararse como cargas iguales ni convertirse en una promesa de FPS. Se verificó equivalencia exacta de puntos y reutilización por identidad.
@@ -42,5 +42,7 @@ El PSS antes/después es una muestra del proceso completo, con modelos, vistas, 
 
 El primer intento pasó Android pero no encontró ffprobe en el host. La CI ahora instala FFmpeg/Pillow antes de compilar y la verificación final completa es correcta. Los commits documentales posteriores conservan el código del APK verificado.
 
-## Salida pendiente
-Parte técnica preparada para prueba del propietario; PR #20 todavía sin integrar. La aceptación de esta APK y los pendientes físicos/visuales se registran por separado. [Ficha de dos teléfonos y rúbrica](VALIDACION_FISICA_Y_RECONOCIBILIDAD.md) · [Banco de 30 filas sin resultados](BANCO_RECONOCIBILIDAD.csv). #3 y #6 siguen abiertos: no se declara cerrada toda la Etapa 8 ni lista la publicación por pasar estos emuladores.
+## Estado de salida
+Carlos aprobó 0.12.0 el 20/10/2026 y PR #20 está integrado. Omitió expresamente los dos teléfonos; #6 cerrado como `not_planned`, sin atribuirle una prueba física no realizada.
+
+El [informe del banco visual](../quality-bank/INFORME.md) conserva 30 imágenes, fuentes, PNG y revisión individual. Diagnóstico Dibujo: 21/30 reconocibles sin edición (personas 9/10, mascotas 2/10, objetos/dibujos 10/10). La medición con los perfiles primarios quedó incompleta por el modelo de segmentación en los emuladores; sus casos bloqueados no se puntúan como fallos visuales. No se acredita el objetivo formal de #3 ni se cierra toda la Etapa 8. También queda la combinación simultánea de letra al 150% con rotación. No se cambiaron código de producción ni parámetros para esta evaluación.
