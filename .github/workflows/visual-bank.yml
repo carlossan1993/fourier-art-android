@@ -54,7 +54,7 @@ jobs:
           heap-size: 512M
           emulator-boot-timeout: 240
           disable-animations: true
-          emulator-options: -no-window -gpu swangle -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-window -gpu lavapipe -no-snapshot -noaudio -no-boot-anim
           script: |
             adb shell dumpsys package com.google.android.gms | grep versionName
             adb shell dumpsys SurfaceFlinger | grep GLES || true
