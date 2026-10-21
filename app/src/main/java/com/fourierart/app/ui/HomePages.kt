@@ -8,7 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -76,7 +76,7 @@ fun GuideScreen(onBack: ()->Unit) {
 
 @Composable
 fun SettingsScreen(model: PhotoSessionModel,onBack: ()->Unit,onDiscard: ()->Unit,onPrivacy: ()->Unit) {
-    val language=LocalContext.current.resources.configuration.locales[0].language
+    val language=LocalConfiguration.current.locales[0].language
     WorkflowPage(stringResource(R.string.settings_title),onBack,tag="screen_settings") {
         SectionCard(stringResource(R.string.language_label)) {
             ChoiceButton("Español",language=="es",{AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("es"))},Modifier.fillMaxWidth().testTag("language_es"))

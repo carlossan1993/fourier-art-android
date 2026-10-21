@@ -38,6 +38,7 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
     val snapshot = model.snapshot ?: return
     val spec = model.spec
     val context = LocalContext.current
+    val shareLabel = stringResource(R.string.export_share)
     val working = model.busy || model.saving
     var previewProgress by remember { mutableFloatStateOf(.5f) }
     var preview by remember { mutableStateOf<Bitmap?>(null) }
@@ -139,7 +140,7 @@ fun ExportScreen(model: ExportModel, onClose: () -> Unit) {
                         putExtra(Intent.EXTRA_TITLE,"Fourier-Art-${System.currentTimeMillis()}.${output.format.extension}")
                     }) },enabled=!working,modifier=Modifier.weight(1f).testTag("export_save")) { Text(stringResource(R.string.export_save)) }
                     OutlinedButton(onClick={
-                        try { model.shareIntent(context)?.let { context.startActivity(Intent.createChooser(it,context.getString(R.string.export_share))) } }
+                        try { model.shareIntent(context)?.let { context.startActivity(Intent.createChooser(it,shareLabel)) } }
                         catch (e: Exception) { model.shareFailed() }
                     },enabled=!working,modifier=Modifier.weight(1f).testTag("export_share")) { Text(stringResource(R.string.export_share)) }
                 }

@@ -25,7 +25,11 @@ def audit(bundle, manifest, config):
     assert app.get(ANDROID+'usesCleartextTraffic') == 'false'
     assert app.get(ANDROID+'icon'), 'Launcher icon missing'
     permissions=sorted(x.get(ANDROID+'name') for x in root.findall('uses-permission'))
-    unknown=set(permissions)-ALLOWED_PERMISSIONS
+    receiver_permission='com.fourierart.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+    own_permissions={x.get(ANDROID+'name'):x.get(ANDROID+'protectionLevel') for x in root.findall('permission')}
+    if receiver_permission in permissions:
+        assert own_permissions.get(receiver_permission) in {'signature', '0x00000002', '0x2', '2'}, 'Receiver permission must be signature-only'
+    unknown=set(permissions)-ALLOWED_PERMISSIONS-{receiver_permission}
     assert not unknown, f'Unreviewed permissions: {sorted(unknown)}'
     assert 'android.permission.CAMERA' in permissions
     features={x.get(ANDROID+'name'):x.get(ANDROID+'required','true') for x in root.findall('uses-feature')}

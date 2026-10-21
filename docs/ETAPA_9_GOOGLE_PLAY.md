@@ -8,6 +8,7 @@ Autorizada por Carlos el 21/10/2026 sobre 0.12.0 aceptada. Seguimiento: [#22](ht
 - Icono adaptativo, heredado y monocromático, más PNG 512×512 y gráfico 1024×500 ES/EN. Son dibujos vectoriales propios: una curva definida por tres vectores rotatorios. Fuente y generador en git.
 - Privacidad completa ES/EN dentro de la app, disponible sin conexión. `store/privacy.json` genera también HTML estático en `docs/site/`, sin rastreadores ni dependencias remotas. El contacto previsto es el canal público de incidencias; falta el correo de soporte requerido por la ficha de Play.
 - [Textos de ficha ES](../store/listing-es.json) y [EN](../store/listing-en.json), dentro de los límites 30/80/4000 caracteres. No prometen fidelidad universal ni funcionamiento del perfil Sujeto sin descargar su modelo.
+- [Inventario de terceros](../store/THIRD_PARTY.md), con revisión final de avisos/licencias pendiente antes del envío.
 - [Propuesta Data Safety](../store/DATA_SAFETY.md): distingue el procesamiento local de fotos de la telemetría técnica de ML Kit. Debe contrastarse con el formulario final; no se ha enviado.
 - Auditoría del AAB real, manifest fusionado, permisos, árbol de dependencias, alineación ELF de librerías de 64 bits y configuración ZIP de 16 KB. Un smoke test instala un APK derivado del AAB release con certificado temporal de pruebas; no se distribuye como APK de publicación.
 - Capturas reales ES/EN mediante prueba instrumentada: Inicio, animación, controles, exportación y privacidad. No son maquetas ni imágenes generadas. Pendiente de ejecución CI y revisión visual.
@@ -16,7 +17,7 @@ Autorizada por Carlos el 21/10/2026 sobre 0.12.0 aceptada. Seguimiento: [#22](ht
 
 1. Confirmar nombre e identificador antes de crear/enviar la ficha: `FOURIER ART` / `com.fourierart.app`; proporcionar correo público de soporte.
 2. Custodiar clave de subida y configurar sus secretos. No se genera una clave definitiva en un almacenamiento temporal ni se incorpora al repositorio.
-3. Publicar `docs/site/` en una URL HTTPS estable. El HTML está preparado; no se declara activa una URL que aún no se ha comprobado. Se puede usar GitHub Pages sin coste; habilitar la fuente que contenga esos archivos o publicar la carpeta mediante Actions.
+3. Publicar `docs/site/` en una URL HTTPS estable. El HTML está preparado; no se declara activa una URL que aún no se ha comprobado. Se puede usar GitHub Pages sin coste: en Settings → Pages seleccionar GitHub Actions y ejecutar `Publish privacy policy` desde main una vez integrado el PR. El workflow publica solo `docs/site/`. Después comprobar ambas URL públicas sin iniciar sesión.
 4. Completar la configuración de cuenta, países, público objetivo y cuestionario de contenido en Play Console con las respuestas reales. No se asigna una clasificación de edad por suposición.
 5. Verificar el canal de pruebas requerido. Para cuentas personales creadas después del 13/11/2023, la guía vigente exige al menos 12 testers inscritos continuamente durante 14 días para solicitar acceso a producción. No se presupone aquí el tipo o fecha de la cuenta ni que las pruebas internas de otra app lo sustituyan.
 
