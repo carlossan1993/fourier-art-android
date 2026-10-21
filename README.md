@@ -2,15 +2,15 @@
 
 Aplicación Android nativa que transformará fotografías en animaciones matemáticas mediante Series de Fourier y epiciclos.
 
-**Estado:** 0.11.0 aprobada e integrada en main. Etapa 8: 0.12.0 validada técnicamente en PR #20, pendiente de prueba del propietario y criterios físicos/visuales. Incluye reutilización de curvas y mediciones reproducibles. Motor y contornos conservados.
+**Estado:** 0.12.0 aprobada e integrada en main mediante PR #20. Etapa 8 cerrada por aceptación expresa de Carlos el 21/10/2026, con las limitaciones documentadas. Incluye reutilización de curvas y mediciones reproducibles. Motor y contornos conservados.
 
-Estado actual: [Etapa 8: pruebas y estabilización](docs/ETAPA_8_ESTABILIDAD.md). Se continúa en Work por elección del propietario. La matriz de dos teléfonos fue omitida expresamente por Carlos. El [banco visual](quality-bank/INFORME.md) tiene 30 casos revisados en Dibujo (21 reconocibles); la meta formal de #3 sigue sin acreditar por las limitaciones registradas.
+Estado actual: [Etapa 8 cerrada y siguiente etapa](docs/ETAPAS.md). Sigue la preparación para Google Play (Etapa 9, Work), pendiente de inicio. La matriz de dos teléfonos fue omitida expresamente por Carlos. El [banco visual](quality-bank/INFORME.md) tiene 30 casos revisados en Dibujo (21 reconocibles); la meta formal de #3 sigue sin acreditar y sus mejoras se aplazan. La combinación de letra al 150% con rotación queda sin verificar como excepción aceptada del cierre.
 
 ## Alcance V1
 - Android nativo con **Kotlin** y **Jetpack Compose**.
 - Idiomas **español e inglés**, según el dispositivo y con selector en la aplicación.
 - Procesamiento de fotos **local**; sin backend, cuentas, anuncios ni compras en V1.
-- Próximas etapas: prueba de concepto con contornos, Fourier, cámara/galería, animación, exportación GIF/MP4/PNG, pruebas y Google Play.
+- Próximas etapas: preparación para Google Play y publicación/verificación.
 - Infraestructura recurrente prevista: **US$ 0**.
 
 ## Desarrollo

@@ -57,6 +57,11 @@ El 20/10/2026 Carlos pidió continuar aquí. 0.11.0 organiza el recorrido por pa
 ## Etapa 8 — Pruebas y estabilización (Work)
 Trabajo autorizado por Carlos sobre la base 0.11.0 aceptada. 0.12.0 aprobada por Carlos el 20/10/2026 e integrada mediante PR #20: reutilización acotada de puntos Fourier, liberación de temporales y sesión de exportación, cancelación y mediciones de estabilidad en emuladores. Seguimiento #19 y [alcance](ETAPA_8_ESTABILIDAD.md). La validación técnica pasó: 89 JVM, 28 API 29, 23 API 35 y siete API 24, además de doce archivos verificados externamente. La matriz física de dos dispositivos #6 fue omitida por instrucción expresa de Carlos. La [evaluación de #3](../quality-bank/INFORME.md) revisó las 30 imágenes en Dibujo: 21 reconocibles sin edición. Los perfiles primarios siguen con medición incompleta por el modelo en emulador; no se acredita la meta formal >=24/30.
 
+**Cierre:** Carlos dio por cerrada la Etapa 8 el 21/10/2026: «bueno, algo es algo, lo mejoramos luego. Damos esta etapa por cerrado». Se cierra #19 por aceptación del propietario con excepciones: #3 queda abierto para mejoras posteriores, la prueba física #6 fue omitida y la combinación de letra al 150% con rotación queda sin verificar. El cierre no convierte esos criterios en pruebas superadas ni acredita >=24/30.
+
+## Etapa 9 — Preparación Google Play (Work)
+Siguiente etapa de la hoja de ruta, pendiente de inicio. Preparar el AAB de publicación firmado y la custodia privada de la clave de subida; revisar permisos, SDK y licencias; preparar política de privacidad pública, declaración Data Safety y ficha de tienda con icono, capturas y textos. Comprobar los requisitos de pruebas aplicables a la cuenta en Play Console. La salida prevista es un paquete de publicación preparado y los requisitos bloqueantes resueltos. El envío a producción y la verificación de descarga corresponden a la Etapa 10.
+
 ## Distribución de herramientas aprobada
 
 | Etapa | Trabajo | Herramienta |
