@@ -14,7 +14,7 @@ Versiones: código de producción `5d2f3c8f4679d637a6a17642e41a49e43540ab36` (0.
 
 La selección es de conveniencia y no es una muestra estadística: los retratos proceden de NASA, hay perros y gatos y cinco fotografías de objetos más cinco ilustraciones. Incluye sujeto pequeño, grupo, perfiles, fondo complejo, sombra, pelo, hocico cubierto y tramas finas. El resultado no acredita otras poblaciones, fabricantes ni toda la experiencia de edición.
 
-El manifiesto conserva autor, licencia, URL, hash de la descarga y SHA256 de cada entrada normalizada. La preparación aborta si cambian los bytes. Los originales normalizados se conservan en el artefacto de la ejecución. Las licencias son las indicadas para cada imagen, no la licencia genérica de los metadatos de Commons.
+El manifiesto conserva autor, licencia, URL, hash de la descarga y SHA256 de cada entrada normalizada. Las 30 entradas normalizadas quedan versionadas en `quality-bank/inputs/`; CI verifica su SHA256 antes de procesar. También se conservan en el artefacto de la ejecución. No se depende de que Commons regenere exactamente la misma miniatura: una descarga remota varió durante la preparación y fue rechazada, sin sustituir el banco congelado. Las licencias son las indicadas para cada imagen, no la licencia genérica de los metadatos de Commons.
 
 | ID | Perfil | Imagen / fuente | Autor | Licencia |
 | --- | --- | --- | --- | --- |

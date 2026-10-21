@@ -11,11 +11,12 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 parser = argparse.ArgumentParser()
 parser.add_argument('artifact', type=Path)
+parser.add_argument('--destination', type=Path)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 manifest = json.loads((root / 'quality-bank/manifest.json').read_text())
 records = {r['id']: r for r in json.loads((args.artifact / 'results.json').read_text())}
-destination = root / 'quality-bank/review'
+destination = args.destination or root / 'quality-bank/review'
 destination.mkdir(parents=True, exist_ok=True)
 font_path = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 font = ImageFont.truetype(font_path, 21)
@@ -31,7 +32,8 @@ for case in manifest['cases']:
     row = Image.new('RGB', (cell * 2, cell + header), '#e2e8f0')
     draw = ImageDraw.Draw(row)
     record = records[ident]
-    draw.text((16, 8), f'{ident}  {case["category"]} / {case["mode"]}', fill='#101b2b', font=font)
+    actual_mode = record.get('mode', case['mode'])
+    draw.text((16, 8), f'{ident}  {case["category"]} / {actual_mode}', fill='#101b2b', font=font)
     draw.text((16, 38), 'Original (sin recorte)', fill='#101b2b', font=small)
     draw.text((cell+16, 38), f'Fourier 400 / {record.get("kind", "ERROR")} / {record.get("strokes", 0)} trazos', fill='#101b2b', font=small)
     for index, path in enumerate([original, args.artifact / f'{ident}.png']):
