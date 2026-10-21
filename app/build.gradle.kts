@@ -32,6 +32,10 @@ android {
     }
 
     signingConfigs {
+        // Explicit temporary certificate location for release instrumentation in CI.
+        providers.environmentVariable("FOURIER_CI_SMOKE_KEYSTORE").orNull?.let { path ->
+            getByName("debug").storeFile = file(path)
+        }
         if (uploadReady) create("upload") {
             storeFile = file(uploadStore!!)
             storePassword = uploadStorePassword
