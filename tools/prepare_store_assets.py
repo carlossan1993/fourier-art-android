@@ -56,7 +56,13 @@ def generate():
         dest=ROOT/f'store/graphics/feature-{lang}-1024x500.png'
         cairosvg.svg2png(bytestring=svg.encode(),write_to=str(dest))
         Image.open(dest).convert('RGB').save(dest)
+    generate_privacy()
+
+def generate_privacy():
+    """Regenerate privacy resources and HTML using only the Python standard library."""
     data=json.loads((ROOT/'store/privacy.json').read_text())
+    contact=json.loads((ROOT/'store/contact.json').read_text())
+    support_email=html.escape(contact['supportEmail'], quote=True)
     for lang,content in data['languages'].items():
         resources=ET.Element('resources')
         ET.SubElement(resources,'string',name='privacy_policy_title').text=content['title']
@@ -72,8 +78,19 @@ def generate():
         write(f'app/src/main/res/{values}/privacy.xml','<?xml version="1.0" encoding="utf-8"?>\n'+ET.tostring(resources,encoding='unicode')+'\n')
         sections=''.join(f'<section><h2>{html.escape(t)}</h2><p>{html.escape(b)}</p></section>' for t,b in content['sections'])
         page=f'''<!doctype html><html lang="{lang}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FOURIER ART — {content['title']}</title><style>body{{max-width:760px;margin:40px auto;padding:0 22px;background:{NAVY};color:{WHITE};font:17px/1.65 system-ui}}h1,h2,a{{color:{AQUA}}}h2{{font-size:1.2em}}nav{{margin-bottom:2em}}footer{{margin-top:3em;color:#AFBFCD}}</style><nav><a href="privacy-es.html">Español</a> · <a href="privacy-en.html">English</a></nav><main><h1>FOURIER ART</h1><h2>{content['title']}</h2><p>{data['date']}</p>{sections}</main><footer>FOURIER ART · Android</footer></html>'''
+        # Use the approved public email on the hosted page, while preserving
+        # the policy text already shipped inside the signed Android release.
+        label='Contacto de privacidad' if lang=='es' else 'Privacy contact'
+        page=page.replace('<footer>',f'<footer><p>{label}: <a href="mailto:{support_email}">{support_email}</a></p>')
         write(f'docs/site/privacy-{lang}.html',page)
     write('docs/site/index.html','<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FOURIER ART · Privacidad / Privacy</title><h1>FOURIER ART</h1><p><a href="privacy-es.html">Política de privacidad</a></p><p><a href="privacy-en.html">Privacy policy</a></p></html>\n')
 
 if __name__=='__main__':
-    generate()
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--privacy-only', action='store_true', help='Generate privacy text without regenerating graphics')
+    args=parser.parse_args()
+    if args.privacy_only:
+        generate_privacy()
+    else:
+        generate()

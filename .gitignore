@@ -37,3 +37,8 @@ app/src/androidTest/assets/visual-bank/
 
 # Local Python verification cache
 __pycache__/
+
+# Firebase local target association and deployment cache
+.firebaserc
+.firebase/
+firebase-debug*.log
