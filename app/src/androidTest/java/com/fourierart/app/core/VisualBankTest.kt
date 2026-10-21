@@ -10,6 +10,7 @@ import com.fourierart.app.export.ExportRenderer
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
 import com.google.android.gms.tasks.Tasks
+import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.segmentation.subject.SubjectSegmentation
 import com.google.mlkit.vision.segmentation.subject.SubjectSegmenterOptions
 import org.json.JSONArray
@@ -48,6 +49,15 @@ class VisualBankTest {
                 if (!available) Thread.sleep(2000)
             } while (!available && System.nanoTime() < deadline)
             environment.put("subjectModuleAvailable", available)
+            if (available) {
+                // Exercise the optional graph before releasing this preparatory client.
+                // Closing a graph that has never received input can itself fail in MediaPipe.
+                val warm = assets.open("visual-bank/P01.jpg").use { BitmapFactory.decodeStream(it) }!!
+                try {
+                    val result = Tasks.await(segmenter.process(InputImage.fromBitmap(warm, 0)), 60, TimeUnit.SECONDS)
+                    environment.put("warmupMaskSize", result.foregroundConfidenceMask?.limit() ?: 0)
+                } finally { warm.recycle() }
+            }
         } catch (e: Exception) {
             environment.put("subjectModuleAvailable", false).put("moduleError", e.toString())
         } finally { segmenter.close() }
