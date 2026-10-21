@@ -16,6 +16,11 @@ captures/
 *.aab
 *.jks
 *.keystore
+*.p12
+*.pfx
+*.key
+*RESPALDO_PRIVADO_FIRMA*.zip
+signing-private/
 keystore.properties
 *.pem
 

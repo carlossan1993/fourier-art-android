@@ -1,0 +1,96 @@
+name: Release readiness
+on:
+  push:
+    branches: ["feature/google-play-preparation"]
+    paths-ignore: ["docs/**", "README.md", "store/**"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v4
+        with:
+          packages: ''
+      - run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.13"
+      - name: Create explicit CI-only debug certificate
+        run: |
+          echo "FOURIER_CI_SMOKE_KEYSTORE=$RUNNER_TEMP/fourier-ci-debug.keystore" >> "$GITHUB_ENV"
+          keytool -genkeypair -keystore "$RUNNER_TEMP/fourier-ci-debug.keystore" -storepass android -keypass android -alias androiddebugkey -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 3650
+      - name: Build actual release bundle, lint and smoke-test runner
+        run: gradle :app:bundleRelease :app:lintRelease :app:assembleDebugAndroidTest --no-daemon --stacktrace
+      - name: Fetch pinned bundletool
+        run: |
+          curl --fail --location --retry 2 https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar -o "$RUNNER_TEMP/bundletool.jar"
+          echo "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29  $RUNNER_TEMP/bundletool.jar" | sha256sum --check
+      - name: Audit release bundle, permissions and native libraries
+        run: |
+          mkdir -p release-output
+          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=app/build/outputs/bundle/release/app-release.aab
+          java -jar "$RUNNER_TEMP/bundletool.jar" dump manifest --bundle=app/build/outputs/bundle/release/app-release.aab --module=base > release-output/manifest.xml
+          java -jar "$RUNNER_TEMP/bundletool.jar" dump config --bundle=app/build/outputs/bundle/release/app-release.aab > release-output/bundle-config.json
+          python3 tools/verify_release.py app/build/outputs/bundle/release/app-release.aab release-output/manifest.xml release-output/bundle-config.json > release-output/audit.json
+          gradle :app:dependencies --configuration releaseRuntimeClasspath --no-daemon > release-output/dependencies.txt
+      - name: Confirm required signing cannot silently build unsigned
+        run: |
+          if gradle :app:bundleRelease -PrequireReleaseSigning=true --no-daemon > release-output/missing-signing.txt 2>&1; then
+            echo "Required signing unexpectedly succeeded without credentials"; exit 1
+          fi
+          grep -q 'Release signing is required' release-output/missing-signing.txt
+      - name: Verify configured signing with CI-only credentials
+        run: |
+          cp app/build/outputs/bundle/release/app-release.aab "$RUNNER_TEMP/unsigned.aab"
+          trap 'cp "$RUNNER_TEMP/unsigned.aab" app/build/outputs/bundle/release/app-release.aab' EXIT
+          FOURIER_UPLOAD_STORE_FILE="$FOURIER_CI_SMOKE_KEYSTORE" FOURIER_UPLOAD_STORE_PASSWORD=android FOURIER_UPLOAD_KEY_ALIAS=androiddebugkey FOURIER_UPLOAD_KEY_PASSWORD=android gradle :app:bundleRelease -PrequireReleaseSigning=true --no-daemon
+          jarsigner -verify app/build/outputs/bundle/release/app-release.aab > release-output/signing-smoke.txt
+          python3 -c 'from zipfile import ZipFile; z=ZipFile("app/build/outputs/bundle/release/app-release.aab"); assert any(n.upper().startswith("META-INF/") and n.upper().endswith(".RSA") for n in z.namelist())'
+          cp "$RUNNER_TEMP/unsigned.aab" app/build/outputs/bundle/release/app-release.aab
+      - name: Build release APK set with CI-only debug certificate for smoke testing
+        run: |
+          java -jar "$RUNNER_TEMP/bundletool.jar" build-apks --bundle=app/build/outputs/bundle/release/app-release.aab --output="$RUNNER_TEMP/smoke.apks" --mode=universal --ks="$FOURIER_CI_SMOKE_KEYSTORE" --ks-key-alias=androiddebugkey --ks-pass=pass:android --key-pass=pass:android
+          unzip -p "$RUNNER_TEMP/smoke.apks" universal.apk > "$RUNNER_TEMP/release-smoke.apk"
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run real release UI and capture store screens
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: default
+          arch: x86_64
+          profile: pixel_2
+          ram-size: 2048M
+          heap-size: 256M
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: |
+            adb shell settings put global sysui_demo_allowed 1
+            adb shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm 1010
+            adb install -r "$RUNNER_TEMP/release-smoke.apk"
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            timeout 240s adb shell am instrument -w -e class com.fourierart.app.photo.StoreReadinessAndroidTest com.fourierart.app.test/androidx.test.runner.AndroidJUnitRunner | tee release-output/instrumentation.txt
+            adb pull /sdcard/Android/data/com.fourierart.app/files/quality/store release-output/store
+            python3 -c 'from pathlib import Path; assert "OK (1 test)" in Path("release-output/instrumentation.txt").read_text()'
+      - name: Upload unsigned validation bundle and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-validation-UNSIGNED-not-for-Play
+          path: |
+            app/build/outputs/bundle/release/app-release.aab
+            app/build/reports/lint-results-release.*
+            release-output/
+          retention-days: 7
+          if-no-files-found: error

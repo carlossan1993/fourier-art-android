@@ -1,0 +1,41 @@
+{
+  "devices": {
+    "29": {
+      "passed": 31,
+      "observations": {
+        "input": "input=3601x2401\ndecoded=901x601 bytes=2166004 decodeMs=7.09007\ninvalidAndMissingPreservedWork=true\npssKb=146497 javaUsedBytes=9509840 nativeAllocatedBytes=35356336 maxJavaHeapBytes=536870912\n",
+        "navigation": "cycles=4 elapsedMs=4966.44984\nreusedDrawingAndPoints=true releasedExportSnapshot=true\npssKb=146631 javaUsedBytes=8748512 nativeAllocatedBytes=35668592 maxJavaHeapBytes=536870912\n",
+        "performance": "syntheticStrokes=220 componentsMaximum=400\ndirectTraceMs=111.75686 firstCachedTraceMs=95.15655 cached20PassesMs=11.60001\nsoftware360FrameMedianMs=13.96119 software360FrameP95Ms=27.06568\ngifMs=1732.87881 gifBytes=1070167 mainHeartbeatCount=107 mainHeartbeatMaxGapMs=17\nbefore pssKb=157947 javaUsedBytes=18396688 nativeAllocatedBytes=37334736 maxJavaHeapBytes=536870912\nafter pssKb=179715 javaUsedBytes=21690752 nativeAllocatedBytes=57998280 maxJavaHeapBytes=536870912\nThese are debug-emulator observations, not screen FPS or universal device limits.\n",
+        "cancellation": "closeAndCancelMs=30.01634 noPartialFiles=true secondExportReadableAfterClose=true\npssKb=150860 javaUsedBytes=11961240 nativeAllocatedBytes=37231608 maxJavaHeapBytes=536870912\n"
+      }
+    },
+    "35": {
+      "passed": 24,
+      "observations": {
+        "input": "input=3601x2401\ndecoded=901x601 bytes=2166004 decodeMs=6.856446\ninvalidAndMissingPreservedWork=true\npssKb=153124 javaUsedBytes=12548752 nativeAllocatedBytes=23819472 maxJavaHeapBytes=201326592\n",
+        "navigation": "cycles=4 elapsedMs=5000.158475\nreusedDrawingAndPoints=true releasedExportSnapshot=true\npssKb=149301 javaUsedBytes=8010768 nativeAllocatedBytes=23520000 maxJavaHeapBytes=201326592\n",
+        "performance": "syntheticStrokes=220 componentsMaximum=400\ndirectTraceMs=106.216005 firstCachedTraceMs=109.326918 cached20PassesMs=30.984991\nsoftware360FrameMedianMs=20.296399 software360FrameP95Ms=38.055144\ngifMs=2321.765894 gifBytes=1546116 mainHeartbeatCount=143 mainHeartbeatMaxGapMs=20\nbefore pssKb=167913 javaUsedBytes=25709200 nativeAllocatedBytes=25376192 maxJavaHeapBytes=201326592\nafter pssKb=177685 javaUsedBytes=18533008 nativeAllocatedBytes=42637216 maxJavaHeapBytes=201326592\nThese are debug-emulator observations, not screen FPS or universal device limits.\n",
+        "cancellation": "closeAndCancelMs=32.38064 noPartialFiles=true secondExportReadableAfterClose=true\npssKb=167804 javaUsedBytes=25680608 nativeAllocatedBytes=25161312 maxJavaHeapBytes=201326592\n"
+      }
+    },
+    "24": {
+      "passed": 7,
+      "observations": {
+        "input": "input=3601x2401\ndecoded=901x601 bytes=2166004 decodeMs=8.32872\ninvalidAndMissingPreservedWork=true\npssKb=63479 javaUsedBytes=14041984 nativeAllocatedBytes=21698088 maxJavaHeapBytes=536870912\n",
+        "navigation": "cycles=4 elapsedMs=5066.92032\nreusedDrawingAndPoints=true releasedExportSnapshot=true\npssKb=63993 javaUsedBytes=21623584 nativeAllocatedBytes=21346968 maxJavaHeapBytes=536870912\n",
+        "performance": "syntheticStrokes=220 componentsMaximum=400\ndirectTraceMs=80.53459 firstCachedTraceMs=81.18056 cached20PassesMs=10.43657\nsoftware360FrameMedianMs=17.11608 software360FrameP95Ms=32.35187\ngifMs=1949.43841 gifBytes=1065699 mainHeartbeatCount=120 mainHeartbeatMaxGapMs=24\nbefore pssKb=64542 javaUsedBytes=24067968 nativeAllocatedBytes=20457168 maxJavaHeapBytes=536870912\nafter pssKb=79431 javaUsedBytes=22894176 nativeAllocatedBytes=38592312 maxJavaHeapBytes=536870912\nThese are debug-emulator observations, not screen FPS or universal device limits.\n",
+        "cancellation": "closeAndCancelMs=50.62417 noPartialFiles=true secondExportReadableAfterClose=true\npssKb=60508 javaUsedBytes=18909856 nativeAllocatedBytes=17628024 maxJavaHeapBytes=536870912\n"
+      }
+    }
+  },
+  "unitTests": {
+    "tests": 89,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "externalExportFilesVerified": 12,
+  "limits": "Debug emulators. API29 reports 31 tests including two visual-bank collectors omitted without assets; API35 reports 24, API24 reports seven. No physical device or 16 KB runtime acceptance. Stage8 exceptions remain accepted/deferred.",
+  "sourceCommit": "7ff78118cdcfe88421ebc6865e592b7fddda1f62",
+  "workflowRun": 39552473328
+}

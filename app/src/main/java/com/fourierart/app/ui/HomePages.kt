@@ -8,7 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -75,8 +75,8 @@ fun GuideScreen(onBack: ()->Unit) {
 }
 
 @Composable
-fun SettingsScreen(model: PhotoSessionModel,onBack: ()->Unit,onDiscard: ()->Unit) {
-    val language=LocalContext.current.resources.configuration.locales[0].language
+fun SettingsScreen(model: PhotoSessionModel,onBack: ()->Unit,onDiscard: ()->Unit,onPrivacy: ()->Unit) {
+    val language=LocalConfiguration.current.locales[0].language
     WorkflowPage(stringResource(R.string.settings_title),onBack,tag="screen_settings") {
         SectionCard(stringResource(R.string.language_label)) {
             ChoiceButton("Español",language=="es",{AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("es"))},Modifier.fillMaxWidth().testTag("language_es"))
@@ -86,6 +86,8 @@ fun SettingsScreen(model: PhotoSessionModel,onBack: ()->Unit,onDiscard: ()->Unit
         SectionCard(stringResource(R.string.privacy_title)) {
             Text(stringResource(R.string.privacy_body),color=Muted)
             Text(stringResource(R.string.local_model_body),color=Muted,style=MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.sdk_privacy_summary),color=Muted,style=MaterialTheme.typography.bodySmall)
+            TextButton(onPrivacy,modifier=Modifier.fillMaxWidth().testTag("open_privacy")) {Text(stringResource(R.string.privacy_policy_title))}
         }
         SectionCard(stringResource(R.string.current_work)) {
             Text(stringResource(if(model.source==null)R.string.no_saved_photo else R.string.saved_photo_help),color=Muted)

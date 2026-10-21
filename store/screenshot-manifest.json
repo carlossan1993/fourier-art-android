@@ -1,0 +1,124 @@
+{
+  "sourceCommit": "7ff78118cdcfe88421ebc6865e592b7fddda1f62",
+  "workflowRun": 39552473338,
+  "runtime": "Android 15 API35 emulator; actual non-debuggable release APK from AAB, CI-only test signature",
+  "normalization": "Opaque source PNG converted to RGB without changing pixels; reduced WebP files are review previews only. Original-sized RGB PNG files are in the delivery ZIP.",
+  "screenshots": [
+    {
+      "locale": "en",
+      "name": "01-home.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "7c4a3c55e4030bbf0b2c69838542bba1f4946529fb4890958c00df90ed950aa2",
+      "playPngSha256": "50f36ebe13f468a5a44752c8815a3e54114f3c94ef26e50f6b3edb031c4df4af",
+      "preview": "screenshots/en/01-home.webp"
+    },
+    {
+      "locale": "en",
+      "name": "02-animation.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "39bc2d5657cdfe9180dedae0f7f7fa91934869dd18f715777ce526a94d343c2d",
+      "playPngSha256": "9012dd751bb51a2565d90f5dc9d3063941a4bd9e40c24be2e52c2078aee797aa",
+      "preview": "screenshots/en/02-animation.webp"
+    },
+    {
+      "locale": "en",
+      "name": "03-controls.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "8ffe076ceb1e8c2901496108846e1a79fa91542d88d8a1944f33d9732f29a55f",
+      "playPngSha256": "d8e7adab0d186f5fa278305483d94728152f217cdfe291d401ed744f5fbe1472",
+      "preview": "screenshots/en/03-controls.webp"
+    },
+    {
+      "locale": "en",
+      "name": "04-export.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "05f98f1e10a9d57ac3b71900eb4f441c6c92a743a52b49a6a0722d520dc26ce7",
+      "playPngSha256": "7405281fe77315c8a4707725a5f772c6a1179a8b2aa371a781530f1852703653",
+      "preview": "screenshots/en/04-export.webp"
+    },
+    {
+      "locale": "en",
+      "name": "05-privacy.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "9428a13e454c5c7ed54f68d348363710e2413b5ec0f54800bf5aed14af46803b",
+      "playPngSha256": "2ed3561ff1f11c395185df861c313038fb88279ce8eee63d55f477398b4685e9"
+    },
+    {
+      "locale": "en",
+      "name": "06-google-disclosure.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "0d8c1a0c4979a10df6f4f22b246662e19145e214728bc5934b23c9610711dbd8",
+      "playPngSha256": "0babb4321f18e43808fcd2a49981e5bc7cb33c37236ba9a82a46e295acafce9e"
+    },
+    {
+      "locale": "es",
+      "name": "01-home.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "69cb41675d304f03042032e6ff79ea7d59cae83486435e64f9d48e03c3717701",
+      "playPngSha256": "5116a04abba05fd6636191e7de72913f992b9991fe3c0e64882b325b7d93341f",
+      "preview": "screenshots/es/01-home.webp"
+    },
+    {
+      "locale": "es",
+      "name": "02-animation.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "2954c9306ff5a47b1da60453d2fd5808fa88bc05588a7f2a52acf1bc9b575b93",
+      "playPngSha256": "cd1385a62746741bcb400266716271d091695ebbf0a3a5a331085761bfbd0091",
+      "preview": "screenshots/es/02-animation.webp"
+    },
+    {
+      "locale": "es",
+      "name": "03-controls.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "95cd2f44cd242933ff3bccd4ef8bebf2d9daefd65730cca3d726c4a72e7244dc",
+      "playPngSha256": "b770ea01125cdb9e2923e4e7cd437c697aa1ced05af1d2e8b7a475d1de71e271",
+      "preview": "screenshots/es/03-controls.webp"
+    },
+    {
+      "locale": "es",
+      "name": "04-export.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "bf03b225365c0d7847b3002abadd1d3ea2dba24d1a579b830012520093d6d13f",
+      "playPngSha256": "dde5ae98201be45316e6fb4d730aeb07da8cf09562da630fbc0cd8910777a6f6",
+      "preview": "screenshots/es/04-export.webp"
+    },
+    {
+      "locale": "es",
+      "name": "05-privacy.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "81d85c07fba07a32d040f035f309f38038513c8dde6b88066b1f3497bc08a8e2",
+      "playPngSha256": "c2df89c5b390067c0e9bb1a57f02ed4a035a021a58cf8bf04b3c664bfbbbb8b4"
+    },
+    {
+      "locale": "es",
+      "name": "06-google-disclosure.png",
+      "width": 1080,
+      "height": 1920,
+      "mode": "RGB",
+      "sourcePngSha256": "886250a3c610c484f0d182f494590b3b541708368c3ba92e8f67e8577892f19d",
+      "playPngSha256": "47176f8a76cd7251fd6928e2c9900166c8477b83e526ea22fc1dae77d2b7bc8d"
+    }
+  ]
+}

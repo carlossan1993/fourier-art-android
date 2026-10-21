@@ -60,7 +60,7 @@ Trabajo autorizado por Carlos sobre la base 0.11.0 aceptada. 0.12.0 aprobada por
 **Cierre:** Carlos dio por cerrada la Etapa 8 el 21/10/2026: «bueno, algo es algo, lo mejoramos luego. Damos esta etapa por cerrado». Se cierra #19 por aceptación del propietario con excepciones: #3 queda abierto para mejoras posteriores, la prueba física #6 fue omitida y la combinación de letra al 150% con rotación queda sin verificar. El cierre no convierte esos criterios en pruebas superadas ni acredita >=24/30.
 
 ## Etapa 9 — Preparación Google Play (Work)
-Siguiente etapa de la hoja de ruta, pendiente de inicio. Preparar el AAB de publicación firmado y la custodia privada de la clave de subida; revisar permisos, SDK y licencias; preparar política de privacidad pública, declaración Data Safety y ficha de tienda con icono, capturas y textos. Comprobar los requisitos de pruebas aplicables a la cuenta en Play Console. La salida prevista es un paquete de publicación preparado y los requisitos bloqueantes resueltos. El envío a producción y la verificación de descarga corresponden a la Etapa 10.
+Autorizada por Carlos el 21/10/2026 («bien. Procede.»), en curso mediante #22. Propuesta 0.13.0: [preparación y pendientes](ETAPA_9_GOOGLE_PLAY.md). Preparar el AAB de publicación firmado y la custodia privada de la clave de subida; revisar permisos, SDK y licencias; preparar política de privacidad pública, declaración Data Safety y ficha de tienda con icono, capturas y textos. Comprobar los requisitos de pruebas aplicables a la cuenta en Play Console. La salida prevista es un paquete de publicación preparado y los requisitos bloqueantes resueltos. El envío a producción y la verificación de descarga corresponden a la Etapa 10.
 
 ## Distribución de herramientas aprobada
 

@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-21",
+  "app": "FOURIER ART",
+  "contact_url": "https://github.com/carlossan1993/fourier-art-android/issues",
+  "languages": {
+    "es": {
+      "title": "Política de privacidad",
+      "summary": "Las fotos se procesan en el dispositivo. Los SDK de Google pueden enviar métricas técnicas e identificadores para diagnóstico y análisis de uso.",
+      "sections": [
+        ["Responsable y alcance", "Esta política corresponde a FOURIER ART para Android. No necesitas una cuenta. La app no tiene anuncios, compras ni un servidor propio para recibir tus fotografías."],
+        ["Fotografías y cámara", "La cámara se usa solo cuando la solicitas y autorizas su permiso. Puedes elegir una imagen con el selector de Android sin conceder acceso general a tu galería. Los contornos, rasgos faciales y dibujos se calculan en el dispositivo; las imágenes y los resultados de ML Kit no se envían a Google para procesarlos. No se identifica a las personas."],
+        ["Almacenamiento y eliminación", "Se conserva una sola foto de trabajo, su recorte y sus correcciones en el espacio privado de la app, excluido de copias de seguridad. Puedes eliminarla desde Ajustes o reemplazarla con otra foto o una demostración. Al borrar los datos de la app o desinstalarla se elimina ese trabajo. Las exportaciones temporales se guardan en caché; la app elimina las de más de 24 horas cuando ejecuta su limpieza de exportaciones, no mediante un borrado programado a las 24 horas. Las fotos originales y los archivos que guardaste o compartiste fuera de la app no se eliminan al descartar el trabajo; los administras desde su ubicación o aplicación de destino. La preferencia de idioma se guarda localmente."],
+        ["Servicios y métricas de Google", "ML Kit y Google Play services pueden descargar modelos y enviar a Google datos técnicos: información de dispositivo y app, identificadores de instalación o dispositivo según el SDK, eventos de uso, rendimiento y errores. Google indica que estas comunicaciones se cifran mediante HTTPS. No equivalen a subir tus fotografías. El tratamiento de esos datos técnicos está sujeto a la política de Google; esta app no controla sus plazos de conservación. Consulta https://developers.google.com/ml-kit/terms y https://policies.google.com/privacy."],
+        ["Guardar y compartir", "Solo se guarda una exportación fuera de la app o se comparte cuando lo solicitas. Android entrega el archivo al destino que eliges. Ese destino aplica sus propias condiciones y política de privacidad."],
+        ["Contacto y cambios", "Para consultas sobre FOURIER ART y privacidad: https://github.com/carlossan1993/fourier-art-android/issues. No publiques fotografías privadas ni datos personales en ese canal público. Si cambian las funciones o dependencias, actualizaremos esta política y las declaraciones de la tienda."]
+      ]
+    },
+    "en": {
+      "title": "Privacy policy",
+      "summary": "Photos are processed on your device. Google SDKs may send technical metrics and identifiers for diagnostics and usage analytics.",
+      "sections": [
+        ["Scope and responsibility", "This policy applies to FOURIER ART for Android. No account is required. The app has no advertising, purchases or developer-operated server that receives your photographs."],
+        ["Photos and camera", "The camera is used only when you request it and grant permission. Android's picker lets you choose an image without granting broad gallery access. Contours, facial landmarks and drawings are computed on your device; ML Kit does not send input images or resulting outputs to Google for processing. The app does not identify people."],
+        ["Storage and deletion", "One working photo, its crop and corrections are kept in private app storage excluded from backups. Delete it in Settings or replace it with another photo or a demonstration. Clearing app data or uninstalling removes this work. Temporary exports are cached; the app removes those older than 24 hours when export cleanup runs, rather than through a scheduled deletion exactly at 24 hours. Original photos and files saved or shared outside the app remain when you discard your work; manage them in their destination folder or app. Your language preference is stored locally."],
+        ["Google services and metrics", "ML Kit and Google Play services may download models and send Google technical data: device and app information, installation or device identifiers depending on the SDK, usage events, performance and errors. Google states that these communications are encrypted using HTTPS. This does not mean that your photographs are uploaded. Google's policy governs this technical data, including retention periods outside this app's control. See https://developers.google.com/ml-kit/terms and https://policies.google.com/privacy."],
+        ["Saving and sharing", "An export is saved outside the app or shared only when you request it. Android delivers the file to your chosen destination. The destination has its own terms and privacy policy."],
+        ["Contact and updates", "For FOURIER ART and privacy enquiries: https://github.com/carlossan1993/fourier-art-android/issues. Do not post private photographs or personal data in this public channel. We will update this policy and store disclosures when features or dependencies change."]
+      ]
+    }
+  }
+}

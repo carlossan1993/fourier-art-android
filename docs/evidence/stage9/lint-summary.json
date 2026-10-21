@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "7ff78118cdcfe88421ebc6865e592b7fddda1f62",
+  "counts": {
+    "Warning": 51
+  },
+  "warningTypes": {
+    "OldTargetApi": 1,
+    "UnusedAttribute": 1,
+    "GradleDependency": 9,
+    "ConfigurationScreenWidthHeight": 3,
+    "ModifierParameter": 1,
+    "PluralsCandidate": 11,
+    "DataExtractionRules": 1,
+    "VectorPath": 3,
+    "UnusedResources": 12,
+    "TypographyDashes": 2,
+    "UseKtx": 7
+  }
+}

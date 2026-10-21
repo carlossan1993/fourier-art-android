@@ -1,0 +1,6 @@
+{
+  "alias": "fourier-upload",
+  "certificateSha256": "4F:88:49:6E:92:80:C8:35:32:AF:B7:23:05:C9:29:FE:B6:E5:93:FF:31:A1:98:06:6C:14:CB:0F:C2:5C:FE:54",
+  "algorithm": "RSA 3072",
+  "purpose": "Google Play upload key, not the Play distribution signing key"
+}
