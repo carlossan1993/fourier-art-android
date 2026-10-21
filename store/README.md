@@ -19,4 +19,6 @@ La entrega de publicación se proporciona como ZIP separado: AAB firmado, PNG or
 
 El respaldo de firma se entrega **por separado y de forma privada**, con la clave de subida y sus credenciales. No forma parte del ZIP de materiales de publicación, de la APK ni del repositorio. El AAB firmado contiene solo el certificado público y firmas; no la clave privada.
 
-Antes de subir: confirmar nombre/identificador (en revisión); correo público de soporte confirmado: `csdigital.apps@gmail.com`; guardar el respaldo privado; publicar y verificar la política HTTPS; completar público objetivo, contenido, países, Data Safety y pruebas aplicables en Play Console. Comprobar los avisos/licencias de terceros requeridos. El envío a producción es Etapa 10.
+Nombre aprobado: **Fourier Art**. Frase descriptiva: «Tus fotos, dibujadas con matemáticas».
+
+Antes de subir: verificar el identificador técnico `com.fourierart.app` al crear la ficha; correo público de soporte confirmado: `csdigital.apps@gmail.com`; guardar el respaldo privado; publicar y verificar la política HTTPS; completar público objetivo, contenido, países, Data Safety y pruebas aplicables en Play Console. Comprobar los avisos/licencias de terceros requeridos. El envío a producción es Etapa 10.

@@ -15,7 +15,7 @@ Autorizada por Carlos el 21/10/2026 sobre 0.12.0 aceptada. Seguimiento: [#22](ht
 
 ## Acciones del propietario pendientes
 
-1. Confirmar nombre e identificador antes de crear/enviar la ficha: `FOURIER ART` / `com.fourierart.app`. Carlos está revisando el nombre. Correo público de soporte ya confirmado: `csdigital.apps@gmail.com`.
+1. Nombre aprobado por Carlos el 21/10/2026: **Fourier Art**. Frase descriptiva: «Tus fotos, dibujadas con matemáticas». Correo público de soporte confirmado: `csdigital.apps@gmail.com`. Identificador técnico actual: `com.fourierart.app`, que se verificará al crear la ficha. La aprobación del nombre no acredita una nueva prueba del APK 0.13.0.
 2. Descargar y custodiar el respaldo privado de la clave de subida RSA 3072 y sus credenciales, generado y conservado por separado. No se incorpora al repositorio. Configurar los secretos de Actions es opcional para automatizar futuras compilaciones firmadas.
 3. Publicar `docs/site/` en una URL HTTPS estable. El HTML está preparado; no se declara activa una URL que aún no se ha comprobado. Se puede usar GitHub Pages sin coste: en Settings → Pages seleccionar GitHub Actions y ejecutar `Publish privacy policy` desde main una vez integrado el PR. El workflow publica solo `docs/site/`. Después comprobar ambas URL públicas sin iniciar sesión.
 4. Completar la configuración de cuenta, países, público objetivo y cuestionario de contenido en Play Console con las respuestas reales. No se asigna una clasificación de edad por suposición.
