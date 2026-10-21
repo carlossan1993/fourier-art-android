@@ -1,0 +1,11 @@
+{
+  "file": "FOURIER_ART_0.13.0_UPLOAD_SIGNED.aab",
+  "sha256": "d35ded997d3a1f0eb6fd213b4d80bc3542102718b85086a4d35be3927f098457",
+  "unsignedSha256": "f35f4165e037ee19ad6b9f6b250ac40f5f17ef5f33c9d7f9222d6a12ebe0ff86",
+  "sourceCommit": "7ff78118cdcfe88421ebc6865e592b7fddda1f62",
+  "releaseRun": 39552473338,
+  "signatureVerified": true,
+  "payloadUnchanged": true,
+  "certificateSha256": "4F:88:49:6E:92:80:C8:35:32:AF:B7:23:05:C9:29:FE:B6:E5:93:FF:31:A1:98:06:6C:14:CB:0F:C2:5C:FE:54",
+  "bundletoolValidated": true
+}

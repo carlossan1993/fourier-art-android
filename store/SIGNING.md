@@ -23,7 +23,7 @@ Si falta alguna variable o se exige firma sin credenciales, Gradle falla. Nunca 
 ## Flujo previsto con Play App Signing
 
 1. Confirmar nombre e identificador antes del primer envío: actualmente `FOURIER ART` / `com.fourierart.app`. El identificador quedará vinculado a la ficha de Play.
-2. Crear o utilizar una clave **de subida** bajo custodia del propietario; conservar una copia de seguridad privada y sus contraseñas. No se genera una clave definitiva en este entorno temporal.
+2. La clave **de subida** RSA 3072 se generó el 21/10/2026 y su respaldo se conserva y entrega por separado de forma privada. El propietario debe descargar y custodiar el archivo y sus credenciales; no están en git. La huella pública está en `store/upload-certificate.json`.
 3. Activar Play App Signing y dejar que Google custodie la clave de firma de distribución. La clave de subida permite autenticar futuros AAB; no es la misma obligación de custodia que la clave de distribución.
 4. Verificar la firma, huella del certificado, versión y SHA256 del AAB final. Subirlo al canal de pruebas que corresponda. La publicación en producción es Etapa 10.
 

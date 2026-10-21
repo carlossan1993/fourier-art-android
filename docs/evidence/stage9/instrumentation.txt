@@ -1,0 +1,8 @@
+
+com.fourierart.app.photo.StoreReadinessAndroidTest:.
+
+Time: 11.683
+
+OK (1 test)
+
+

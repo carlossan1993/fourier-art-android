@@ -24,7 +24,7 @@ jobs:
       - name: Restore private upload key and build signed AAB
         env:
           FOURIER_UPLOAD_STORE_BASE64: ${{ secrets.FOURIER_UPLOAD_STORE_BASE64 }}
-          FOURIER_UPLOAD_STORE_FILE: ${{ runner.temp }}/fourier-upload.jks
+          FOURIER_UPLOAD_STORE_FILE: ${{ runner.temp }}/fourier-upload.p12
           FOURIER_UPLOAD_STORE_PASSWORD: ${{ secrets.FOURIER_UPLOAD_STORE_PASSWORD }}
           FOURIER_UPLOAD_KEY_ALIAS: ${{ secrets.FOURIER_UPLOAD_KEY_ALIAS }}
           FOURIER_UPLOAD_KEY_PASSWORD: ${{ secrets.FOURIER_UPLOAD_KEY_PASSWORD }}
@@ -38,7 +38,7 @@ jobs:
           sha256sum app/build/outputs/bundle/release/app-release.aab > app/build/outputs/bundle/release/SHA256SUMS
       - name: Remove temporary key
         if: always()
-        run: rm -f "$RUNNER_TEMP/fourier-upload.jks"
+        run: rm -f "$RUNNER_TEMP/fourier-upload.p12"
       - uses: actions/upload-artifact@v4
         with:
           name: fourier-art-signed-upload-bundle
