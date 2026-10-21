@@ -1,0 +1,29 @@
+
+com.fourierart.app.core.VisualBankTest:
+Process crashed while executing collectFrozenBank(com.fourierart.app.core.VisualBankTest):
+com.google.mediapipe.framework.MediaPipeException: invalid argument: CalculatorGraph::Run() failed: 
+Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
+	at com.google.mediapipe.framework.Graph.nativeWaitUntilGraphDone(Native Method)
+	at com.google.mediapipe.framework.Graph.k(:com.google.android.gms.optional_mlkit_subject_segmentation@242335049@24.23.35 (100800-0):20)
+	at m.afg.close(:com.google.android.gms.optional_mlkit_subject_segmentation@242335049@24.23.35 (100800-0):23)
+	at m.afl.close(:com.google.android.gms.optional_mlkit_subject_segmentation@242335049@24.23.35 (100800-0):3)
+	at com.google.android.gms.mlkit.segmentation.subject.SubjectSegmenter.e(:com.google.android.gms.optional_mlkit_subject_segmentation@242335049@24.23.35 (100800-0):5)
+	at m.aws.v(:com.google.android.gms.optional_mlkit_subject_segmentation@242335049@24.23.35 (100800-0):65)
+	at m.at.onTransact(:com.google.android.gms.optional_mlkit_subject_segmentation@242335049@24.23.35 (100800-0):21)
+	at android.os.Binder.transact(Binder.java:1345)
+	at com.google.android.gms.internal.mlkit_vision_subject_segmentation.zza.zzc(com.google.android.gms:play-services-mlkit-subject-segmentation@@16.0.0-beta1:2)
+	at com.google.android.gms.internal.mlkit_vision_subject_segmentation.zzub.zzf(com.google.android.gms:play-services-mlkit-subject-segmentation@@16.0.0-beta1:2)
+	at com.google.mlkit.vision.segmentation.subject.internal.zzj.release(com.google.android.gms:play-services-mlkit-subject-segmentation@@16.0.0-beta1:1)
+	at com.google.mlkit.common.sdkinternal.ModelResource.zzb(com.google.mlkit:common@@18.11.0:3)
+	at com.google.mlkit.common.sdkinternal.zzl.run(Unknown Source:4)
+	at com.google.mlkit.common.sdkinternal.zzt.run(com.google.mlkit:common@@18.11.0:2)
+	at com.google.mlkit.common.sdkinternal.MlKitThreadPool.zze(com.google.mlkit:common@@18.11.0:4)
+	at com.google.mlkit.common.sdkinternal.MlKitThreadPool.zzc(com.google.mlkit:common@@18.11.0:1)
+	at com.google.mlkit.common.sdkinternal.zzi.run(Unknown Source:2)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+	at com.google.mlkit.common.sdkinternal.MlKitThreadPool.zzd(com.google.mlkit:common@@18.11.0:2)
+	at com.google.mlkit.common.sdkinternal.zzk.run(Unknown Source:2)
+	at java.lang.Thread.run(Thread.java:1012)
+INSTRUMENTATION_RESULT: shortMsg=Process crashed.
+INSTRUMENTATION_CODE: 0

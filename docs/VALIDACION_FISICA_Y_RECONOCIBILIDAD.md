@@ -1,23 +1,11 @@
-# Validación física y reconocibilidad pendientes
+# Validación física y reconocibilidad
 
-La aceptación de una APK permite continuar con esa base; esta ficha registra por separado los criterios formales abiertos de #3 y #6. No hay resultados físicos o visuales nuevos atribuidos al propietario.
+La aceptación de una APK permite continuar con esa base. Se registran por separado la decisión sobre #6 y la evaluación visual de #3; los resultados del asistente no se atribuyen al propietario.
 
 ## Dos teléfonos (#6)
-Registrar modelo, versión Android y RAM si se conoce, APK probada y fecha. Repetir cada caso en ambos equipos.
+> Decisión de Carlos, 20/10/2026: «omitiré lo de los dos teléfonos, no los tengo».
 
-| Caso | Teléfono A | Teléfono B |
-| --- | --- | --- |
-| Selección, cancelación y foto en orientación vertical/horizontal | Pendiente | Pendiente |
-| Cámara: denegar, conceder, cancelar y capturar | Pendiente | Pendiente |
-| Giro, recorte y retorno al original | Pendiente | Pendiente |
-| Recuperación tras cerrar/reabrir y recreación al girar | Pendiente | Pendiente |
-| Cuatro ciclos de contornos → animación → exportación | Pendiente | Pendiente |
-| Pausa, segundo plano y regreso sin salto | Pendiente | Pendiente |
-| PNG/GIF/MP4: guardar, abrir fuera y compartir; 1:1/9:16 | Pendiente | Pendiente |
-| Cancelar exportación y volver a crear otra | Pendiente | Pendiente |
-| Español/inglés, letra grande y horizontal | Pendiente | Pendiente |
-
-Anotar bloqueos, cierre inesperado, pantalla vacía, demora aproximada y pasos para reproducir. Los emuladores no rellenan las columnas físicas.
+Requisito omitido por instrucción expresa del propietario. #6 cerrado como `not_planned`; deja de bloquear la continuidad. Se conserva la aceptación funcional del APK y la evidencia de emuladores. **No se afirma que se hayan probado dos teléfonos físicos.**
 
 ## Banco de 30 imágenes (#3): rúbrica previa a la medición
 Usar diez rostros/grupos, diez mascotas y diez objetos/logotipos/dibujos, con casos favorables y difíciles. Debe existir permiso o licencia. Mantener las fotos privadas fuera del repositorio; usar IDs y referencia privada en el registro.
@@ -30,4 +18,4 @@ Fijar antes de medir: APK, perfil Auto para personas, Sujeto para mascotas/objet
 
 Para caras, comprobar ojos, nariz, boca y disposición relativa cuando sean visibles. Para mascotas, revisar ojos, hocico/nariz y boca cuando aparezcan. Para objetos, forma y partes que permitan distinguirlos. Un rostro parcialmente oculto se evalúa sobre lo visible; anotar la limitación. Registrar evaluador, puntuación, acciones, tiempo y motivo. La valoración sigue siendo visual y no acredita fidelidad universal.
 
-La meta conservada es **al menos 24 de 30 con puntuación 1 o 2**. No asignar puntos por compilar, por métricas geométricas o por aprobación general de una versión. El CSV tiene 30 filas vacías preparadas; no representa pruebas realizadas.
+La meta conservada es **al menos 24 de 30 con puntuación 1 o 2**. No asignar puntos por compilar, por métricas geométricas o por aprobación general de una versión. El [CSV primario](BANCO_RECONOCIBILIDAD.csv) registra 30 intentos: 15 reconocibles, uno insuficiente automáticamente y 14 sin puntuación por modelo no disponible. El [diagnóstico Dibujo](../quality-bank/INFORME.md) revisó las 30 imágenes y obtuvo 21 reconocibles, sin correcciones; no se mezcla con la medición primaria. La meta formal sigue sin acreditar.

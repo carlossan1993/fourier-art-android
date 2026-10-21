@@ -27,7 +27,7 @@ El 19/10/2026 el propietario pidió continuar esta etapa en Work por su disponib
 
 0.6.0 añade CameraX, permiso al usarla, editor de rotación/recorte, conservación del original y recuperación del trabajo. Photo Picker y EXIF se mantienen; `core/` conserva el motor 0.5.0. Ver [implementación y pruebas](ETAPA_2_CAPTURA.md).
 
-**Estado: 0.6.0 probada y aceptada por el propietario el 19/10/2026; PR #8 integrado.** Actions: 44 pruebas JVM, nueve API 29 y cuatro API 35 correctas. La confirmación no identifica dos dispositivos: la matriz física completa queda pendiente en #6. Se avanza por decisión del propietario.
+**Estado: 0.6.0 probada y aceptada por el propietario el 19/10/2026; PR #8 integrado.** Actions: 44 pruebas JVM, nueve API 29 y cuatro API 35 correctas. El 20/10/2026 Carlos omitió expresamente la matriz física de dos equipos porque no dispone de ellos; #6 cerrado como `not_planned`. No se acredita una prueba física no realizada.
 
 ## Etapa 3 — Contornos robustos (Work)
 0.7.0 incorpora vista previa editable, Silueta/Detalles, limpieza, conservación de una zona, borrador de segmentos, dibujo correctivo y deshacer/rehacer. La detección aceptada sigue siendo el valor predeterminado. Seguimiento: #9 y [alcance](ETAPA_3_CONTORNOS.md).
@@ -55,7 +55,12 @@ El 20/10/2026 Carlos pidió continuar aquí. 0.11.0 organiza el recorrido por pa
 **Estado: Carlos aprobó el APK 0.11.0 el 20/10/2026 («la apk se ve bien»); integración mediante PR #18.** La compilación y suite JVM pasaron, con 24 pruebas en Android 10 y 19 en Android 15. Esta aceptación conserva las pendientes formales #3 y #6.
 
 ## Etapa 8 — Pruebas y estabilización (Work)
-Trabajo autorizado por Carlos sobre la base 0.11.0 aceptada. 0.12.0 en preparación: reutilización acotada de puntos Fourier, liberación de temporales y sesión de exportación, cancelación y mediciones de estabilidad en emuladores. Seguimiento #19 y [alcance](ETAPA_8_ESTABILIDAD.md). La validación técnica pasó: 89 JVM, 28 API 29, 23 API 35 y siete API 24, además de doce archivos verificados externamente. APK 0.12.0 preparada en PR #20; prueba del propietario y cierre de los criterios físicos/visuales pendientes. El banco formal de reconocibilidad #3 y la matriz física de dos dispositivos #6 conservan su estado pendiente; no se consideran superados por aceptar una versión.
+Trabajo autorizado por Carlos sobre la base 0.11.0 aceptada. 0.12.0 aprobada por Carlos el 20/10/2026 e integrada mediante PR #20: reutilización acotada de puntos Fourier, liberación de temporales y sesión de exportación, cancelación y mediciones de estabilidad en emuladores. Seguimiento #19 y [alcance](ETAPA_8_ESTABILIDAD.md). La validación técnica pasó: 89 JVM, 28 API 29, 23 API 35 y siete API 24, además de doce archivos verificados externamente. La matriz física de dos dispositivos #6 fue omitida por instrucción expresa de Carlos. La [evaluación de #3](../quality-bank/INFORME.md) revisó las 30 imágenes en Dibujo: 21 reconocibles sin edición. Los perfiles primarios siguen con medición incompleta por el modelo en emulador; no se acredita la meta formal >=24/30.
+
+**Cierre:** Carlos dio por cerrada la Etapa 8 el 21/10/2026: «bueno, algo es algo, lo mejoramos luego. Damos esta etapa por cerrado». Se cierra #19 por aceptación del propietario con excepciones: #3 queda abierto para mejoras posteriores, la prueba física #6 fue omitida y la combinación de letra al 150% con rotación queda sin verificar. El cierre no convierte esos criterios en pruebas superadas ni acredita >=24/30.
+
+## Etapa 9 — Preparación Google Play (Work)
+Siguiente etapa de la hoja de ruta, pendiente de inicio. Preparar el AAB de publicación firmado y la custodia privada de la clave de subida; revisar permisos, SDK y licencias; preparar política de privacidad pública, declaración Data Safety y ficha de tienda con icono, capturas y textos. Comprobar los requisitos de pruebas aplicables a la cuenta en Play Console. La salida prevista es un paquete de publicación preparado y los requisitos bloqueantes resueltos. El envío a producción y la verificación de descarga corresponden a la Etapa 10.
 
 ## Distribución de herramientas aprobada
 

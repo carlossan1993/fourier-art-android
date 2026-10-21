@@ -1,0 +1,8 @@
+{
+  "api": 35,
+  "device": "google\/sdk_gphone64_x86_64\/emu64xa:15\/AE3A.240806.036\/12592187:user\/release-keys",
+  "googlePlayServices": "24.23.35 (190800-646585959)",
+  "installSession": 1,
+  "subjectModuleAvailable": false,
+  "moduleError": "java.util.concurrent.ExecutionException: com.google.mlkit.common.MlKitException: Failed to run thin subject segmenter."
+}

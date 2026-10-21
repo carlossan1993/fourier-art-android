@@ -1,0 +1,13 @@
+10-21 05:13:25.750  2783  2783 E MobileVisionBase: Error preloading model resource
+10-21 05:14:35.706  2783  4837 E native  : Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
+10-21 05:14:35.707  2783  4837 E MLKSubjectSegmenter: Failed to segment input image
+10-21 05:14:35.707  2783  4837 E MLKSubjectSegmenter: com.google.mediapipe.framework.MediaPipeException: invalid argument: CalculatorGraph::Run() failed: 
+10-21 05:14:35.707  2783  4837 E MLKSubjectSegmenter: Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
+10-21 05:14:35.874  2783  4857 E AndroidRuntime: com.google.mediapipe.framework.MediaPipeException: invalid argument: CalculatorGraph::Run() failed: 
+10-21 05:14:35.874  2783  4857 E AndroidRuntime: Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
+10-21 05:14:35.875  2783  4857 D MonitoringInstr: com.google.mediapipe.framework.MediaPipeException: invalid argument: CalculatorGraph::Run() failed: 
+10-21 05:14:35.875  2783  4857 D MonitoringInstr: Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
+10-21 05:14:35.875  2783  4857 W AndroidJUnitRunner: com.google.mediapipe.framework.MediaPipeException: invalid argument: CalculatorGraph::Run() failed: 
+10-21 05:14:35.875  2783  4857 W AndroidJUnitRunner: Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
+10-21 05:14:35.917  2783  4857 E MonitoringInstr: com.google.mediapipe.framework.MediaPipeException: invalid argument: CalculatorGraph::Run() failed: 
+10-21 05:14:35.917  2783  4857 E MonitoringInstr: Calculator::Process() for node "mediapipe_tasks_vision_image_segmenter_imagesegmentergraph__mediapipe.tasks.TensorsToSegmentationCalculator" failed: Tensor should have 2, 3, or 4 dims, received: 0
