@@ -4,6 +4,7 @@ Estado: preparación en [PR #23](https://github.com/carlossan1993/fourier-art-an
 
 | Material | Ubicación |
 | --- | --- |
+| Correo público de soporte confirmado | `csdigital.apps@gmail.com` · `contact.json` |
 | Textos ES/EN (30/80/4000 caracteres) | `listing-es.json`, `listing-en.json` |
 | Icono de ficha 512×512 RGBA | `graphics/icon-512.png` |
 | Gráficos 1024×500 RGB | `graphics/feature-es-1024x500.png`, `graphics/feature-en-1024x500.png` |
@@ -18,4 +19,4 @@ La entrega de publicación se proporciona como ZIP separado: AAB firmado, PNG or
 
 El respaldo de firma se entrega **por separado y de forma privada**, con la clave de subida y sus credenciales. No forma parte del ZIP de materiales de publicación, de la APK ni del repositorio. El AAB firmado contiene solo el certificado público y firmas; no la clave privada.
 
-Antes de subir: confirmar nombre/identificador y correo público de soporte; guardar el respaldo privado; publicar y verificar la política HTTPS; completar público objetivo, contenido, países, Data Safety y pruebas aplicables en Play Console. Comprobar los avisos/licencias de terceros requeridos. El envío a producción es Etapa 10.
+Antes de subir: confirmar nombre/identificador (en revisión); correo público de soporte confirmado: `csdigital.apps@gmail.com`; guardar el respaldo privado; publicar y verificar la política HTTPS; completar público objetivo, contenido, países, Data Safety y pruebas aplicables en Play Console. Comprobar los avisos/licencias de terceros requeridos. El envío a producción es Etapa 10.

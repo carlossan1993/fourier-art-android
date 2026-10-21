@@ -6,7 +6,7 @@ Autorizada por Carlos el 21/10/2026 sobre 0.12.0 aceptada. Seguimiento: [#22](ht
 
 - AAB release reproducible; firma de subida por variables privadas y fallo explícito si se exige firma sin credenciales. [Custodia y workflow manual](../store/SIGNING.md).
 - Icono adaptativo, heredado y monocromático, más PNG 512×512 y gráfico 1024×500 ES/EN. Son dibujos vectoriales propios: una curva definida por tres vectores rotatorios. Fuente y generador en git.
-- Privacidad completa ES/EN dentro de la app, disponible sin conexión. `store/privacy.json` genera también HTML estático en `docs/site/`, sin rastreadores ni dependencias remotas. El contacto previsto es el canal público de incidencias; falta el correo de soporte requerido por la ficha de Play.
+- Privacidad completa ES/EN dentro de la app, disponible sin conexión. `store/privacy.json` genera también HTML estático en `docs/site/`, sin rastreadores ni dependencias remotas. La política actual ofrece el canal público de incidencias. Carlos confirmó `csdigital.apps@gmail.com` como correo público de soporte de la ficha el 21/10/2026; queda registrado en `store/contact.json`.
 - [Textos de ficha ES](../store/listing-es.json) y [EN](../store/listing-en.json), dentro de los límites 30/80/4000 caracteres. No prometen fidelidad universal ni funcionamiento del perfil Sujeto sin descargar su modelo.
 - [Inventario de terceros](../store/THIRD_PARTY.md), con revisión final de avisos/licencias pendiente antes del envío.
 - [Propuesta Data Safety](../store/DATA_SAFETY.md): distingue el procesamiento local de fotos de la telemetría técnica de ML Kit. Debe contrastarse con el formulario final; no se ha enviado.
@@ -15,7 +15,7 @@ Autorizada por Carlos el 21/10/2026 sobre 0.12.0 aceptada. Seguimiento: [#22](ht
 
 ## Acciones del propietario pendientes
 
-1. Confirmar nombre e identificador antes de crear/enviar la ficha: `FOURIER ART` / `com.fourierart.app`; proporcionar correo público de soporte.
+1. Confirmar nombre e identificador antes de crear/enviar la ficha: `FOURIER ART` / `com.fourierart.app`. Carlos está revisando el nombre. Correo público de soporte ya confirmado: `csdigital.apps@gmail.com`.
 2. Descargar y custodiar el respaldo privado de la clave de subida RSA 3072 y sus credenciales, generado y conservado por separado. No se incorpora al repositorio. Configurar los secretos de Actions es opcional para automatizar futuras compilaciones firmadas.
 3. Publicar `docs/site/` en una URL HTTPS estable. El HTML está preparado; no se declara activa una URL que aún no se ha comprobado. Se puede usar GitHub Pages sin coste: en Settings → Pages seleccionar GitHub Actions y ejecutar `Publish privacy policy` desde main una vez integrado el PR. El workflow publica solo `docs/site/`. Después comprobar ambas URL públicas sin iniciar sesión.
 4. Completar la configuración de cuenta, países, público objetivo y cuestionario de contenido en Play Console con las respuestas reales. No se asigna una clasificación de edad por suposición.
