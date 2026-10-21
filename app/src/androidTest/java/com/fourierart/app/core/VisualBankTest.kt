@@ -33,6 +33,7 @@ class VisualBankTest {
         val cases = manifest.getJSONArray("cases")
         assertEquals(30, cases.length())
         val environment = JSONObject().put("api", Build.VERSION.SDK_INT).put("device", Build.FINGERPRINT)
+        environment.put("googlePlayServices", instrumentation.targetContext.packageManager.getPackageInfo("com.google.android.gms", 0).versionName)
         // The accepted app uses the unbundled Google model. Prepare it, not a substitute mask.
         val segmenter = SubjectSegmentation.getClient(SubjectSegmenterOptions.Builder().enableForegroundConfidenceMask().build())
         try {

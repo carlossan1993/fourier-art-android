@@ -1,5 +1,13 @@
 # Banco visual: fuentes y condiciones
 
+## Reproducción y límites
+
+Ejecutar el workflow `Frozen visual bank` de `.github/workflows/visual-bank.yml`. `tools/stage_visual_bank.py` descarga y comprueba cada entrada; `VisualBankTest` prepara el módulo de Google Play services, ejecuta `PhotoContours.analyze` y `extract` sin cambiar producción, y renderiza con `ExportRenderer` a progreso 1.0. El resultado incluye disponibilidad del módulo, tipo de detección, caras, trazos y tiempo. Un resultado vacío también se conserva. La suite normal omite este recolector cuando no se han preparado sus 30 assets.
+
+La disponibilidad del modelo de sujeto y el código de la aplicación se registran por separado: los pesos que Google Play services entrega no se fijan por un SHA del repositorio. Los tiempos son de un emulador debug y no equivalen al rendimiento de un teléfono. El recolector no mide el recorrido de la interfaz ni sustituye una valoración visual. `tools/review_visual_bank.py` compone las comparaciones; no decide puntuaciones.
+
+## Selección previa
+
 Selección fijada antes de procesar: 20/10/2026 (Guayaquil). Diez personas, diez mascotas y diez objetos/dibujos. No hay recortes repetidos ni selecciones posteriores por el resultado del motor.
 
 Versiones: código de producción `5d2f3c8f4679d637a6a17642e41a49e43540ab36` (0.12.0). Auto/Sujeto/Dibujo según el manifiesto, Estructura, Medio, sensibilidad 50, 400 componentes. Las imágenes se reducen hasta 1024 px, sin recorte, respetando proporción y orientación; transparencia sobre blanco. La salida se genera con el `ExportRenderer` real a dibujo completo.
