@@ -186,7 +186,7 @@
     <string name="no_saved_photo">No photograph is saved. Demo shapes are not personal photos.</string>
     <string name="saved_photo_help">One working photo is kept with its crop and corrections. Resume it from Home.</string>
     <string name="about_title">About</string>
-    <string name="app_version">Test version 0.13.0</string>
+    <string name="app_version">Test version 0.13.1</string>
     <string name="about_body">Fourier series and epicycles for animated drawings. Local processing, no account and no payments.</string>
     <string name="language_system">Use device language</string>
     <string name="replace_title">Switch to a demo?</string>

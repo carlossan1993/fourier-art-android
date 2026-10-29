@@ -1,0 +1,13 @@
+{
+  "applicationId": "com.fourierart.app",
+  "versionName": "0.13.1",
+  "versionCode": 17,
+  "approvedIconPackaged": true,
+  "unitTests": 89,
+  "lintErrors": 0,
+  "lintWarnings": 48,
+  "uploadCertificateSha256": "4F:88:49:6E:92:80:C8:35:32:AF:B7:23:05:C9:29:FE:B6:E5:93:FF:31:A1:98:06:6C:14:CB:0F:C2:5C:FE:54",
+  "aabSha256": "06c6caaae54299a2572df22f016b9196b7d05e7ed8b87795cf4a16914ad4d3d7",
+  "sourceIconSha256": "ec0cf5c4b7cb986fd70df4e466a2f51d3e57184e528aaaeb580b2e560c6e853d",
+  "githubPublicationAuthorized": "2026-10-29; explicit owner confirmation"
+}
