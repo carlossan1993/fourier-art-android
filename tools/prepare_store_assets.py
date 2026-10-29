@@ -26,30 +26,12 @@ def curve(cx, cy, scale, steps=420):
 
 def generate():
     import cairosvg
-    iconpath=curve(54,54,19)
-    vector=f'''<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="{NAVY}" android:pathData="M0,0h108v108h-108z"/>
-    <path android:fillColor="#00000000" android:strokeColor="{AQUA}" android:strokeWidth="2.6" android:strokeLineJoin="round" android:strokeLineCap="round" android:pathData="{iconpath}"/>
-    <path android:fillColor="{WHITE}" android:pathData="M83.9,51.4a2.6,2.6 0,1 0,0,5.2a2.6,2.6 0,1 0,0,-5.2"/>
-</vector>\n'''
-    write('app/src/main/res/drawable/ic_fourier.xml',vector)
-    write('app/src/main/res/mipmap-anydpi/ic_launcher.xml',vector)
-    write('app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml',f'''<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/icon_background"/>
-    <foreground android:drawable="@drawable/ic_fourier"/>
-    <monochrome android:drawable="@drawable/ic_fourier_monochrome"/>
-</adaptive-icon>\n''')
-    write('app/src/main/res/drawable/ic_fourier_monochrome.xml',f'''<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="2.6" android:strokeLineJoin="round" android:strokeLineCap="round" android:pathData="{iconpath}"/>
-</vector>\n''')
-    write('app/src/main/res/values/icon_colors.xml',f'<resources><color name="icon_background">{NAVY}</color></resources>\n')
-    icon=f'''<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 108 108"><rect width="108" height="108" fill="{NAVY}"/><path d="{iconpath}" fill="none" stroke="{AQUA}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="83.9" cy="54" r="2.6" fill="{WHITE}"/></svg>'''
-    write('store/graphics/icon.svg',icon)
-    png=ROOT/'store/graphics/icon-512.png'
-    cairosvg.svg2png(bytestring=icon.encode(),write_to=str(png))
-    # Google requires a 32-bit PNG icon, even with a fully opaque background.
+    # The approved PNG is authoritative; never recreate the retired cyan star.
+    import sys
+    sys.path.insert(0, str(ROOT / 'tools'))
+    from prepare_launcher_icon import generate as generate_launcher_icon
     from PIL import Image
-    im=Image.open(png).convert('RGBA');im.save(png)
+    generate_launcher_icon()
     for lang,tagline in [('es','Tus fotos. Dibujos en movimiento.'),('en','Your photos. Drawings in motion.')]:
         svg=f'''<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500"><rect width="1024" height="500" fill="{NAVY}"/><circle cx="790" cy="250" r="178" fill="#102532"/><path d="{curve(790,250,100)}" fill="none" stroke="{AQUA}" stroke-width="5" stroke-linejoin="round"/><text x="68" y="190" fill="{WHITE}" font-size="66" font-family="DejaVu Sans" font-weight="bold">FOURIER</text><text x="68" y="262" fill="{AQUA}" font-size="66" font-family="DejaVu Sans" font-weight="bold">ART</text><text x="72" y="338" fill="#AFBFCD" font-size="24" font-family="DejaVu Sans">{tagline}</text><text x="72" y="380" fill="#AFBFCD" font-size="20" font-family="DejaVu Sans">PNG · GIF · MP4</text></svg>'''
         write(f'store/graphics/feature-{lang}.svg',svg)
